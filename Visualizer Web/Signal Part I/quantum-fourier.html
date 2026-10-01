@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- CP203 extra — Quantum Fourier Transform (builds on Lecture 04) -->
+<title>Quantum Fourier Transform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Thai:wght@400;500;600&family=STIX+Two+Text:ital,wght@0,400;0,600;1,400;1,600&display=swap">
+<style>
+html,body{margin:0}
+[hidden]{display:none!important}
+img{max-width:100%}
+/* ===== shared tokens & layout for CEMII lecture pages ===== */
+:root{
+  --bg:#EEF1F5; --surface:#FFFFFF; --sunk:#F6F8FB; --ink:#18202D; --muted:#5A6577; --line:#D3DAE4;
+  --grid:rgba(52,86,140,.10); --axis:#8792A5;
+  --x:#1C2638; --h:#D0392C; --mark:#2E6BD9; --prod:#7A4ED3; --y:#12865A; --amber:#B8770F; --on-mark:#FFFFFF;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E1219; --surface:#151B24; --sunk:#111721; --ink:#E5E9F0; --muted:#98A2B3; --line:#29323F;
+    --grid:rgba(150,180,230,.08); --axis:#5F6979;
+    --x:#DDE4EF; --h:#FF6C5E; --mark:#6FA1FF; --prod:#B596FF; --y:#44CF98; --amber:#E8A93E; --on-mark:#0E1219;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E1219; --surface:#151B24; --sunk:#111721; --ink:#E5E9F0; --muted:#98A2B3; --line:#29323F;
+  --grid:rgba(150,180,230,.08); --axis:#5F6979;
+  --x:#DDE4EF; --h:#FF6C5E; --mark:#6FA1FF; --prod:#B596FF; --y:#44CF98; --amber:#E8A93E; --on-mark:#0E1219;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.65 "IBM Plex Sans Thai",system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1240px;margin:0 auto;padding-inline:clamp(16px,3vw,36px);padding-block:28px 72px}
+.math{font-family:"STIX Two Text","Cambria Math","Times New Roman",serif;font-style:italic;letter-spacing:.01em}
+.up{font-style:normal}
+code{font:12.5px/1.4 "IBM Plex Mono",ui-monospace,monospace;background:color-mix(in srgb,var(--ink) 7%,transparent);padding:1px 5px;border-radius:4px;white-space:nowrap}
+:focus-visible{outline:2px solid var(--mark);outline-offset:2px}
+
+header.top{padding-bottom:20px;border-bottom:1px solid var(--line)}
+.eyebrow{font:500 12px/1.4 "IBM Plex Mono",ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}
+h1{font:600 clamp(28px,4.2vw,42px)/1.06 "STIX Two Text","Times New Roman",serif;margin:0;letter-spacing:-.01em;text-wrap:balance}
+h1 .math{font-weight:400;color:var(--muted);font-size:.58em;margin-left:.3em;white-space:nowrap}
+.lede{margin:10px 0 0;color:var(--muted);max-width:66ch}
+
+.layout{display:grid;grid-template-columns:248px minmax(0,1fr);gap:32px;margin-top:24px;align-items:start}
+@media (max-width:920px){.layout{grid-template-columns:minmax(0,1fr);gap:20px}}
+.toc{position:sticky;top:calc(env(safe-area-inset-top,0px) + 12px);display:flex;flex-direction:column;gap:2px;max-height:calc(100vh - 40px);overflow-y:auto}
+@media (max-width:920px){.toc{position:static;max-height:none;flex-direction:row;flex-wrap:wrap;gap:6px;padding-bottom:4px}}
+.toc .lab{font:500 11.5px/1.4 "IBM Plex Mono",monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+@media (max-width:920px){.toc .lab{width:100%;margin-bottom:2px}}
+.toc a{display:flex;gap:9px;align-items:baseline;padding:7px 10px;border-radius:8px;color:var(--muted);text-decoration:none;font-size:14px;line-height:1.35;border:1px solid transparent}
+.toc a b{font:600 11.5px/1.4 "IBM Plex Mono",monospace;color:var(--muted);flex:none}
+.toc a:hover{background:color-mix(in srgb,var(--mark) 7%,transparent);color:var(--ink)}
+.toc a.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.toc a.on b{color:inherit;opacity:.72}
+
+main{display:flex;flex-direction:column;gap:14px;min-width:0}
+section.sec{scroll-margin-top:24px;padding-block:14px 26px;border-top:1px dashed var(--line)}
+section.sec:first-of-type{border-top:0;padding-top:0}
+section.sec > h2{font:600 24px/1.25 "STIX Two Text","Times New Roman",serif;margin:0 0 4px;display:flex;flex-wrap:wrap;align-items:baseline;gap:10px}
+section.sec > h2 .n{font:600 12px/1 "IBM Plex Mono",monospace;color:var(--mark);letter-spacing:.06em}
+section.sec > h2 .th{font-family:"IBM Plex Sans Thai",sans-serif;font-size:15px;font-weight:400;color:var(--muted)}
+.intro{margin:6px 0 16px;color:var(--muted);max-width:74ch}
+.intro b{color:var(--ink);font-weight:600}
+
+/* formula card */
+.fcard{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:14px}
+.fcard .ftitle{font:500 11.5px/1.4 "IBM Plex Mono",monospace;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin:0 0 10px}
+.fbig{font-size:clamp(19px,2.6vw,25px);line-height:2.1;overflow-x:auto;padding-bottom:2px}
+.fbig.sm{font-size:clamp(17px,2.2vw,21px)}
+.legend-sym{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px 18px;margin-top:14px;padding-top:12px;border-top:1px dashed var(--line)}
+.legend-sym div{display:flex;gap:9px;align-items:baseline;font-size:13.5px;color:var(--muted)}
+.legend-sym .s{font-family:"STIX Two Text",serif;font-style:italic;font-size:17px;color:var(--ink);flex:none;min-width:2.4em}
+.note{margin:10px 0 0;font-size:13.5px;color:var(--muted)}
+.note b{color:var(--ink)}
+.warn{border-left:3px solid var(--amber);padding-left:12px;margin:12px 0 0;font-size:13.5px;color:var(--muted)}
+.warn b{color:var(--ink)}
+
+/* derivation stepper */
+.deriv{margin:0;padding:0;list-style:none;counter-reset:d}
+.deriv li{counter-increment:d;display:grid;grid-template-columns:26px minmax(0,1fr);gap:4px 12px;padding:9px 0;border-top:1px solid var(--line);transition:opacity .2s}
+.deriv li:first-child{border-top:0}
+.deriv li::before{content:counter(d);font:600 11px/18px "IBM Plex Mono",monospace;color:var(--muted);background:var(--sunk);border-radius:50%;width:18px;height:18px;text-align:center;margin-top:5px}
+.deriv li.dim{opacity:.22}
+.deriv .ln{font-size:18px;overflow-x:auto}
+.deriv .why{grid-column:2;font-size:13px;color:var(--muted)}
+.dnav{display:flex;align-items:center;gap:8px;margin-top:12px;flex-wrap:wrap}
+.dnav .cnt{font:500 12.5px/1 "IBM Plex Mono",monospace;color:var(--muted)}
+
+/* figures + controls */
+.plot{margin:0 0 12px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px 6px}
+.plot figcaption{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 14px;align-items:baseline;margin-bottom:2px}
+.pt{font-weight:600;font-size:14px}
+.pt .math{font-weight:400;font-size:15.5px}
+.legend{display:flex;flex-wrap:wrap;gap:2px 12px;font-size:12.5px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:14px;height:3px;border-radius:2px;background:var(--c)}
+.legend i.dash{background:repeating-linear-gradient(90deg,var(--c) 0 4px,transparent 4px 7px)}
+.legend .math{font-size:14px;color:var(--ink)}
+canvas{display:block;width:100%;height:200px;touch-action:pan-y}
+canvas.drag{cursor:ew-resize}
+.ctrls{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin-bottom:12px}
+.ctrl{display:flex;align-items:center;gap:9px;font-size:13.5px;flex:1 1 210px;min-width:0}
+.ctrl > span:first-child{color:var(--muted);white-space:nowrap}
+.ctrl input[type=range]{flex:1;min-width:80px;accent-color:var(--mark)}
+.ctrl output{font:600 13px/1 "IBM Plex Mono",monospace;color:var(--mark);min-width:3.4em;text-align:right;font-variant-numeric:tabular-nums}
+.ctrl select,.ctrl input[type=text]{font:13.5px "IBM Plex Mono",monospace;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:6px 8px;max-width:100%}
+.ctrl select{font-family:"IBM Plex Sans Thai",sans-serif;cursor:pointer;flex:1}
+.btn{appearance:none;font:500 13.5px/1 "IBM Plex Sans Thai",system-ui,sans-serif;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 12px;min-height:34px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{border-color:var(--mark)}
+.btn.primary{background:var(--mark);border-color:var(--mark);color:var(--on-mark)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.sm{min-height:30px;padding:6px 10px;font-size:13px}
+.chk{display:inline-flex;align-items:center;gap:7px;font-size:13.5px;color:var(--muted);cursor:pointer}
+.chk input{accent-color:var(--mark)}
+
+/* readout */
+.out{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 20px;padding:12px 4px;border-block:1px dashed var(--line);margin-bottom:12px;min-height:74px}
+.out .l{display:flex;flex-direction:column;gap:3px;min-width:0;font-size:17px;flex:1 1 320px}
+.out .l .sub{font-size:13px;color:var(--muted)}
+.out .r{font:600 24px/1 "IBM Plex Mono",monospace;color:var(--y);white-space:nowrap}
+.out .r.small{font-size:18px}
+
+/* math bits */
+.bigop{display:inline-flex;align-items:center;vertical-align:middle;margin:0 .1em 0 .12em}
+.bigop .op{font-style:normal;font-size:1.4em;line-height:1}
+.bigop .lims{display:inline-flex;flex-direction:column;justify-content:space-between;font-size:.55em;line-height:1.2;margin-left:.12em;min-height:2.2em}
+.frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;font-size:.86em;line-height:1.25;margin:0 .14em}
+.frac>span:last-child{border-top:1px solid currentColor;padding-top:1px}
+.cases{display:inline-flex;align-items:center;vertical-align:middle}
+.cases .brace{font-size:2.6em;line-height:1;font-style:normal;margin-right:.08em}
+.cases .rows{display:grid;grid-template-columns:auto auto;gap:3px 16px;align-items:center;font-size:.92em}
+.cases .cond{color:var(--muted);white-space:nowrap}
+.box{display:inline-block;border:1.5px solid var(--y);border-radius:8px;padding:2px 10px;background:color-mix(in srgb,var(--y) 8%,transparent)}
+.hl{background:color-mix(in srgb,var(--mark) 16%,transparent);border-radius:4px;padding:0 3px}
+.hl2{background:color-mix(in srgb,var(--prod) 16%,transparent);border-radius:4px;padding:0 3px}
+
+/* tables */
+.tscroll{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface);margin-bottom:12px}
+table{border-collapse:collapse;font:13.5px/1.35 "IBM Plex Sans Thai",sans-serif;width:max-content;min-width:100%}
+th,td{padding:9px 12px;text-align:left;vertical-align:top;border-top:1px solid var(--line)}
+thead th{border-top:0;color:var(--muted);font-weight:500;font-size:12.5px;letter-spacing:.04em;text-transform:uppercase}
+td.m,th.m{font-family:"STIX Two Text",serif;font-style:italic;font-size:15.5px}
+td.num{font-family:"IBM Plex Mono",monospace;font-style:normal;text-align:right;font-variant-numeric:tabular-nums}
+tbody tr.on{background:color-mix(in srgb,var(--mark) 10%,transparent)}
+.mini{font-size:12.5px;color:var(--muted)}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 18px;justify-content:space-between}
+footer a{color:var(--mark)}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+
+.wrapc{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.quad{display:grid;grid-template-columns:auto 1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-bottom:12px}
+.quad > div{background:var(--surface);padding:12px 14px}
+.quad .hd{font:500 12px/1.4 "IBM Plex Mono",monospace;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);background:var(--sunk)}
+.quad .nm{font-weight:600;font-size:15px;margin-bottom:4px}
+.quad .fm{font-family:"STIX Two Text",serif;font-style:italic;font-size:15px;color:var(--ink);line-height:1.8}
+.quad .tag{font-size:12.5px;color:var(--muted);margin-top:6px}
+
+/* circuit diagram */
+.circ-wrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:4px}
+.circ-wrap svg{display:block;margin:0 auto}
+#s3-svg .wire{stroke:var(--axis);stroke-width:1.4}
+#s3-svg .wl{fill:var(--ink);font:500 12px "IBM Plex Mono",monospace;text-anchor:end;dominant-baseline:middle}
+#s3-svg .g rect{fill:var(--surface);stroke:var(--ink);stroke-width:1.4}
+#s3-svg .g line,#s3-svg .g path{stroke:var(--ink);stroke-width:1.6;fill:none}
+#s3-svg .g circle{fill:var(--ink)}
+#s3-svg .g text{fill:var(--ink);font:600 12.5px "IBM Plex Mono",monospace;text-anchor:middle;dominant-baseline:central}
+#s3-svg .g.todo{opacity:.3}
+#s3-svg .g.cur rect{fill:var(--mark);stroke:var(--mark)}
+#s3-svg .g.cur text{fill:var(--on-mark)}
+#s3-svg .g.cur line,#s3-svg .g.cur path{stroke:var(--mark);stroke-width:2.2}
+#s3-svg .g.cur circle{fill:var(--mark)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">CP203 · เสริมจาก Lecture 04 · Quantum Fourier Transform</p>
+    <h1>Quantum Fourier <span class="math">|n⟩ ↦ (1/√N) Σ<sub>k</sub> e<sup>j2πnk/N</sup>|k⟩</span></h1>
+    <p class="lede">ที่เรียกกันว่า “quantum Fourier” คือ DFT ตัวเดียวกับใน Lecture 04 แค่ข้อมูลไม่ได้อยู่ใน array แต่เป็น amplitude ของ qubit หน้านี้ไล่จากเรื่องที่เรียนแล้ว (DFT, FFT, สมบัติเลื่อนเวลา, leakage) ไปจนถึงเหตุผลที่มันทำให้ Shor's algorithm แยกตัวประกอบได้เร็ว — <b>เนื้อหาเสริม ไม่อยู่ในสไลด์ของวิชา</b></p>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" aria-label="หัวข้อ">
+      <span class="lab">หัวข้อ</span>
+      <a href="#same"><b>01</b><span>QFT = DFT ของ amplitude</span></a>
+      <a href="#wheel"><b>02</b><span>QFT ของ <span class="math">|n⟩</span> คือวงล้อเฟส</span></a>
+      <a href="#circuit"><b>03</b><span>วงจร: H + หมุนเฟส</span></a>
+      <a href="#period"><b>04</b><span>หาคาบ · หัวใจของ Shor</span></a>
+      <a href="#cost"><b>05</b><span>เร็วกว่า FFT จริงไหม</span></a>
+      <a href="#map"><b>06</b><span>ตารางเทียบ DFT / QFT</span></a>
+    </nav>
+
+    <main>
+      <!-- ============ 01 ============ -->
+      <section class="sec" id="same">
+        <h2><span class="n">01</span> QFT คือ DFT ที่ใส่ไว้ใน amplitude <span class="th">— สูตรเดียวกัน ต่างแค่ 2 จุด</span></h2>
+        <p class="intro">สถานะของ <span class="math">q</span> qubit คือเวกเตอร์ของจำนวนเชิงซ้อน <span class="math">N = 2<sup>q</sup></span> ตัว <span class="math">x<sub>0</sub>, …, x<sub>N−1</sub></span> ที่ <span class="math">Σ|x<sub>n</sub>|<sup>2</sup> = 1</span> — มองเป็นสัญญาณ discrete ยาว <span class="math">N</span> จุดได้เลย QFT ทำกับเวกเตอร์นี้แบบเดียวกับ DFT ทุกอย่าง ต่างกันแค่ <b>หารด้วย <span class="math">√N</span></b> (ให้ความน่าจะเป็นรวมยังเป็น 1 — คือ Parseval) และ <b>เครื่องหมายในเลขชี้กำลังเป็นบวก</b></p>
+        <div class="fcard">
+          <p class="ftitle">วางเทียบกัน</p>
+          <div class="fbig sm math">DFT: X[k] = <span class="bigop"><span class="op">Σ</span><span class="lims"><span>N−1</span><span>n=0</span></span></span> x[n] e<sup>−j2πkn/N</sup></div>
+          <div class="fbig sm math">QFT: y<sub>k</sub> = <span class="frac"><span>1</span><span>√N</span></span><span class="bigop"><span class="op">Σ</span><span class="lims"><span>N−1</span><span>n=0</span></span></span> x<sub>n</sub> e<sup><span class="hl">+</span>j2πkn/N</sup></div>
+          <div class="legend-sym">
+            <div><span class="s">|n⟩</span>สถานะที่อ่าน qubit ทั้งหมดเป็นเลขฐานสองได้ <span class="math">n</span></div>
+            <div><span class="s">x<sub>n</sub></span>amplitude (เชิงซ้อน) ของ <span class="math">|n⟩</span></div>
+            <div><span class="s">|x<sub>n</sub>|²</span>ความน่าจะเป็นที่วัดแล้วได้ <span class="math">n</span></div>
+            <div><span class="s">1/√N</span>ทำให้ <span class="math">Σ|y<sub>k</sub>|² = Σ|x<sub>n</sub>|²</span> (Parseval)</div>
+          </div>
+          <p class="note">ใน numpy: <code>y = np.fft.ifft(x) * np.sqrt(N)</code> · หนังสือฟิสิกส์เขียน <span class="math">i</span> แทน <span class="math">j</span> — หน้านี้ใช้ <span class="math">j</span> ตามสไลด์วิชา</p>
+        </div>
+        <div class="ctrls">
+          <label class="ctrl"><span>จำนวน qubit</span><select id="s1-q"><option value="2">q = 2 (N = 4)</option><option value="3" selected>q = 3 (N = 8)</option><option value="4">q = 4 (N = 16)</option></select></label>
+          <label class="ctrl"><span>สถานะเริ่มต้น</span><select id="s1-in">
+            <option value="basis">basis |p⟩ (impulse)</option>
+            <option value="uni">ซ้อนเท่ากันทุกตัว</option>
+            <option value="comb" selected>impulse train คาบ p</option>
+            <option value="cos">cos(2πpn/N)</option>
+          </select></label>
+          <label class="ctrl"><span id="s1-plab">p</span><input type="range" id="s1-p" min="0" max="7" step="1" value="2"><output id="s1-pv">2</output></label>
+        </div>
+        <figure class="plot">
+          <figcaption><span class="pt">ก่อน QFT · <span class="math">x<sub>n</sub></span></span><span class="legend"><span>พื้นที่วงทึบ = ความน่าจะเป็น</span><span>เข็ม = เฟส</span></span></figcaption>
+          <canvas id="s1-x" data-h="120" aria-label="amplitude ก่อน QFT แบบวงกลม"></canvas>
+        </figure>
+        <figure class="plot">
+          <figcaption><span class="pt">หลัง QFT · <span class="math">y<sub>k</sub></span></span><span class="legend"><span>พื้นที่วงทึบ = ความน่าจะเป็น</span><span>เข็ม = เฟส</span></span></figcaption>
+          <canvas id="s1-y" data-h="120" aria-label="amplitude หลัง QFT แบบวงกลม"></canvas>
+        </figure>
+        <div class="out"><div class="l"><span id="s1-eq"></span><span class="sub" id="s1-sub"></span></div></div>
+      </section>
+
+      <!-- ============ 02 ============ -->
+      <section class="sec" id="wheel">
+        <h2><span class="n">02</span> QFT ของ <span class="math">|n⟩</span> แยกเป็นวงล้อเฟสทีละ qubit <span class="th">— เพราะอย่างนี้วงจรถึงสั้น</span></h2>
+        <p class="intro">ถ้าเข้าเป็น basis <span class="math">|n⟩</span> (impulse <span class="math">δ[·−n]</span>) ผลคือ exponential <span class="math">e<sup>j2πnk/N</sup>/√N</span> — เหมือน <span class="math">δ[n−n₀] ↔ e<sup>−jωn₀</sup></span> ในเลกเชอร์ เขียน <span class="math">k</span> เป็นบิตแล้วผลนี้ <b>แยกเป็นผลคูณของ qubit แต่ละตัว</b> ได้พอดี: qubit ที่ <span class="math">l</span> หมุนเฟสไป <span class="math">2πn/2<sup>l</sup></span> โดยไม่ขึ้นกับตัวอื่น</p>
+        <div class="fcard">
+          <p class="ftitle">แตกเป็นผลคูณ</p>
+          <ol class="deriv">
+            <li><div class="ln math">QFT|n⟩ = <span class="frac"><span>1</span><span>√N</span></span> Σ<sub>k</sub> e<sup>j2πnk/N</sup> |k⟩</div><div class="why">นิยาม ใส่ x เป็น impulse ที่ตำแหน่ง n</div></li>
+            <li><div class="ln math">k = k<sub>1</sub>2<sup>q−1</sup> + k<sub>2</sub>2<sup>q−2</sup> + … + k<sub>q</sub>2<sup>0</sup></div><div class="why">เขียน k เป็นบิต — k₁ คือบิตบนสุด (qubit แรก)</div></li>
+            <li><div class="ln math">e<sup>j2πnk/N</sup> = Π<sub>l</sub> e<sup>j2πn k<sub>l</sub> / 2<sup>l</sup></sup></div><div class="why">เพราะ 2<sup>q−l</sup>/2<sup>q</sup> = 1/2<sup>l</sup> และ e<sup>a+b</sup> = e<sup>a</sup>e<sup>b</sup></div></li>
+            <li><div class="ln math">QFT|n⟩ = <span class="box">⊗<sub>l=1…q</sub> (|0⟩ + e<sup>j2πn/2<sup>l</sup></sup>|1⟩)/√2</span></div><div class="why">ผลรวมของแต่ละ k<sub>l</sub> ∈ {0,1} แยกกันได้ → ไม่มี entanglement แต่ละ qubit เตรียมแยกกันได้</div></li>
+          </ol>
+        </div>
+        <div class="ctrls">
+          <label class="ctrl"><span>จำนวน qubit</span><select id="s2-q"><option value="3">q = 3 (N = 8)</option><option value="4" selected>q = 4 (N = 16)</option><option value="5">q = 5 (N = 32)</option></select></label>
+          <label class="ctrl"><span>สถานะเข้า <span class="math">n</span></span><input type="range" id="s2-n" min="0" max="15" step="1" value="5"><output id="s2-nv">5</output></label>
+          <button class="btn" type="button" id="s2-play">▶ นับ n ขึ้นเรื่อย ๆ</button>
+        </div>
+        <figure class="plot">
+          <figcaption><span class="pt">เฟสของ qubit แต่ละตัวหลัง QFT</span><span class="legend"><span>ขีดรอบวง = มุมที่ qubit นั้นมีได้ (<span class="math">2<sup>l</sup></span> ตำแหน่ง)</span></span></figcaption>
+          <canvas id="s2-c" data-h="210" aria-label="วงล้อเฟสของแต่ละ qubit"></canvas>
+        </figure>
+        <div class="out"><div class="l"><span id="s2-eq"></span><span class="sub" id="s2-sub"></span></div></div>
+      </section>
+
+      <!-- ============ 03 ============ -->
+      <section class="sec" id="circuit">
+        <h2><span class="n">03</span> วงจร QFT <span class="th">— ชิ้นส่วนเดียวกับ FFT ทุกชิ้น</span></h2>
+        <p class="intro">วงจรสร้างวงล้อในข้อ 02 ทีละ qubit ด้วยเกต 3 ชนิด และแต่ละชนิดมีคู่ใน FFT แบบ radix-2: <b>H</b> = DFT ขนาด 2 (butterfly), <b>R<sub>k</sub></b> ที่มีตัวควบคุม = คูณ twiddle factor, <b>swap</b> ตอนท้าย = กลับลำดับบิต (bit reversal) กด “ขั้นถัดไป” เพื่อดูสถานะหลังแต่ละเกต</p>
+        <div class="fcard">
+          <p class="ftitle">เกตที่ใช้</p>
+          <div class="fbig sm math">H = <span class="frac"><span>1</span><span>√2</span></span>[1 1; 1 −1] <span style="display:inline-block;width:1.4em"></span> R<sub>k</sub> = [1 0; 0 e<sup>j2π/2<sup>k</sup></sup>]</div>
+          <p class="note">ใช้เกตทั้งหมด <span class="math">q(q+1)/2</span> ตัว + swap <span class="math">⌊q/2⌋</span> ตัว — โตแบบ <span class="math">q²</span> ไม่ใช่ <span class="math">N</span></p>
+        </div>
+        <div class="ctrls">
+          <label class="ctrl"><span>จำนวน qubit</span><select id="s3-q"><option value="2">q = 2</option><option value="3" selected>q = 3</option><option value="4">q = 4</option></select></label>
+          <label class="ctrl"><span>สถานะเข้า <span class="math">|n⟩</span></span><input type="range" id="s3-n" min="0" max="7" step="1" value="5"><output id="s3-nv">5</output></label>
+        </div>
+        <div class="circ-wrap"><svg id="s3-svg" role="img" aria-label="วงจร QFT"></svg></div>
+        <div class="dnav">
+          <button class="btn sm" type="button" id="s3-reset">⟲ เริ่มใหม่</button>
+          <button class="btn sm" type="button" id="s3-prev">‹ ก่อนหน้า</button>
+          <button class="btn sm primary" type="button" id="s3-next">ขั้นถัดไป ›</button>
+          <span class="cnt" id="s3-cnt"></span>
+          <button class="btn sm" type="button" id="s3-all">ไปจนจบ</button>
+        </div>
+        <div class="out"><div class="l"><span id="s3-eq"></span><span class="sub" id="s3-sub"></span></div></div>
+        <figure class="plot">
+          <figcaption><span class="pt">สถานะหลังเกตล่าสุด</span><span class="legend"><span>พื้นที่วงทึบ = ความน่าจะเป็น</span><span>เข็ม = เฟส</span></span></figcaption>
+          <canvas id="s3-c" data-h="120" aria-label="สถานะ ณ ขั้นปัจจุบัน"></canvas>
+        </figure>
+      </section>
+
+      <!-- ============ 04 ============ -->
+      <section class="sec" id="period">
+        <h2><span class="n">04</span> หาคาบ <span class="th">— งานที่ QFT ทำได้ดีจริง ๆ และเป็นหัวใจของ Shor's algorithm</span></h2>
+        <p class="intro">ถ้าสถานะเป็น impulse train คาบ <span class="math">r</span> (เลื่อนไป <span class="math">x₀</span>) หลัง QFT จะเหลือยอดที่ <span class="math">k ≈ N/r, 2N/r, …</span> เหมือน DFT ของ impulse train ส่วน <span class="math">x₀</span> แค่คูณเฟส <span class="math">e<sup>j2πkx₀/N</sup></span> — <b>ขนาดไม่เปลี่ยน</b> (สมบัติ time shift) นี่คือเหตุผลที่ใช้ได้: เราไม่รู้ <span class="math">x₀</span> แต่ก็ไม่จำเป็นต้องรู้ วัดได้ <span class="math">k</span> มาหนึ่งค่า แล้ว <span class="math">k/N ≈ s/r</span> ใช้เศษส่วนต่อเนื่อง (continued fraction) หา <span class="math">r</span></p>
+        <div class="ctrls">
+          <label class="ctrl"><span>จำนวน qubit</span><select id="s4-q"><option value="4">q = 4 (N = 16)</option><option value="5">q = 5 (N = 32)</option><option value="6" selected>q = 6 (N = 64)</option></select></label>
+          <label class="ctrl"><span>คาบ <span class="math">r</span></span><input type="range" id="s4-r" min="2" max="12" step="1" value="6"><output id="s4-rv">6</output></label>
+          <label class="ctrl"><span>เลื่อน <span class="math">x₀</span></span><input type="range" id="s4-x0" min="0" max="5" step="1" value="1"><output id="s4-x0v">1</output></label>
+        </div>
+        <figure class="plot">
+          <figcaption><span class="pt">ก่อน QFT · <span class="math">|x<sub>n</sub>|²</span></span><span class="legend"><span style="--c:var(--x)"><i></i>ความน่าจะเป็น</span></span></figcaption>
+          <canvas id="s4-x" data-h="150" aria-label="ความน่าจะเป็นก่อน QFT"></canvas>
+        </figure>
+        <figure class="plot">
+          <figcaption><span class="pt">หลัง QFT · <span class="math">|y<sub>k</sub>|²</span></span><span class="legend"><span style="--c:var(--y)"><i></i>ความน่าจะเป็น</span><span style="--c:var(--h)"><i class="dash"></i><span class="math">k = mN/r</span></span></span></figcaption>
+          <canvas id="s4-y" data-h="190" aria-label="ความน่าจะเป็นหลัง QFT"></canvas>
+        </figure>
+        <div class="ctrls">
+          <button class="btn primary" type="button" id="s4-meas">วัด 1 ครั้ง</button>
+          <button class="btn" type="button" id="s4-clr">ล้างผล</button>
+          <span class="mini" id="s4-hint">วัดหลาย ๆ ครั้ง แล้วเอา lcm ของตัวส่วนที่ได้ — จะได้ <span class="math">r</span></span>
+        </div>
+        <div class="tscroll"><table>
+          <thead><tr><th>ครั้งที่</th><th>วัดได้ k</th><th>k/N</th><th>เศษส่วนต่อเนื่อง ≈ s/r′</th><th>r′</th><th>lcm สะสม</th></tr></thead>
+          <tbody id="s4-tb"><tr><td colspan="6" class="mini">ยังไม่ได้วัด</td></tr></tbody>
+        </table></div>
+        <div class="out"><div class="l"><span id="s4-eq"></span><span class="sub" id="s4-sub"></span></div></div>
+
+        <div class="fcard">
+          <p class="ftitle">ตัวอย่าง Shor: แยก 15 ด้วย a = 7</p>
+          <ol class="deriv">
+            <li><div class="ln math">f(x) = 7<sup>x</sup> mod 15 = 1, 7, 4, 13, 1, 7, 4, 13, …</div><div class="why">ฟังก์ชันนี้เป็นคาบเสมอ — ปัญหาคือหาคาบตรง ๆ บนคอมธรรมดาช้ามากเมื่อตัวเลขใหญ่</div></li>
+            <li><div class="ln math">Σ<sub>x</sub> |x⟩|f(x)⟩ → วัด f ได้ 4 → เหลือ |2⟩ + |6⟩ + |10⟩ + …</div><div class="why">คอมควอนตัมคำนวณ f ทุก x พร้อมกัน วัดค่า f แล้วเหลือ impulse train คาบ r = 4 ที่ x₀ = 2 (สุ่ม)</div></li>
+            <li><div class="ln math">QFT → ยอดที่ k = 0, N/4, 2N/4, 3N/4</div><div class="why">ลองตั้ง r = 4 ข้างบน — ยอดอยู่ที่เดิมไม่ว่า x₀ จะเป็นเท่าไร</div></li>
+            <li><div class="ln math">r = 4 → 7<sup>2</sup> = 49 → gcd(48, 15) = 3, gcd(50, 15) = 5</div><div class="why">ถ้า r คู่: a<sup>r</sup> − 1 = (a<sup>r/2</sup> − 1)(a<sup>r/2</sup> + 1) ≡ 0 mod 15 จึงได้ตัวประกอบ <span class="box">15 = 3 × 5</span></div></li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- ============ 05 ============ -->
+      <section class="sec" id="cost">
+        <h2><span class="n">05</span> เร็วกว่า FFT จริงไหม <span class="th">— เร็วกว่ามาก แต่อ่านผลออกมาไม่ได้</span></h2>
+        <p class="intro">FFT ใช้ประมาณ <span class="math">N log₂N = q·2<sup>q</sup></span> ครั้ง ส่วนวงจร QFT ใช้ <span class="math">q(q+1)/2</span> เกต ต่างกันแบบ exponential — แต่ QFT <b>ไม่ได้ให้ array <span class="math">y<sub>k</sub></span> ออกมา</b> วัดแล้วได้ <span class="math">k</span> มาค่าเดียวตามความน่าจะเป็น <span class="math">|y<sub>k</sub>|²</span> แล้วสถานะก็หายไป</p>
+        <div class="ctrls">
+          <label class="ctrl"><span>จำนวน qubit <span class="math">q</span></span><input type="range" id="s5-q" min="1" max="40" step="1" value="20"><output id="s5-qv">20</output></label>
+        </div>
+        <figure class="plot">
+          <figcaption><span class="pt">จำนวนขั้นตอน (สเกล log)</span><span class="legend"><span style="--c:var(--h)"><i></i>FFT · <span class="math">q·2<sup>q</sup></span></span><span style="--c:var(--mark)"><i></i>QFT · <span class="math">q(q+1)/2</span></span></span></figcaption>
+          <canvas id="s5-c" data-h="220" aria-label="เทียบจำนวนขั้นตอน FFT กับ QFT"></canvas>
+        </figure>
+        <div class="out"><div class="l"><span id="s5-eq"></span><span class="sub" id="s5-sub"></span></div></div>
+        <p class="warn"><b>เอา QFT มาแทน FFT ทำเสียง/ภาพไม่ได้</b> — การโหลด <span class="math">N</span> ค่าเข้า amplitude ก็ใช้เวลาราว <span class="math">N</span> อยู่แล้ว และอ่าน <span class="math">y<sub>k</sub></span> ครบทุกตัวต้องวัดซ้ำมหาศาล QFT คุ้มเฉพาะงานที่สถานะเกิดขึ้นเองในคอมควอนตัม และต้องการคำตอบแค่ “ยอดอยู่ตรงไหน” เช่นการหาคาบ (Shor) และ phase estimation</p>
+      </section>
+
+      <!-- ============ 06 ============ -->
+      <section class="sec" id="map">
+        <h2><span class="n">06</span> ตารางเทียบ DFT / QFT</h2>
+        <div class="tscroll"><table>
+          <thead><tr><th></th><th>DFT / FFT (Lecture 04)</th><th>QFT</th></tr></thead>
+          <tbody>
+            <tr><td>ข้อมูลอยู่ที่</td><td>array <span class="math">x[n]</span> ในหน่วยความจำ</td><td>amplitude <span class="math">x<sub>n</sub></span> ของ <span class="math">q = log₂N</span> qubit</td></tr>
+            <tr><td>สูตร</td><td class="m">Σ x[n] e<sup>−j2πkn/N</sup></td><td class="m">(1/√N) Σ x<sub>n</sub> e<sup>+j2πkn/N</sup></td></tr>
+            <tr><td>ค่าคงที่</td><td>ไม่หาร (หาร <span class="math">N</span> ตอน inverse)</td><td>หาร <span class="math">√N</span> ทั้งไปและกลับ (unitary)</td></tr>
+            <tr><td>butterfly</td><td>ขนาด 2: <span class="math">a ± b</span></td><td>เกต H</td></tr>
+            <tr><td>twiddle factor</td><td class="m">W<sub>N</sub><sup>k</sup> = e<sup>−j2πk/N</sup></td><td>controlled-<span class="math">R<sub>k</sub></span></td></tr>
+            <tr><td>ลำดับผลลัพธ์</td><td>bit-reversed (ต้องเรียงใหม่)</td><td>swap ตอนท้าย</td></tr>
+            <tr><td>จำนวนขั้น</td><td class="m">N log₂N</td><td class="m">≈ q²/2</td></tr>
+            <tr><td>อ่านผล</td><td>ได้ทุก <span class="math">X[k]</span></td><td>ได้ <span class="math">k</span> ค่าเดียว สุ่มตาม <span class="math">|y<sub>k</sub>|²</span></td></tr>
+            <tr><td>time shift</td><td class="m">|X[k]| ไม่เปลี่ยน</td><td>ความน่าจะเป็นไม่เปลี่ยน → หาคาบได้โดยไม่รู้ x₀</td></tr>
+          </tbody>
+        </table></div>
+      </section>
+
+      <footer>
+        <span>อ้างอิง: CP203 Lecture 04 (DFT, FFT) · Nielsen &amp; Chuang <i>Quantum Computation and Quantum Information</i> บทที่ 5</span>
+        <span>ทุกกราฟจำลองสดจากสูตรในหน้านี้</span>
+      </footer>
+    </main>
+  </div>
+</div>
+<script>
+/* ===== shared kit: plots, steppers, controls (CEMII lecture pages) ===== */
+const K = (function(){
+'use strict';
+const MINUS = '−', TAU = Math.PI * 2;
+const C = {};
+const TOKENS = ['ink','muted','line','grid','axis','x','h','mark','prod','y','amber','surface','sunk'];
+function readColors(){ const cs = getComputedStyle(document.documentElement); TOKENS.forEach(k => { C[k] = cs.getPropertyValue('--'+k).trim() || '#888'; }); }
+readColors();
+
+/* ---------- numbers ---------- */
+function fmt(v, d){
+  if (d == null) d = 3;
+  if (!isFinite(v)) return (v < 0 ? MINUS : '') + '∞';
+  if (Math.abs(v) < 1e-10) v = 0;
+  const a = Math.abs(v), s = Number.isInteger(a) ? String(a) : String(+a.toFixed(d));
+  return (v < 0 && +s !== 0 ? MINUS : '') + s;
+}
+const fx = (v, d) => (v < 0 && Math.abs(v) >= Math.pow(10, -(d || 2)) / 2 ? MINUS : '') + Math.abs(v).toFixed(d == null ? 2 : d);
+function piLabel(v){
+  const k = v / Math.PI;
+  if (Math.abs(k) < 1e-9) return '0';
+  const q = Math.round(k * 4);
+  if (Math.abs(q - k * 4) > 1e-6) return fmt(v, 2);
+  const sg = q < 0 ? MINUS : '';
+  let num = Math.abs(q), den = 4;
+  const g = (a, b) => b ? g(b, a % b) : a;
+  const d = g(num, den); num /= d; den /= d;
+  return sg + (num === 1 ? 'π' : num + 'π') + (den === 1 ? '' : '/' + den);
+}
+function nice(range, target){
+  const raw = range / Math.max(1, target), p = Math.pow(10, Math.floor(Math.log10(raw))), f = raw / p;
+  return (f < 1.5 ? 1 : f < 3 ? 2 : f < 7 ? 5 : 10) * p;
+}
+function rng(lo, hi, pad){
+  pad = pad == null ? .18 : pad;
+  const s = (hi - lo) || 1;
+  return [lo - (lo < 0 ? pad : pad * .5) * s, hi + pad * s];
+}
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+function simpson(f, a, b, n){
+  n = n % 2 ? n + 1 : n;
+  const hh = (b - a) / n; let s = f(a) + f(b);
+  for (let i = 1; i < n; i++) s += (i % 2 ? 4 : 2) * f(a + i * hh);
+  return s * hh / 3;
+}
+/* complex as [re, im] */
+const cadd = (a, b) => [a[0] + b[0], a[1] + b[1]];
+const cmul = (a, b) => [a[0]*b[0] - a[1]*b[1], a[0]*b[1] + a[1]*b[0]];
+const cabs = a => Math.hypot(a[0], a[1]);
+const carg = a => Math.atan2(a[1], a[0]);
+const cexp = th => [Math.cos(th), Math.sin(th)];
+function cstr(a, d){
+  d = d == null ? 3 : d;
+  const re = Math.abs(a[0]) < 5e-4 ? 0 : a[0], im = Math.abs(a[1]) < 5e-4 ? 0 : a[1];
+  if (im === 0) return fmt(re, d);
+  if (re === 0) return (im < 0 ? MINUS : '') + (Math.abs(im) === 1 ? '' : fmt(Math.abs(im), d)) + 'j';
+  return fmt(re, d) + (im < 0 ? ' ' + MINUS + ' ' : ' + ') + (Math.abs(im) === 1 ? '' : fmt(Math.abs(im), d)) + 'j';
+}
+/* DFT of complex array (arrays of [re,im]) — direct, N is small here */
+function dft(x){
+  const N = x.length, X = [];
+  for (let k = 0; k < N; k++){
+    let re = 0, im = 0;
+    for (let n = 0; n < N; n++){
+      const th = -TAU * k * n / N, c = Math.cos(th), s = Math.sin(th);
+      re += x[n][0] * c - x[n][1] * s; im += x[n][0] * s + x[n][1] * c;
+    }
+    X.push([re, im]);
+  }
+  return X;
+}
+
+/* ---------- plot ---------- */
+class Plot {
+  constructor(cv){ this.cv = cv; this.ctx = cv.getContext('2d'); this.h0 = +cv.dataset.h || 200; this.pad = {l:46, r:16, t:20, b:26}; }
+  size(){
+    const w = this.cv.clientWidth; if (!w) return false;
+    const H = Math.round(this.h0 * (w < 520 ? .84 : 1));
+    const dpr = Math.min(window.devicePixelRatio || 1, 2.5);
+    const W = Math.round(w * dpr), HH = Math.round(H * dpr);
+    if (this.cv.width !== W || this.cv.height !== HH){ this.cv.width = W; this.cv.height = HH; }
+    this.cv.style.height = H + 'px';
+    this.w = w; this.H = H;
+    this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0); this.ctx.clearRect(0, 0, w, H);
+    return true;
+  }
+  view(x0, x1, y0, y1){ this.x0 = x0; this.x1 = x1; this.y0 = y0; this.y1 = y1; return this; }
+  get L(){ return this.pad.l; } get R(){ return this.w - this.pad.r; }
+  get T(){ return this.pad.t; } get B(){ return this.H - this.pad.b; }
+  pw(){ return this.R - this.L; }
+  X(v){ return this.L + (v - this.x0) / (this.x1 - this.x0) * this.pw(); }
+  Y(v){ return this.T + (this.y1 - v) / (this.y1 - this.y0) * (this.B - this.T); }
+  inv(px){ return this.x0 + (px - this.L) / this.pw() * (this.x1 - this.x0); }
+  frame(o){
+    o = o || {}; const c = this.ctx; c.save();
+    const pi = !!o.piTick;
+    const tick = o.tick || (pi ? Math.PI / 2 : nice(this.x1 - this.x0, Math.max(4, this.pw() / 64)));
+    const grid = o.grid || tick / 2;
+    const ys = o.yTick || nice(this.y1 - this.y0, o.yT || 4);
+    c.lineWidth = 1; c.strokeStyle = C.grid; c.beginPath();
+    for (let i = Math.ceil(this.x0 / grid - 1e-9); i * grid <= this.x1 + 1e-9; i++){ const px = Math.round(this.X(i * grid)) + .5; c.moveTo(px, this.T); c.lineTo(px, this.B); }
+    for (let i = Math.ceil(this.y0 / ys - 1e-9); i * ys <= this.y1 + 1e-9; i++){ const py = Math.round(this.Y(i * ys)) + .5; c.moveTo(this.L, py); c.lineTo(this.R, py); }
+    c.stroke();
+    c.strokeStyle = C.axis; c.beginPath();
+    const p0 = Math.round(this.Y(0)) + .5; c.moveTo(this.L, p0); c.lineTo(this.R, p0);
+    if (this.x0 < 0 && this.x1 > 0){ const q = Math.round(this.X(0)) + .5; c.moveTo(q, this.T); c.lineTo(q, this.B); }
+    c.stroke();
+    c.fillStyle = C.muted; c.font = '11px "IBM Plex Mono", ui-monospace, monospace';
+    c.textAlign = 'center'; c.textBaseline = 'top';
+    for (let i = Math.ceil(this.x0 / tick - 1e-9); i * tick <= this.x1 + 1e-9; i++){
+      const v = i * tick; if (o.skip0 && Math.abs(v) < 1e-9) continue;
+      c.fillText(pi ? piLabel(v) : fmt(v, 2), this.X(v), this.B + 8);
+    }
+    if (!o.noY){
+      c.textAlign = 'right'; c.textBaseline = 'middle';
+      for (let i = Math.ceil(this.y0 / ys - 1e-9); i * ys <= this.y1 + 1e-9; i++) c.fillText(fmt(i * ys, 2), this.L - 8, this.Y(i * ys));
+    }
+    if (o.xl){ c.font = 'italic 14px "STIX Two Text", serif'; c.fillStyle = C.ink; c.textAlign = 'left'; c.textBaseline = 'middle'; c.fillText(o.xl, this.R + 3, this.Y(0)); }
+    c.restore(); return this;
+  }
+  clip(){ const c = this.ctx; c.save(); c.beginPath(); c.rect(this.L, this.T - 8, this.pw(), this.B - this.T + 16); c.clip(); }
+  unclip(){ this.ctx.restore(); }
+  curve(pts, col, w, o){
+    o = o || {}; if (!pts.length) return this; const c = this.ctx; this.clip();
+    c.globalAlpha = o.alpha == null ? 1 : o.alpha; c.strokeStyle = col; c.lineWidth = w || 2; c.lineJoin = 'round'; c.lineCap = 'round';
+    if (o.dash) c.setLineDash(o.dash);
+    const yc = v => clamp(this.Y(v), -5000, 5000);
+    c.beginPath(); let down = false;
+    pts.forEach(p => { if (p == null || !isFinite(p[1])){ down = false; return; } const X = this.X(p[0]), Y = yc(p[1]); if (down) c.lineTo(X, Y); else { c.moveTo(X, Y); down = true; } });
+    c.stroke(); this.unclip(); return this;
+  }
+  area(pts, col, al){
+    if (!pts.length) return this; const c = this.ctx; this.clip();
+    const yc = v => clamp(this.Y(v), -5000, 5000);
+    c.globalAlpha = al == null ? .25 : al; c.fillStyle = col; c.beginPath(); c.moveTo(this.X(pts[0][0]), this.Y(0));
+    pts.forEach(p => c.lineTo(this.X(p[0]), yc(p[1]))); c.lineTo(this.X(pts[pts.length-1][0]), this.Y(0)); c.closePath(); c.fill();
+    this.unclip(); return this;
+  }
+  stem(k, v, col, o){
+    o = o || {}; const c = this.ctx; const px = this.X(k) + (o.dx || 0), p0 = this.Y(0), p1 = clamp(this.Y(v), this.T - 6, this.B + 6);
+    if (px < this.L - 6 || px > this.R + 6) return this;
+    c.save(); c.globalAlpha = o.alpha == null ? 1 : o.alpha; c.strokeStyle = col; c.fillStyle = col; c.lineWidth = o.w || 2;
+    if (Math.abs(v) > 1e-12){ c.beginPath(); c.moveTo(px, p0); c.lineTo(px, p1); c.stroke(); }
+    c.beginPath(); c.arc(px, p1, o.r == null ? 3.4 : o.r, 0, TAU); c.fill();
+    if (o.ring){ c.strokeStyle = o.ring; c.lineWidth = 2; c.beginPath(); c.arc(px, p1, (o.r == null ? 3.4 : o.r) + 3.5, 0, TAU); c.stroke(); }
+    if (o.label != null){ c.font = '600 10.5px "IBM Plex Mono", monospace'; c.textAlign = 'center'; c.textBaseline = v >= 0 ? 'bottom' : 'top'; c.fillText(o.label, px, v >= 0 ? p1 - 6 : p1 + 6); }
+    c.restore(); return this;
+  }
+  arrow(x, v, col, o){ /* impulse arrow */
+    o = o || {}; const c = this.ctx, px = this.X(x), p0 = this.Y(0), p1 = this.Y(v);
+    if (px < this.L - 4 || px > this.R + 4) return this;
+    c.save(); c.strokeStyle = col; c.fillStyle = col; c.lineWidth = o.w || 2;
+    c.beginPath(); c.moveTo(px, p0); c.lineTo(px, p1); c.stroke();
+    const d = v >= 0 ? 1 : -1;
+    c.beginPath(); c.moveTo(px, p1); c.lineTo(px - 4.5, p1 + 8 * d); c.lineTo(px + 4.5, p1 + 8 * d); c.closePath(); c.fill();
+    if (o.label){ c.font = '600 10.5px "IBM Plex Mono", monospace'; c.textAlign = 'center'; c.textBaseline = v >= 0 ? 'bottom' : 'top'; c.fillText(o.label, px, v >= 0 ? p1 - 10 : p1 + 10); }
+    c.restore(); return this;
+  }
+  dot(x, y, col, r){ const c = this.ctx; c.save(); c.fillStyle = col; c.beginPath(); c.arc(this.X(x), clamp(this.Y(y), this.T - 4, this.B + 4), r || 3, 0, TAU); c.fill(); c.restore(); return this; }
+  point(x, y, col, ring){ const c = this.ctx; c.save(); c.fillStyle = col; c.beginPath(); c.arc(this.X(x), clamp(this.Y(y), this.T, this.B), 5, 0, TAU); c.fill(); if (ring){ c.strokeStyle = ring; c.lineWidth = 2; c.beginPath(); c.arc(this.X(x), clamp(this.Y(y), this.T, this.B), 9, 0, TAU); c.stroke(); } c.restore(); return this; }
+  vline(x, col, label, o){
+    o = o || {}; const c = this.ctx, px = Math.round(this.X(x)) + .5; if (px < this.L - 1 || px > this.R + 1) return this;
+    c.save(); c.strokeStyle = col; c.lineWidth = o.w || 1.2; if (o.dash !== false) c.setLineDash(o.dash || [4, 4]);
+    c.beginPath(); c.moveTo(px, this.T - 2); c.lineTo(px, this.B); c.stroke(); c.setLineDash([]);
+    if (label){ c.fillStyle = col; c.font = '500 11.5px "IBM Plex Mono", monospace'; c.textBaseline = 'bottom'; const right = px > this.R - 62; c.textAlign = right ? 'right' : 'left'; c.fillText(label, px + (right ? -5 : 5), this.T - 3); }
+    c.restore(); return this;
+  }
+  band(a, b, col, al){ const c = this.ctx; c.save(); c.globalAlpha = al == null ? .1 : al; c.fillStyle = col; const x0 = Math.max(this.L, this.X(a)), x1 = Math.min(this.R, this.X(b)); if (x1 > x0) c.fillRect(x0, this.T, x1 - x0, this.B - this.T); c.restore(); return this; }
+  text(s, x, y, col, o){
+    o = o || {}; const c = this.ctx; c.save(); c.fillStyle = col;
+    c.font = o.font || '500 12px "IBM Plex Sans Thai", sans-serif';
+    c.textAlign = o.align || 'center'; c.textBaseline = o.base || 'middle';
+    c.fillText(s, x, y); c.restore(); return this;
+  }
+  label(s, x, y, col, o){ return this.text(s, this.X(x), this.Y(y), col, o); }
+}
+
+/* ---------- figure registry ---------- */
+const FIGS = [];
+function fig(id, draw){
+  const cv = document.getElementById(id); if (!cv) return null;
+  const p = new Plot(cv); FIGS.push({p, draw, cv}); return p;
+}
+let raf = 0;
+function redraw(){ if (raf) return; raf = requestAnimationFrame(() => { raf = 0; FIGS.forEach(f => { if (f.cv.offsetParent === null && f.cv.clientWidth === 0) return; if (f.p.size()) f.draw(f.p); }); }); }
+const $ = s => document.querySelector(s);
+const $$ = s => Array.prototype.slice.call(document.querySelectorAll(s));
+function val(sel){ const e = $(sel); return e ? +e.value : 0; }
+function sval(sel){ const e = $(sel); return e ? e.value : ''; }
+function chk(sel){ const e = $(sel); return !!(e && e.checked); }
+function bind(sel, fn){
+  $$(sel).forEach(e => e.addEventListener('input', ev => { if (fn) fn(ev); redraw(); }));
+}
+function out(sel, text){ const e = $(sel); if (e) e.textContent = text; }
+function html(sel, s){ const e = $(sel); if (e) e.innerHTML = s; }
+
+/* ---------- derivation steppers ---------- */
+function derivInit(){
+  $$('.deriv').forEach(list => {
+    const items = Array.prototype.slice.call(list.children);
+    const nav = document.createElement('div'); nav.className = 'dnav';
+    nav.innerHTML = '<button class="btn sm" type="button" data-a="prev">‹ ก่อนหน้า</button>'
+      + '<button class="btn sm primary" type="button" data-a="next">ขั้นถัดไป ›</button>'
+      + '<span class="cnt"></span><button class="btn sm" type="button" data-a="all">แสดงทั้งหมด</button>';
+    list.parentNode.insertBefore(nav, list.nextSibling);
+    let i = 1;
+    function render(){
+      items.forEach((li, k) => li.classList.toggle('dim', k >= i));
+      nav.querySelector('.cnt').textContent = `ขั้นที่ ${Math.min(i, items.length)} / ${items.length}`;
+      nav.querySelector('[data-a=prev]').disabled = i <= 1;
+      nav.querySelector('[data-a=next]').disabled = i >= items.length;
+    }
+    nav.addEventListener('click', e => {
+      const a = e.target.closest('[data-a]'); if (!a) return;
+      if (a.dataset.a === 'next') i = Math.min(items.length, i + 1);
+      else if (a.dataset.a === 'prev') i = Math.max(1, i - 1);
+      else i = items.length;
+      render();
+    });
+    render();
+  });
+}
+
+/* ---------- table of contents scrollspy ---------- */
+function tocInit(){
+  const links = $$('.toc a'); if (!links.length) return;
+  const secs = links.map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(en => {
+      if (!en.isIntersecting) return;
+      links.forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#' + en.target.id));
+    });
+  }, {rootMargin: '-10% 0px -70% 0px', threshold: 0});
+  secs.forEach(s => io.observe(s));
+}
+
+/* ---------- animation loop helper ---------- */
+function ticker(step){
+  let on = false, last = 0, id = 0;
+  function frame(now){
+    if (!on) return;
+    const dt = Math.min(.05, (now - last) / 1000); last = now;
+    step(dt); redraw(); id = requestAnimationFrame(frame);
+  }
+  return {
+    start(){ if (on) return; on = true; last = performance.now(); id = requestAnimationFrame(frame); },
+    stop(){ on = false; if (id) cancelAnimationFrame(id); id = 0; },
+    toggle(){ on ? this.stop() : this.start(); return on; },
+    get running(){ return on; }
+  };
+}
+
+/* ---------- boot ---------- */
+function boot(){
+  derivInit(); tocInit(); redraw();
+  const onTheme = () => { readColors(); redraw(); };
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', onTheme);
+  new MutationObserver(onTheme).observe(document.documentElement, {attributes:true, attributeFilter:['data-theme']});
+  if (window.ResizeObserver) new ResizeObserver(() => redraw()).observe(document.body);
+  else window.addEventListener('resize', redraw);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(redraw);
+}
+
+return {C, MINUS, TAU, fmt, fx, piLabel, nice, rng, clamp, simpson, cadd, cmul, cabs, carg, cexp, cstr, dft,
+        Plot, fig, redraw, $, $$, val, sval, chk, bind, out, html, ticker, boot, readColors};
+})();
+
+(function(){
+'use strict';
+const {fmt, fx, cabs, carg, cstr, MINUS, TAU} = K;
+const PI = Math.PI;
+const bin = (n, q) => n.toString(2).padStart(q, '0');
+const gcd = (a, b) => b ? gcd(b, a % b) : a;
+const lcm = (a, b) => a / gcd(a, b) * b;
+
+/* ---------- quantum bits ---------- */
+/* QFT: y_k = (1/√N) Σ x_n e^{+j2πkn/N} */
+function qft(x){
+  const N = x.length, s = 1 / Math.sqrt(N), y = [];
+  for (let k = 0; k < N; k++){
+    let re = 0, im = 0;
+    for (let n = 0; n < N; n++){
+      const th = TAU * k * n / N, c = Math.cos(th), si = Math.sin(th);
+      re += x[n][0] * c - x[n][1] * si; im += x[n][0] * si + x[n][1] * c;
+    }
+    y.push([re * s, im * s]);
+  }
+  return y;
+}
+function normalize(x){
+  const s = Math.sqrt(x.reduce((a, v) => a + v[0] * v[0] + v[1] * v[1], 0)) || 1;
+  return x.map(v => [v[0] / s, v[1] / s]);
+}
+const basis = (N, n) => Array.from({length: N}, (_, i) => i === n ? [1, 0] : [0, 0]);
+const probs = x => x.map(v => v[0] * v[0] + v[1] * v[1]);
+
+/* gate list of the textbook circuit; qubit 1 = top wire = most significant bit */
+function gates(q){
+  const G = [];
+  for (let t = 1; t <= q; t++){
+    G.push({type: 'H', t});
+    for (let c = t + 1; c <= q; c++) G.push({type: 'R', t, c, k: c - t + 1});
+  }
+  for (let i = 1; i <= Math.floor(q / 2); i++) G.push({type: 'S', a: i, b: q + 1 - i});
+  return G;
+}
+function apply(s, g, q){
+  const N = s.length, m = w => 1 << (q - w);
+  s = s.map(v => v.slice());
+  if (g.type === 'H'){
+    const M = m(g.t), r = Math.SQRT1_2;
+    for (let i = 0; i < N; i++) if (!(i & M)){
+      const a = s[i], b = s[i | M];
+      s[i] = [(a[0] + b[0]) * r, (a[1] + b[1]) * r]; s[i | M] = [(a[0] - b[0]) * r, (a[1] - b[1]) * r];
+    }
+  } else if (g.type === 'R'){
+    const ph = K.cexp(TAU / Math.pow(2, g.k)), both = m(g.t) | m(g.c);
+    for (let i = 0; i < N; i++) if ((i & both) === both) s[i] = K.cmul(s[i], ph);
+  } else {
+    const A = m(g.a), B = m(g.b);
+    for (let i = 0; i < N; i++) if ((i & A) && !(i & B)){ const j = i ^ A ^ B, t = s[i]; s[i] = s[j]; s[j] = t; }
+  }
+  return s;
+}
+
+/* ---------- circle notation: disc area = probability, needle = phase ---------- */
+function circles(p, amps, o){
+  o = o || {};
+  const N = amps.length, q = Math.round(Math.log2(N)), w = p.cv.clientWidth;
+  const cols = N <= 8 ? N : (w >= 54 * N ? N : 8), rows = Math.ceil(N / cols);
+  const cell = Math.min(78, w / cols), R = Math.min(cell * .36, 26), rowH = 2 * R + 34;
+  const H = rows * rowH + 6;
+  p.h0 = H / (w < 520 ? .84 : 1); p.size();
+  const c = p.ctx, x0 = (w - cols * cell) / 2;
+  amps.forEach((a, i) => {
+    const cx = x0 + (i % cols + .5) * cell, cy = 4 + Math.floor(i / cols) * rowH + R + 2, m = cabs(a);
+    c.save();
+    if (o.hi === i){ c.fillStyle = K.C.sunk; c.beginPath(); c.arc(cx, cy, R + 5, 0, TAU); c.fill(); }
+    c.strokeStyle = K.C.line; c.lineWidth = 1.2; c.beginPath(); c.arc(cx, cy, R, 0, TAU); c.stroke();
+    if (m > 1e-6){
+      c.fillStyle = K.C.mark; c.globalAlpha = .32; c.beginPath(); c.arc(cx, cy, R * Math.min(1, m), 0, TAU); c.fill();
+      c.globalAlpha = 1; const ph = carg(a);
+      c.strokeStyle = K.C.ink; c.lineWidth = 1.8; c.lineCap = 'round';
+      c.beginPath(); c.moveTo(cx, cy); c.lineTo(cx + R * Math.cos(ph), cy - R * Math.sin(ph)); c.stroke();
+    }
+    c.fillStyle = K.C.muted; c.textAlign = 'center'; c.textBaseline = 'top';
+    c.font = '500 10.5px "IBM Plex Mono", monospace'; c.fillText(String(i), cx, cy + R + 4);
+    if (cell >= 40){ c.font = '10px "IBM Plex Mono", monospace'; c.globalAlpha = .75; c.fillText(bin(i, q), cx, cy + R + 16); }
+    c.restore();
+  });
+}
+function ampList(y){
+  return y.map((v, k) => cabs(v) < 5e-4 ? null : `y<sub>${k}</sub> = ${cstr(v, 3)}`).filter(Boolean).join(' · ');
+}
+
+/* ===== 01 QFT vs DFT ===== */
+const S1 = {
+  basis: {lab: 'ตำแหน่ง p', lo: 0, hi: N => N - 1, x: (N, p) => basis(N, p),
+    say: (N, p) => `impulse ที่ ${p} → exponential: ทุก k มีขนาด 1/√${N} เท่ากัน เฟสหมุนทีละ 2π·${p}/${N} (เหมือน δ[n − n₀] ↔ e<sup>−jωn₀</sup>)`},
+  uni: {lab: '—', lo: 0, hi: () => 0, x: N => normalize(Array.from({length: N}, () => [1, 0])),
+    say: () => 'ค่าคงที่ (DC) → เหลือ impulse ที่ k = 0 อย่างเดียว — กลับข้างของกรณี basis'},
+  comb: {lab: 'คาบ p', lo: 1, hi: N => N / 2, x: (N, p) => normalize(Array.from({length: N}, (_, n) => [n % p === 0 ? 1 : 0, 0])),
+    say: (N, p) => N % p === 0 ? `impulse train คาบ ${p} → impulse train คาบ N/p = ${N / p} (ยอดที่ k = 0, ${N / p}, ${2 * N / p}, …)` : `p = ${p} หาร N = ${N} ไม่ลงตัว → ยอดไม่ตรง k พอดี กระจายไปข้าง ๆ (leakage แบบเดียวกับ DFT)`},
+  cos: {lab: 'ความถี่ p', lo: 0, hi: N => N / 2, x: (N, p) => normalize(Array.from({length: N}, (_, n) => [Math.cos(TAU * p * n / N), 0])),
+    say: (N, p) => p === 0 || p === N / 2 ? `p = ${p} → cos กลายเป็นค่าคงที่/สลับเครื่องหมาย → ยอดเดียวที่ k = ${p}` : `cos มีสองความถี่ ±p → ยอดที่ k = ${p} และ k = N − ${p} = ${N - p} (ความถี่ลบอยู่ปลายอีกด้าน เหมือน DFT)`}
+};
+function s1(){
+  const q = K.val('#s1-q'), N = 1 << q, mode = K.sval('#s1-in'), m = S1[mode], el = K.$('#s1-p');
+  el.min = m.lo; el.max = m.hi(N); el.disabled = m.hi(N) === m.lo;
+  if (+el.value > +el.max) el.value = el.max;
+  if (+el.value < +el.min) el.value = el.min;
+  const p = +el.value, x = m.x(N, p), y = qft(x);
+  K.out('#s1-plab', m.lab); K.out('#s1-pv', mode === 'uni' ? '—' : String(p));
+  return {N, p, x, y, m};
+}
+K.fig('s1-x', pl => { const s = s1(); circles(pl, s.x); });
+K.fig('s1-y', pl => {
+  const s = s1(); circles(pl, s.y);
+  K.html('#s1-eq', s.m.say(s.N, s.p));
+  K.html('#s1-sub', ampList(s.y));
+});
+K.bind('#s1-q'); K.bind('#s1-in'); K.bind('#s1-p');
+
+/* ===== 02 phase wheels ===== */
+K.fig('s2-c', p => {
+  const q = K.val('#s2-q'), N = 1 << q, el = K.$('#s2-n');
+  el.max = N - 1; if (+el.value > N - 1) el.value = N - 1;
+  const n = +el.value, w = p.w, c = p.ctx, cell = w / q, R = Math.min(52, cell * .36), cy = 16 + R + 6;
+  for (let l = 1; l <= q; l++){
+    const cx = (l - .5) * cell, ph = TAU * n / Math.pow(2, l), M = Math.pow(2, l);
+    c.save();
+    c.strokeStyle = K.C.line; c.lineWidth = 1.2; c.beginPath(); c.arc(cx, cy, R, 0, TAU); c.stroke();
+    c.strokeStyle = K.C.axis; c.lineWidth = 1;
+    for (let i = 0; i < M && M <= 64; i++){ const a = TAU * i / M; c.beginPath(); c.moveTo(cx + R * Math.cos(a), cy - R * Math.sin(a)); c.lineTo(cx + (R - 5) * Math.cos(a), cy - (R - 5) * Math.sin(a)); c.stroke(); }
+    c.strokeStyle = K.C.mark; c.fillStyle = K.C.mark; c.lineWidth = 2.6; c.lineCap = 'round';
+    const ex = cx + R * Math.cos(ph), ey = cy - R * Math.sin(ph);
+    c.beginPath(); c.moveTo(cx, cy); c.lineTo(ex, ey); c.stroke();
+    c.beginPath(); c.arc(ex, ey, 4, 0, TAU); c.fill();
+    c.fillStyle = K.C.ink; c.textAlign = 'center'; c.textBaseline = 'top';
+    c.font = '600 12.5px "IBM Plex Sans Thai", sans-serif'; c.fillText(`qubit ${l}`, cx, cy + R + 10);
+    c.fillStyle = K.C.muted; c.font = '11px "IBM Plex Mono", monospace';
+    c.fillText(`${n % M}/${M} รอบ`, cx, cy + R + 28);
+    if (cell > 70) c.fillText(`0.${bin(n % M, l)}₂`, cx, cy + R + 44);
+    c.restore();
+  }
+  K.out('#s2-nv', String(n));
+  K.html('#s2-eq', `n = ${n} = ${bin(n, q)}₂ · qubit l หมุน n/2<sup>l</sup> รอบ = เอาบิตท้าย l บิตของ n มาเป็นทศนิยมฐานสอง`);
+  K.html('#s2-sub', `qubit 1 สลับทุกครั้งที่ n เปลี่ยน (หมุนครึ่งรอบ) ส่วน qubit ${q} ขยับทีละ 1/${N} รอบ — เหมือนเข็มนาฬิกาของตัวนับเลขฐานสอง`);
+});
+K.bind('#s2-q'); K.bind('#s2-n');
+let s2t = 0;
+K.$('#s2-play').addEventListener('click', e => {
+  if (s2t){ clearInterval(s2t); s2t = 0; e.currentTarget.textContent = '▶ นับ n ขึ้นเรื่อย ๆ'; return; }
+  e.currentTarget.textContent = '⏸ หยุด';
+  s2t = setInterval(() => { const el = K.$('#s2-n'); el.value = (+el.value + 1) % (+el.max + 1); K.redraw(); }, 750);
+});
+
+/* ===== 03 circuit stepper ===== */
+let s3step = 0;
+const svgNS = 'http://www.w3.org/2000/svg';
+function s3state(){
+  const q = K.val('#s3-q'), N = 1 << q, el = K.$('#s3-n');
+  el.max = N - 1; if (+el.value > N - 1) el.value = N - 1;
+  const n = +el.value, G = gates(q);
+  s3step = K.clamp(s3step, 0, G.length);
+  let s = basis(N, n);
+  for (let i = 0; i < s3step; i++) s = apply(s, G[i], q);
+  return {q, N, n, G, s};
+}
+function s3svg(st){
+  const {q, n, G} = st, gap = 54, top = 26, row = 46, left = 74;
+  const W = left + G.length * gap + 34, H = top + (q - 1) * row + 30;
+  const svg = K.$('#s3-svg');
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.setAttribute('width', W); svg.setAttribute('height', H);
+  const y = t => top + (t - 1) * row, bits = bin(n, q);
+  let h = '';
+  for (let t = 1; t <= q; t++){
+    h += `<line class="wire" x1="${left - 10}" x2="${W - 10}" y1="${y(t)}" y2="${y(t)}"/>`;
+    h += `<text class="wl" x="${left - 16}" y="${y(t)}">q${t} |${bits[t - 1]}⟩</text>`;
+  }
+  G.forEach((g, i) => {
+    const x = left + i * gap + gap / 2, cls = i < s3step - 1 ? 'g done' : i === s3step - 1 ? 'g cur' : 'g todo';
+    h += `<g class="${cls}">`;
+    if (g.type === 'H') h += `<rect x="${x - 15}" y="${y(g.t) - 15}" width="30" height="30" rx="5"/><text x="${x}" y="${y(g.t)}">H</text>`;
+    else if (g.type === 'R') h += `<line x1="${x}" x2="${x}" y1="${y(g.t)}" y2="${y(g.c)}"/><circle cx="${x}" cy="${y(g.c)}" r="5"/><rect x="${x - 17}" y="${y(g.t) - 15}" width="34" height="30" rx="5"/><text x="${x}" y="${y(g.t)}">R${g.k}</text>`;
+    else { const d = 7; h += `<line x1="${x}" x2="${x}" y1="${y(g.a)}" y2="${y(g.b)}"/>` + [g.a, g.b].map(t => `<path d="M${x - d} ${y(t) - d}L${x + d} ${y(t) + d}M${x + d} ${y(t) - d}L${x - d} ${y(t) + d}"/>`).join(''); }
+    h += '</g>';
+  });
+  svg.innerHTML = h;
+}
+K.fig('s3-c', p => {
+  const st = s3state(), {q, N, n, G, s} = st;
+  s3svg(st); circles(p, s);
+  K.out('#s3-nv', String(n));
+  K.out('#s3-cnt', `เกต ${s3step} / ${G.length}`);
+  K.$('#s3-prev').disabled = s3step <= 0; K.$('#s3-reset').disabled = s3step <= 0;
+  K.$('#s3-next').disabled = s3step >= G.length; K.$('#s3-all').disabled = s3step >= G.length;
+  const g = G[s3step - 1];
+  let say;
+  if (!g) say = `เริ่มจาก |${n}⟩ = |${bin(n, q)}⟩ — มี amplitude 1 อยู่ช่องเดียว`;
+  else if (g.type === 'H') say = `H บน q${g.t}: แยกเป็น (|0⟩ ± |1⟩)/√2 — คือ DFT ขนาด 2 (butterfly ใน FFT)`;
+  else if (g.type === 'R') say = `R${g.k} บน q${g.t} ควบคุมด้วย q${g.c}: ถ้า q${g.c} = 1 หมุนเฟส 2π/2<sup>${g.k}</sup> = ${fmt(360 / Math.pow(2, g.k), 2)}° — บทบาทเดียวกับ twiddle factor`;
+  else say = `สลับ q${g.a} ↔ q${g.b}: กลับลำดับบิต — FFT radix-2 ก็ได้ผลแบบ bit-reversed เหมือนกัน`;
+  K.html('#s3-eq', say);
+  if (s3step === G.length){
+    const ref = qft(basis(N, n)), err = Math.max(...ref.map((v, k) => cabs([v[0] - s[k][0], v[1] - s[k][1]])));
+    K.html('#s3-sub', err < 1e-9 ? `จบวงจร: ตรงกับสูตร QFT ทุกช่อง ✓ (ต่างกันสูงสุด ${err.toExponential(1)})` : `ไม่ตรงสูตร (ต่าง ${fmt(err, 4)})`);
+  } else K.html('#s3-sub', 'ดูวงทึบ: หลัง H ทุกตัว ขนาดเท่ากันหมดแล้ว — ที่เหลือทำแค่หมุนเฟส');
+});
+K.bind('#s3-q', () => { s3step = 0; }); K.bind('#s3-n', () => { s3step = 0; });
+[['#s3-next', 1], ['#s3-prev', -1]].forEach(([id, d]) => K.$(id).addEventListener('click', () => { s3step += d; K.redraw(); }));
+K.$('#s3-reset').addEventListener('click', () => { s3step = 0; K.redraw(); });
+K.$('#s3-all').addEventListener('click', () => { s3step = 1e9; K.redraw(); });
+
+/* ===== 04 period finding ===== */
+let s4log = [];
+function s4state(){
+  const q = K.val('#s4-q'), N = 1 << q, r = K.val('#s4-r'), el = K.$('#s4-x0');
+  el.max = r - 1; if (+el.value > r - 1) el.value = r - 1;
+  const x0 = +el.value;
+  const x = normalize(Array.from({length: N}, (_, n) => [n >= x0 && (n - x0) % r === 0 ? 1 : 0, 0]));
+  return {q, N, r, x0, x, P: probs(qft(x))};
+}
+function convergents(num, den){
+  const out = []; let h0 = 0, h1 = 1, k0 = 1, k1 = 0, a = num, b = den;
+  while (b){
+    const t = Math.floor(a / b);
+    [h0, h1] = [h1, t * h1 + h0]; [k0, k1] = [k1, t * k1 + k0];
+    out.push([h1, k1]); [a, b] = [b, a - t * b];
+  }
+  return out;
+}
+K.fig('s4-x', p => {
+  const {N, x} = s4state(), P = probs(x), top = Math.max(...P);
+  p.view(-.8, N - .2, 0, top * 1.25).frame({tick: N / 8, grid: N / 16, yT: 2, xl: 'n'});
+  P.forEach((v, n) => { if (v > 1e-12) p.stem(n, v, K.C.x, {r: 2.8}); });
+});
+K.fig('s4-y', p => {
+  const {q, N, r, x0, P} = s4state(), top = Math.max(...P);
+  p.view(-.8, N - .2, 0, top * 1.2).frame({tick: N / 8, grid: N / 16, yT: 2, xl: 'k'});
+  for (let m = 1; m < r; m++) p.vline(m * N / r, K.C.h, null, {dash: [3, 4]});
+  P.forEach((v, k) => p.stem(k, v, K.C.y, {r: v > 1e-6 ? 2.8 : 1.4, alpha: v > 1e-6 ? 1 : .35}));
+  K.out('#s4-rv', String(r)); K.out('#s4-x0v', String(x0));
+  K.html('#s4-eq', N % r === 0
+    ? `r = ${r} หาร N = ${N} ลงตัว → ยอดตรง k = m·${N / r} พอดี ${r} ยอด แต่ละยอดมีโอกาส 1/${r}`
+    : `r = ${r} หาร N = ${N} ไม่ลงตัว → ยอดอยู่ใกล้ k = m·${fmt(N / r, 2)} และรั่วไปข้าง ๆ (leakage) — ยังหา r ได้ด้วยเศษส่วนต่อเนื่อง`);
+  K.html('#s4-sub', `ลองเลื่อน x₀: รูปข้างบนเลื่อน แต่รูปนี้นิ่ง — |y<sub>k</sub>|² ไม่ขึ้นกับ x₀ (time shift เปลี่ยนแค่เฟส)`);
+});
+function s4table(){
+  const tb = K.$('#s4-tb');
+  if (!s4log.length){ tb.innerHTML = '<tr><td colspan="6" class="mini">ยังไม่ได้วัด</td></tr>'; return; }
+  tb.innerHTML = s4log.map((e, i) => `<tr${e.hit ? ' class="on"' : ''}><td class="num">${i + 1}</td><td class="num">${e.k}</td><td class="num">${e.k}/${e.N} = ${fmt(e.k / e.N, 4)}</td><td class="m">${e.frac}</td><td class="num">${e.d}</td><td class="num">${e.L}${e.hit ? ' ✓' : ''}</td></tr>`).join('');
+}
+K.$('#s4-meas').addEventListener('click', () => {
+  const {N, r, P} = s4state();
+  let u = Math.random(), k = 0;
+  while (k < N - 1 && (u -= P[k]) > 0) k++;
+  /* the convergent within 1/(2N) of k/N whose denominator is below N */
+  const cv = convergents(k, N).filter(([, d]) => d < N);
+  const pick = cv.find(([s, d]) => Math.abs(k / N - s / d) <= 1 / (2 * N)) || cv[cv.length - 1] || [0, 1];
+  const L = lcm(s4log.length ? s4log[s4log.length - 1].L : 1, pick[1]);
+  s4log.push({N, k, frac: k === 0 ? '0 → ไม่ได้ข้อมูล' : cv.map(([s, d]) => `${s}/${d}`).join(', ') + ` → <b>${pick[0]}/${pick[1]}</b>`, d: pick[1], L, hit: L === r});
+  if (s4log.length > 8) s4log.shift();
+  s4table();
+});
+K.$('#s4-clr').addEventListener('click', () => { s4log = []; s4table(); });
+K.bind('#s4-q', () => { s4log = []; s4table(); }); K.bind('#s4-r', () => { s4log = []; s4table(); }); K.bind('#s4-x0');
+
+/* ===== 05 cost ===== */
+K.fig('s5-c', p => {
+  const qs = K.val('#s5-q'), Q = 40;
+  p.pad.l = 52;
+  p.view(0, Q + 1, 0, 14.5).frame({tick: 5, grid: 1, yTick: 2, noY: true, xl: 'q'});
+  for (let e = 0; e <= 14; e += 2) p.text('10' + String(e).split('').map(d => '⁰¹²³⁴⁵⁶⁷⁸⁹'[d]).join(''), p.L - 8, p.Y(e), K.C.muted, {align: 'right', font: '11px "IBM Plex Mono", monospace'});
+  const f = q => Math.log10(q * Math.pow(2, q)), g = q => Math.log10(q * (q + 1) / 2);
+  const A = [], B = [];
+  for (let q = 1; q <= Q; q += .25){ A.push([q, f(q)]); B.push([q, g(q)]); }
+  p.curve(A, K.C.h, 2.2).curve(B, K.C.mark, 2.2);
+  p.vline(qs, K.C.muted, `q = ${qs}`);
+  p.point(qs, f(qs), K.C.h).point(qs, g(qs), K.C.mark);
+  const N = Math.pow(2, qs), sci = v => v < 1e5 ? Math.round(v).toLocaleString('en-US') : v.toExponential(1).replace('e+', '×10^');
+  K.out('#s5-qv', String(qs));
+  K.html('#s5-eq', `q = ${qs} qubit → N = ${sci(N)} จุด · FFT ≈ ${sci(qs * N)} ครั้ง · QFT = ${qs * (qs + 1) / 2} เกต`);
+  K.html('#s5-sub', `ต่างกันราว ${sci(qs * N / (qs * (qs + 1) / 2))} เท่า — แต่ได้ผลแค่ k ค่าเดียวต่อการรันหนึ่งครั้ง`);
+});
+K.bind('#s5-q');
+
+K.boot();
+})();
+</script>
+</body>
+</html>

@@ -129,6 +129,9 @@ const PARTS = [
     { id: 'apps', no: '05', title: 'Sampling & Filtering', th: 'การสุ่มและการกรอง', file: 'sampling-filtering.html',
       desc: 'สเปกตรัมซ้อนกันตอนสุ่มช้าเกินไป (aliasing), คิด Nyquist rate, ตัวกรองอุดมคติ 4 ชนิด, moving average / differencing และวงจร RC ที่เป็นตัวกรองตัวแรกของทุกคน',
       tags: ['<span class="math">ω<sub>s</sub> ≥ 2ω<sub>B</sub></span>', '<span class="math">f<sub>p</sub> = |f − kf<sub>s</sub>|</span>', '<span class="math">Y = X·H</span>', 'RC filter'] },
+    { id: 'qft', no: '04+', kind: 'EXTRA', title: 'Quantum Fourier', th: 'ฟูเรียร์ควอนตัม (เสริม)', file: 'quantum-fourier.html',
+      desc: 'QFT คือ DFT ของ amplitude ของ qubit: แตกเป็นวงล้อเฟสทีละ qubit, ไล่วงจร H + controlled-phase ทีละเกตแล้วเทียบกับ butterfly / twiddle ของ FFT, หาคาบแบบ Shor (15 = 3 × 5) และทำไมเร็วแต่แทน FFT ไม่ได้',
+      tags: ['<span class="math">y<sub>k</sub> = (1/√N) Σ x<sub>n</sub>e<sup>j2πkn/N</sup></span>', 'วงจร QFT', 'period finding', 'Shor'] },
     { id: 'midterm', no: 'Q2', kind: 'MIDTERM', title: 'Midterm · Quiz 2', th: 'เฉลยข้อสอบ', path: '../Midterm Signals/index.html',
       desc: 'เฉลย Quiz 2 ครบ 11 ข้อ ทีละขั้นพร้อมกราฟ: convolution, สมบัติ Fourier transform, Parseval, Fourier series, DTFT, DFT, Fourier interpolation และ aliasing — ติ๊กข้อที่ทำแล้วได้',
       tags: ['11 ข้อ', 'convolution', 'Parseval', 'DTFT / DFT', 'aliasing'] }

@@ -11,7 +11,8 @@ Visualizer Web/
 │   ├── convolution-lab.html            ← Lecture 02 Convolution
 │   ├── fourier-ct.html                 ← Lecture 03 Fourier (เวลาต่อเนื่อง)
 │   ├── fourier-dt.html                 ← Lecture 04 DTFS / DTFT / DFT / FFT
-│   └── sampling-filtering.html         ← Lecture 05 Sampling & Filtering
+│   ├── sampling-filtering.html         ← Lecture 05 Sampling & Filtering
+│   └── quantum-fourier.html            ← เสริม: Quantum Fourier Transform (ต่อจาก Lecture 04)
 └── Optimization/                       ← ยังว่าง
 
 ../Midterm Signals/index.html           ← เฉลย Midterm Quiz 2 (ลิงก์จาก Signal Part I ด้วย path)
@@ -40,4 +41,5 @@ Visualizer Web/
 | Convolution | Ex 2.1 `y = {1,5,5,−5,−6,4,1,−2}` · Ex 2.2 `y[2] = 0.5278` · Ex 2.5 `y(−0.8) = 1.2` · Ex 2.6 `y(1.2) = 0.251` |
 | Fourier CT | คลื่นสี่เหลี่ยม `a₁ = −j2/π` · Ex 3.2 `a₀ = 1, a₁ = 1 − 0.5j, a₂ = 0.5∠π/4` |
 | Fourier DT | `x = {1,2,0,−1}` → `X[k] = {2, 1−3j, 0, 1+3j}` · circular conv. `{−6, 6, 7, −5}` |
+| Quantum Fourier | วงจร H + R<sub>k</sub> + swap ตรงกับสูตร `y_k = (1/√N) Σ x_n e^{j2πkn/N}` ทุก input (q = 1–6, ต่างกัน < 1e−14) · 15 = 3 × 5 ด้วย a = 7, r = 4 |
 | Sampling | `f = 13 Hz, fs = 10 Hz → fp = 3 Hz` · เสียง 5 kHz → `ωs = 62832 rad/s, T = 0.1 ms` |
