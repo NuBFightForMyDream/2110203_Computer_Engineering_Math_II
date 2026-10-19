@@ -13,7 +13,10 @@ Visualizer Web/
 │   ├── fourier-dt.html                 ← Lecture 04 DTFS / DTFT / DFT / FFT
 │   ├── sampling-filtering.html         ← Lecture 05 Sampling & Filtering
 │   └── quantum-fourier.html            ← เสริม: Quantum Fourier Transform (ต่อจาก Lecture 04)
-└── Optimization/                       ← ยังว่าง
+└── Optimization/
+    ├── exam-2020.html                  ← เฉลย Quiz 1 2020/1 ครบ 8 ข้อ (ทีละขั้น)
+    ├── exam-2021.html                  ← เฉลย Quiz 1 2021 (3 ข้อ formulation)
+    └── exam-2025.html                  ← เฉลย Quiz 2025/1 ข้อ 6–7 (integer program)
 
 ../Midterm Signals/index.html           ← เฉลย Midterm Quiz 2 (ลิงก์จาก Signal Part I ด้วย path)
 ```
@@ -43,3 +46,6 @@ Visualizer Web/
 | Fourier DT | `x = {1,2,0,−1}` → `X[k] = {2, 1−3j, 0, 1+3j}` · circular conv. `{−6, 6, 7, −5}` |
 | Quantum Fourier | วงจร H + R<sub>k</sub> + swap ตรงกับสูตร `y_k = (1/√N) Σ x_n e^{j2πkn/N}` ทุก input (q = 1–6, ต่างกัน < 1e−14) · 15 = 3 × 5 ด้วย a = 7, r = 4 |
 | Sampling | `f = 13 Hz, fs = 10 Hz → fp = 3 Hz` · เสียง 5 kHz → `ωs = 62832 rad/s, T = 0.1 ms` |
+| Optim · Quiz 2020 | Q3 ช่องว่าง `a = 12, y = −8`, optimal `(5,12), z = 44` · Q4 `z = 5` ที่ `(2,0)` + alternative optima ถึง `(0,5)` · Q5 `z = 20` ที่ `(0,4)` · Q6 `0.61 ฿/g` · Q7 `฿15,500` · ตรวจด้วย scipy `linprog` |
+| Optim · Quiz 2021 | คนงาน `h₁ = 54.63, u₂ = 22.22`, ต้นทุน `1,831,759` (จ้างครบเมื่อค่าปรับ > 16,033) · แผนเงินเดือน A `d = 930, e = 100, ฿13,300` |
+| Optim · Quiz 2025 | เลือกตั้ง `248` ที่นั่ง (ใช้ 996 ล้าน) · ชั้นวางตัวอย่าง 7.1–7.4 = `50 / 55.5 / 100 / 104` จาก scipy `milp` (ตัวเลขสินค้าเป็นตัวอย่างสมมติ) |

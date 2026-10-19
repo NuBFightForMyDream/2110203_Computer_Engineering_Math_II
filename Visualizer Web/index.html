@@ -136,7 +136,17 @@ const PARTS = [
       desc: 'เฉลย Quiz 2 ครบ 11 ข้อ ทีละขั้นพร้อมกราฟ: convolution, สมบัติ Fourier transform, Parseval, Fourier series, DTFT, DFT, Fourier interpolation และ aliasing — ติ๊กข้อที่ทำแล้วได้',
       tags: ['11 ข้อ', 'convolution', 'Parseval', 'DTFT / DFT', 'aliasing'] }
   ]},
-  { id: 'optim', name: 'Optimization', short: 'Optim', th: 'การหาค่าเหมาะที่สุด', folder: 'Optimization', lectures: [] }
+  { id: 'optim', name: 'Optimization', short: 'Optim', th: 'การหาค่าเหมาะที่สุด', folder: 'Optimization', lectures: [
+    { id: 'quiz2020', no: '’20', kind: 'QUIZ', title: 'Quiz 1 · 2020', th: 'เฉลยข้อสอบเก่า', file: 'exam-2020.html',
+      desc: 'เฉลยครบ 8 ข้อแบบทีละขั้น รูปเปลี่ยนตามขั้นที่อ่าน: convex set, true/false พร้อม counterexample, ย้อนหา LP จาก BV/NBV, simplex และ two-phase แบบ tableau ทุกรอบ, เขียน LP + standard form ของ blending / การผลิต / กระจายสินค้า (min average vs min max)',
+      tags: ['simplex tableau', 'two-phase', 'BS / BFS', 'standard form', 'min-max'] },
+    { id: 'quiz2021', no: '’21', kind: 'QUIZ', title: 'Quiz 1 · 2021', th: 'เฉลยข้อสอบเก่า', file: 'exam-2021.html',
+      desc: 'โจทย์ formulation 3 ข้อ: วัคซีน (ค่าเฉลี่ยถ่วงน้ำหนัก → linear), จ้างคนงานหลายเดือน (balance equation + ค่าปรับ) และเลือก 1 ใน 3 แผนเงินเดือน — แต่ละข้อแก้ LP จริงให้ลองเลื่อนค่าดู',
+      tags: ['formulation', 'multi-period', 'weighted average', 'แก้ LP ทีละทาง'] },
+    { id: 'quiz2025', no: '’25', kind: 'QUIZ', title: 'Quiz · 2025', th: 'เฉลยข้อสอบเก่า', file: 'exam-2025.html',
+      desc: 'ข้อ 6–7 ปี 2025 แบบ integer program: เลือกตั้ง (ราคาต่อเขต → 248 ที่นั่ง) และจัดชั้นวางสินค้า 7.1–7.4 (หมุน / หลายแถว / ซ้อน) พร้อมรูปชั้นวางที่แก้ด้วย IP จริง',
+      tags: ['integer program', 'knapsack', 'LP relaxation', 'bonus 7.4'] }
+  ]}
 ];
 
 const BUNDLE = window.CEM_BUNDLE || {};

@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- CP203 Optimization — เฉลย Quiz 1 2021 -->
+<title>Optimization Quiz 2021</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Thai:wght@400;500;600&family=STIX+Two+Text:ital,wght@0,400;0,600;1,400;1,600&display=swap">
+<style>
+<style>
+html,body{margin:0}
+[hidden]{display:none!important}
+img{max-width:100%}
+/* ===== shared tokens & layout for CEMII lecture pages ===== */
+:root{
+  --bg:#EEF1F5; --surface:#FFFFFF; --sunk:#F6F8FB; --ink:#18202D; --muted:#5A6577; --line:#D3DAE4;
+  --grid:rgba(52,86,140,.10); --axis:#8792A5;
+  --x:#1C2638; --h:#D0392C; --mark:#2E6BD9; --prod:#7A4ED3; --y:#12865A; --amber:#B8770F; --on-mark:#FFFFFF;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E1219; --surface:#151B24; --sunk:#111721; --ink:#E5E9F0; --muted:#98A2B3; --line:#29323F;
+    --grid:rgba(150,180,230,.08); --axis:#5F6979;
+    --x:#DDE4EF; --h:#FF6C5E; --mark:#6FA1FF; --prod:#B596FF; --y:#44CF98; --amber:#E8A93E; --on-mark:#0E1219;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E1219; --surface:#151B24; --sunk:#111721; --ink:#E5E9F0; --muted:#98A2B3; --line:#29323F;
+  --grid:rgba(150,180,230,.08); --axis:#5F6979;
+  --x:#DDE4EF; --h:#FF6C5E; --mark:#6FA1FF; --prod:#B596FF; --y:#44CF98; --amber:#E8A93E; --on-mark:#0E1219;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.65 "IBM Plex Sans Thai",system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1240px;margin:0 auto;padding-inline:clamp(16px,3vw,36px);padding-block:28px 72px}
+.math{font-family:"STIX Two Text","Cambria Math","Times New Roman",serif;font-style:italic;letter-spacing:.01em}
+.up{font-style:normal}
+code{font:12.5px/1.4 "IBM Plex Mono",ui-monospace,monospace;background:color-mix(in srgb,var(--ink) 7%,transparent);padding:1px 5px;border-radius:4px;white-space:nowrap}
+:focus-visible{outline:2px solid var(--mark);outline-offset:2px}
+
+header.top{padding-bottom:20px;border-bottom:1px solid var(--line)}
+.eyebrow{font:500 12px/1.4 "IBM Plex Mono",ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}
+h1{font:600 clamp(28px,4.2vw,42px)/1.06 "STIX Two Text","Times New Roman",serif;margin:0;letter-spacing:-.01em;text-wrap:balance}
+h1 .math{font-weight:400;color:var(--muted);font-size:.58em;margin-left:.3em;white-space:nowrap}
+.lede{margin:10px 0 0;color:var(--muted);max-width:66ch}
+
+.layout{display:grid;grid-template-columns:248px minmax(0,1fr);gap:32px;margin-top:24px;align-items:start}
+@media (max-width:920px){.layout{grid-template-columns:minmax(0,1fr);gap:20px}}
+.toc{position:sticky;top:calc(env(safe-area-inset-top,0px) + 12px);display:flex;flex-direction:column;gap:2px;max-height:calc(100vh - 40px);overflow-y:auto}
+@media (max-width:920px){.toc{position:static;max-height:none;flex-direction:row;flex-wrap:wrap;gap:6px;padding-bottom:4px}}
+.toc .lab{font:500 11.5px/1.4 "IBM Plex Mono",monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+@media (max-width:920px){.toc .lab{width:100%;margin-bottom:2px}}
+.toc a{display:flex;gap:9px;align-items:baseline;padding:7px 10px;border-radius:8px;color:var(--muted);text-decoration:none;font-size:14px;line-height:1.35;border:1px solid transparent}
+.toc a b{font:600 11.5px/1.4 "IBM Plex Mono",monospace;color:var(--muted);flex:none}
+.toc a:hover{background:color-mix(in srgb,var(--mark) 7%,transparent);color:var(--ink)}
+.toc a.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.toc a.on b{color:inherit;opacity:.72}
+
+main{display:flex;flex-direction:column;gap:14px;min-width:0}
+section.sec{scroll-margin-top:24px;padding-block:14px 26px;border-top:1px dashed var(--line)}
+section.sec:first-of-type{border-top:0;padding-top:0}
+section.sec > h2{font:600 24px/1.25 "STIX Two Text","Times New Roman",serif;margin:0 0 4px;display:flex;flex-wrap:wrap;align-items:baseline;gap:10px}
+section.sec > h2 .n{font:600 12px/1 "IBM Plex Mono",monospace;color:var(--mark);letter-spacing:.06em}
+section.sec > h2 .th{font-family:"IBM Plex Sans Thai",sans-serif;font-size:15px;font-weight:400;color:var(--muted)}
+.intro{margin:6px 0 16px;color:var(--muted);max-width:74ch}
+.intro b{color:var(--ink);font-weight:600}
+
+/* formula card */
+.fcard{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:14px}
+.fcard .ftitle{font:500 11.5px/1.4 "IBM Plex Mono",monospace;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin:0 0 10px}
+.fbig{font-size:clamp(19px,2.6vw,25px);line-height:2.1;overflow-x:auto;padding-bottom:2px}
+.fbig.sm{font-size:clamp(17px,2.2vw,21px)}
+.legend-sym{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px 18px;margin-top:14px;padding-top:12px;border-top:1px dashed var(--line)}
+.legend-sym div{display:flex;gap:9px;align-items:baseline;font-size:13.5px;color:var(--muted)}
+.legend-sym .s{font-family:"STIX Two Text",serif;font-style:italic;font-size:17px;color:var(--ink);flex:none;min-width:2.4em}
+.note{margin:10px 0 0;font-size:13.5px;color:var(--muted)}
+.note b{color:var(--ink)}
+.warn{border-left:3px solid var(--amber);padding-left:12px;margin:12px 0 0;font-size:13.5px;color:var(--muted)}
+.warn b{color:var(--ink)}
+
+/* derivation stepper */
+.deriv{margin:0;padding:0;list-style:none;counter-reset:d}
+.deriv li{counter-increment:d;display:grid;grid-template-columns:26px minmax(0,1fr);gap:4px 12px;padding:9px 0;border-top:1px solid var(--line);transition:opacity .2s}
+.deriv li:first-child{border-top:0}
+.deriv li::before{content:counter(d);font:600 11px/18px "IBM Plex Mono",monospace;color:var(--muted);background:var(--sunk);border-radius:50%;width:18px;height:18px;text-align:center;margin-top:5px}
+.deriv li.dim{opacity:.22}
+.deriv .ln{font-size:18px;overflow-x:auto}
+.deriv .why{grid-column:2;font-size:13px;color:var(--muted)}
+.dnav{display:flex;align-items:center;gap:8px;margin-top:12px;flex-wrap:wrap}
+.dnav .cnt{font:500 12.5px/1 "IBM Plex Mono",monospace;color:var(--muted)}
+
+/* figures + controls */
+.plot{margin:0 0 12px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px 6px}
+.plot figcaption{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 14px;align-items:baseline;margin-bottom:2px}
+.pt{font-weight:600;font-size:14px}
+.pt .math{font-weight:400;font-size:15.5px}
+.legend{display:flex;flex-wrap:wrap;gap:2px 12px;font-size:12.5px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:14px;height:3px;border-radius:2px;background:var(--c)}
+.legend i.dash{background:repeating-linear-gradient(90deg,var(--c) 0 4px,transparent 4px 7px)}
+.legend .math{font-size:14px;color:var(--ink)}
+canvas{display:block;width:100%;height:200px;touch-action:pan-y}
+canvas.drag{cursor:ew-resize}
+.ctrls{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin-bottom:12px}
+.ctrl{display:flex;align-items:center;gap:9px;font-size:13.5px;flex:1 1 210px;min-width:0}
+.ctrl > span:first-child{color:var(--muted);white-space:nowrap}
+.ctrl input[type=range]{flex:1;min-width:80px;accent-color:var(--mark)}
+.ctrl output{font:600 13px/1 "IBM Plex Mono",monospace;color:var(--mark);min-width:3.4em;text-align:right;font-variant-numeric:tabular-nums}
+.ctrl select,.ctrl input[type=text]{font:13.5px "IBM Plex Mono",monospace;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:6px 8px;max-width:100%}
+.ctrl select{font-family:"IBM Plex Sans Thai",sans-serif;cursor:pointer;flex:1}
+.btn{appearance:none;font:500 13.5px/1 "IBM Plex Sans Thai",system-ui,sans-serif;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 12px;min-height:34px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{border-color:var(--mark)}
+.btn.primary{background:var(--mark);border-color:var(--mark);color:var(--on-mark)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.sm{min-height:30px;padding:6px 10px;font-size:13px}
+.chk{display:inline-flex;align-items:center;gap:7px;font-size:13.5px;color:var(--muted);cursor:pointer}
+.chk input{accent-color:var(--mark)}
+
+/* readout */
+.out{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 20px;padding:12px 4px;border-block:1px dashed var(--line);margin-bottom:12px;min-height:74px}
+.out .l{display:flex;flex-direction:column;gap:3px;min-width:0;font-size:17px;flex:1 1 320px}
+.out .l .sub{font-size:13px;color:var(--muted)}
+.out .r{font:600 24px/1 "IBM Plex Mono",monospace;color:var(--y);white-space:nowrap}
+.out .r.small{font-size:18px}
+
+/* math bits */
+.bigop{display:inline-flex;align-items:center;vertical-align:middle;margin:0 .1em 0 .12em}
+.bigop .op{font-style:normal;font-size:1.4em;line-height:1}
+.bigop .lims{display:inline-flex;flex-direction:column;justify-content:space-between;font-size:.55em;line-height:1.2;margin-left:.12em;min-height:2.2em}
+.frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;font-size:.86em;line-height:1.25;margin:0 .14em}
+.frac>span:last-child{border-top:1px solid currentColor;padding-top:1px}
+.cases{display:inline-flex;align-items:center;vertical-align:middle}
+.cases .brace{font-size:2.6em;line-height:1;font-style:normal;margin-right:.08em}
+.cases .rows{display:grid;grid-template-columns:auto auto;gap:3px 16px;align-items:center;font-size:.92em}
+.cases .cond{color:var(--muted);white-space:nowrap}
+.box{display:inline-block;border:1.5px solid var(--y);border-radius:8px;padding:2px 10px;background:color-mix(in srgb,var(--y) 8%,transparent)}
+.hl{background:color-mix(in srgb,var(--mark) 16%,transparent);border-radius:4px;padding:0 3px}
+.hl2{background:color-mix(in srgb,var(--prod) 16%,transparent);border-radius:4px;padding:0 3px}
+
+/* tables */
+.tscroll{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface);margin-bottom:12px}
+table{border-collapse:collapse;font:13.5px/1.35 "IBM Plex Sans Thai",sans-serif;width:max-content;min-width:100%}
+th,td{padding:9px 12px;text-align:left;vertical-align:top;border-top:1px solid var(--line)}
+thead th{border-top:0;color:var(--muted);font-weight:500;font-size:12.5px;letter-spacing:.04em;text-transform:uppercase}
+td.m,th.m{font-family:"STIX Two Text",serif;font-style:italic;font-size:15.5px}
+td.num{font-family:"IBM Plex Mono",monospace;font-style:normal;text-align:right;font-variant-numeric:tabular-nums}
+tbody tr.on{background:color-mix(in srgb,var(--mark) 10%,transparent)}
+.mini{font-size:12.5px;color:var(--muted)}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 18px;justify-content:space-between}
+footer a{color:var(--mark)}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+
+.wrapc{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.verdict{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:15px;padding:6px 12px;border-radius:999px}
+.verdict.ok{color:var(--y);background:color-mix(in srgb,var(--y) 13%,transparent)}
+.verdict.bad{color:var(--h);background:color-mix(in srgb,var(--h) 13%,transparent)}
+.calc{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center}
+.calc input[type=number]{width:110px;font:14px "IBM Plex Mono",monospace;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+
+/* ===== exam walkthrough pages (Optimization) ===== */
+section.sec > h2 .pts{font:500 12px/1 "IBM Plex Mono",monospace;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:4px 9px;letter-spacing:.03em}
+.prob{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--x);border-radius:12px;padding:12px 16px 14px;margin:8px 0 14px}
+.prob > summary{cursor:pointer;font:500 11.5px/1.6 "IBM Plex Mono",monospace;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);list-style:none}
+.prob > summary::-webkit-details-marker{display:none}
+.prob > summary::before{content:"▸ ";color:var(--mark)}
+.prob[open] > summary::before{content:"▾ "}
+.prob .en{font-size:14px;color:var(--ink);margin:8px 0 0}
+.prob .en p{margin:6px 0}
+.prob .th-sum{margin:10px 0 0;padding-top:10px;border-top:1px dashed var(--line);font-size:14px;color:var(--muted)}
+.prob .th-sum b{color:var(--ink)}
+.prob table{font-size:13px}
+.idea{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:start;background:color-mix(in srgb,var(--amber) 9%,var(--surface));border:1px solid color-mix(in srgb,var(--amber) 35%,var(--line));border-radius:12px;padding:12px 14px;margin:0 0 14px;font-size:14px}
+.idea::before{content:"💡";font-size:18px;line-height:1.3}
+.idea b{font-weight:600}
+.idea p{margin:0 0 6px}.idea p:last-child{margin:0}
+
+/* stepper */
+.stepper{background:var(--surface);border:1px solid var(--line);border-radius:14px;margin-bottom:14px;overflow:hidden}
+.stepper .fig{background:var(--sunk);border-bottom:1px solid var(--line);padding:10px 10px 6px;position:relative}
+.stepper .fig svg{display:block;width:100%;height:auto;max-height:440px}
+.stepper .fig .figcap{font-size:12.5px;color:var(--muted);text-align:center;margin:2px 0 0;min-height:1.6em}
+.stepper .fig .figctl{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;justify-content:center;padding:6px 4px 2px;font-size:13px}
+.stepper .fig .figctl label{display:inline-flex;align-items:center;gap:8px;color:var(--muted)}
+.stepper .fig .figctl input[type=range]{width:min(220px,46vw);accent-color:var(--mark)}
+.stepper .fig .figctl output{font:600 12.5px/1 "IBM Plex Mono",monospace;color:var(--mark);min-width:3.2em}
+.snav{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:10px 14px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--surface);z-index:1}
+.snav .cnt{font:500 12.5px/1 "IBM Plex Mono",monospace;color:var(--muted);margin-right:auto}
+.snav .dots{display:flex;gap:4px;flex-wrap:wrap}
+.snav .dots button{appearance:none;width:22px;height:22px;border-radius:50%;border:1px solid var(--line);background:var(--sunk);font:600 10.5px/1 "IBM Plex Mono",monospace;color:var(--muted);cursor:pointer;padding:0}
+.snav .dots button.seen{background:color-mix(in srgb,var(--mark) 18%,var(--surface));color:var(--ink)}
+.snav .dots button.cur{background:var(--mark);border-color:var(--mark);color:var(--on-mark)}
+ol.steps{list-style:none;margin:0;padding:6px 14px 10px}
+ol.steps > li{display:grid;grid-template-columns:30px minmax(0,1fr);gap:2px 12px;padding:12px 0;border-top:1px solid var(--line)}
+ol.steps > li:first-child{border-top:0}
+ol.steps > li::before{content:attr(data-n);font:600 12px/24px "IBM Plex Mono",monospace;color:var(--muted);background:var(--sunk);border:1px solid var(--line);border-radius:50%;width:24px;height:24px;text-align:center}
+ol.steps > li.future, ol.steps > li.past{display:none}
+ol.steps.all > li.future, ol.steps.all > li.past{display:grid}
+ol.steps.all > li.future{opacity:.55}
+ol.steps > li.cur::before{background:var(--mark);border-color:var(--mark);color:var(--on-mark)}
+ol.steps > li.cur{background:linear-gradient(90deg,color-mix(in srgb,var(--mark) 7%,transparent),transparent 70%);margin-inline:-14px;padding-inline:14px}
+ol.steps > li > *{grid-column:2}
+ol.steps > li > h4{margin:0 0 4px;font-size:15.5px;font-weight:600;line-height:1.4}
+ol.steps > li p{margin:4px 0 8px;max-width:78ch}
+ol.steps > li ul{margin:4px 0 8px;padding-left:20px}
+ol.steps > li ul li{margin:3px 0}
+.eq{font-family:"STIX Two Text","Cambria Math","Times New Roman",serif;font-size:17.5px;line-height:1.9;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:8px 14px;margin:6px 0 10px;overflow-x:auto}
+.eq .r{display:block;white-space:nowrap}
+.eq .c{color:var(--muted);font-family:"IBM Plex Sans Thai",sans-serif;font-style:normal;font-size:13px;margin-left:14px}
+.eq i,.eq var{font-style:italic}
+.eq .n{font-style:normal}
+.why{font-size:13.5px;color:var(--muted);border-left:3px solid var(--line);padding-left:10px;margin:6px 0 8px}
+.why b{color:var(--ink)}
+.trap{font-size:13.5px;border-left:3px solid var(--h);padding:4px 10px;margin:8px 0;background:color-mix(in srgb,var(--h) 6%,transparent);border-radius:0 8px 8px 0}
+.trap b{color:var(--h)}
+.ans{border:1.5px solid var(--y);background:color-mix(in srgb,var(--y) 8%,var(--surface));border-radius:12px;padding:12px 16px;margin:0 0 14px;font-size:14.5px}
+.ans > b:first-child{display:block;font:600 11.5px/1.6 "IBM Plex Mono",monospace;letter-spacing:.07em;text-transform:uppercase;color:var(--y);margin-bottom:4px}
+.ans p{margin:4px 0}
+.c-mark{color:var(--mark)} .c-h{color:var(--h)} .c-y{color:var(--y)} .c-prod{color:var(--prod)} .c-amber{color:var(--amber)} .c-mut{color:var(--muted)}
+.tag{display:inline-block;font:600 11px/1.5 "IBM Plex Mono",monospace;border-radius:6px;padding:0 6px;margin-right:4px;vertical-align:1px}
+.tag.t{color:var(--y);background:color-mix(in srgb,var(--y) 14%,transparent)}
+.tag.f{color:var(--h);background:color-mix(in srgb,var(--h) 14%,transparent)}
+.tag.b{color:var(--mark);background:color-mix(in srgb,var(--mark) 14%,transparent)}
+
+/* simplex tableau */
+.tab{overflow-x:auto;margin:6px 0 10px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.tab table{font:13.5px/1.3 "IBM Plex Mono",monospace;min-width:0;width:100%}
+.tab th,.tab td{padding:6px 10px;text-align:right;border-top:1px solid var(--line);white-space:nowrap}
+.tab thead th{text-transform:none;font:italic 15px "STIX Two Text",serif;color:var(--ink);letter-spacing:0}
+.tab td:first-child,.tab th:first-child{text-align:left;font:italic 15px "STIX Two Text",serif;color:var(--muted)}
+.tab tr.r0 td{background:color-mix(in srgb,var(--amber) 8%,transparent)}
+.tab .pc{background:color-mix(in srgb,var(--mark) 12%,transparent)}
+.tab .pr td{background:color-mix(in srgb,var(--prod) 10%,transparent)}
+.tab td.pv{background:var(--mark);color:var(--on-mark);font-weight:600;border-radius:4px}
+.tab td.neg{color:var(--h);font-weight:600}
+.tab td.rat{color:var(--muted);border-left:1px dashed var(--line)}
+.tab td.rat.win{color:var(--prod);font-weight:600}
+.tab th.rhs,.tab td.rhs{border-left:1px solid var(--line)}
+
+/* svg figure classes */
+.sv text{font:12px "IBM Plex Sans Thai",sans-serif;fill:var(--muted)}
+.sv .lbl{font:italic 14px "STIX Two Text",serif;fill:var(--ink)}
+.sv .lbl.b{font-weight:600}
+.sv .tick{font:11px "IBM Plex Mono",monospace;fill:var(--muted)}
+.sv .grid{stroke:var(--grid);stroke-width:1}
+.sv .axis{stroke:var(--axis);stroke-width:1.3}
+.sv .feas{fill:color-mix(in srgb,var(--y) 20%,transparent);stroke:var(--y);stroke-width:2}
+.sv .bad{fill:color-mix(in srgb,var(--h) 14%,transparent);stroke:var(--h);stroke-width:2}
+.sv .ln{stroke-width:2;fill:none}
+.sv .dash{stroke-dasharray:6 5}
+
+/* progress */
+.done-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:4px 0 0}
+.toc a .ok{margin-left:auto;color:var(--y);font-weight:600;visibility:hidden}
+.toc a.done .ok{visibility:visible}
+.toc .grp{font:500 11px/1.4 "IBM Plex Mono",monospace;letter-spacing:.07em;color:var(--muted);margin:10px 10px 2px}
+@media (max-width:920px){.toc .grp{display:none}}
+.kbd{font:500 11.5px/1 "IBM Plex Mono",monospace;border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:2px 5px;color:var(--muted)}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px 18px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">CP203 · Optimization · ข้อสอบเก่า Quiz 1 · 2021</p>
+    <h1>เฉลย Quiz 1 · 2021 <span class="math">โจทย์ formulation</span></h1>
+    <p class="lede">ปี 2021 เป็นโจทย์ "เขียน LP + standard form" ล้วน ๆ 3 ข้อ — เฉลยนี้ไล่ทีละขั้นตั้งแต่อ่านโจทย์ → เลือกตัวแปร → objective → ข้อจำกัดทีละอัน → standard form แล้วแถมแก้ LP จริงด้วยตัวเลขให้ดูว่าโมเดลทำงานยังไง กด <b>ถัดไป ▶</b> ทีละขั้น</p>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" aria-label="ข้อ">
+      <span class="lab">ข้อสอบ 2021</span>
+      <a href="#recipe"><b>00</b><span>สูตร 5 ขั้นเขียน LP</span><span class="ok">✓</span></a>
+      <a href="#vac"><b>01</b><span>Our arms will be full of vaccines</span><span class="ok">✓</span></a>
+      <a href="#wf"><b>02</b><span>Hamtaro factory part 2 V2</span><span class="ok">✓</span></a>
+      <a href="#cr"><b>03</b><span>Hamtaro's first crisis (2021)</span><span class="ok">✓</span></a>
+    </nav>
+
+    <main>
+      <section class="sec" id="recipe">
+        <h2><span class="n">00</span> สูตร 5 ขั้นสำหรับโจทย์ formulation <span class="th">— ใช้ได้ทุกข้อ</span></h2>
+        <div class="fcard">
+          <div class="tscroll"><table>
+            <thead><tr><th>ขั้น</th><th>ถามตัวเอง</th><th>เขียนอะไร</th></tr></thead>
+            <tbody>
+              <tr><td>1. ตัวแปร</td><td>"อะไรที่เรา <b>เลือกได้</b>?" (อย่างอื่นเป็นค่าคงที่)</td><td>นิยามตัวแปร + หน่วย ให้ชัด</td></tr>
+              <tr><td>2. Objective</td><td>"อยาก min / max อะไร?"</td><td>เขียนเป็นผลรวมของ (ค่าคงที่ × ตัวแปร)</td></tr>
+              <tr><td>3. ข้อจำกัด</td><td>อ่านโจทย์ทีละประโยค ประโยคไหนมีคำว่า "ไม่เกิน / อย่างน้อย / ต้อง"</td><td>1 ประโยค → 1 (หรือหลาย) อสมการ</td></tr>
+              <tr><td>4. Assumption</td><td>โจทย์ไม่ได้บอกอะไรที่จำเป็น?</td><td>เขียนสมมติฐานไว้ชัด ๆ (โจทย์อนุญาต)</td></tr>
+              <tr><td>5. Standard form</td><td>ทุกอันเป็น <span class="math">=</span>, ตัวแปร ≥ 0, RHS ≥ 0</td><td><span class="math">≤</span> + slack · <span class="math">≥</span> − surplus · free → <span class="math">x⁺ − x⁻</span></td></tr>
+            </tbody>
+          </table></div>
+          <p class="note">เทคนิคที่ใช้บ่อยมาก: <b>อัตราส่วน/ค่าเฉลี่ย</b> → คูณตัวส่วนข้ามไปให้เป็น linear · <b>เลือก 1 จากหลายทาง</b> → แก้ LP แยกทีละทางแล้วเทียบ (หรือใช้ตัวแปร 0/1)</p>
+        </div>
+        <div class="done-row"><label class="chk"><input type="checkbox" data-done="recipe"> อ่านแล้ว</label></div>
+      </section>
+
+      <!-- ================= vaccines ================= -->
+      <section class="sec" id="vac">
+        <h2><span class="n">01</span> Our arms will be full of vaccines</h2>
+        <details class="prob" open><summary>โจทย์</summary>
+          <div class="en">
+            <p>Six vaccine providers with price per dose <span class="math">c_i ≥ 0</span> and fatality prevention rate <span class="math">0 ≤ p_i ≤ 1</span>. Rate is obtained after <b>two doses</b>, except <b>JaesoJose (single shot)</b>. For vaccine <span class="math">v_i</span> the government must buy at least <span class="math">m_i</span> doses to make the contract, and at most <span class="math">n_i</span> doses can be delivered.
+            The average prevention rate must be no less than <span class="math">R</span>. There are <span class="math">X</span> people. Minimize the cost.</p>
+            <p>No mix-and-match · no boosters · fractional vaccines OK · <b>no contract with BiZerTech (v₂) and Oderman (v₃)</b>, but <b>order all other four</b> · average rate is the weighted average (e.g. 10 Vinosac + 5 ZenaCasatra → (10p₁ + 5p₅)/15) · unvaccinated person has rate <span class="math">p₀</span>; not everyone needs to be vaccinated.</p>
+          </div>
+          <p class="th-sum">สรุป: ซื้อวัคซีน 4 ยี่ห้อ <span class="math">v₁, v₄, v₅, v₆</span> ให้ค่าป้องกันเฉลี่ย ≥ R โดยจ่ายน้อยที่สุด</p>
+        </details>
+        <div class="idea"><div><p><b>จุดที่คนพลาด</b>: (1) วัคซีนส่วนใหญ่ใช้ <b>2 โดส/คน</b> แต่ JaesoJose ใช้ 1 · (2) ต้องซื้อ "อย่างน้อย m_i" ซึ่งอาจมากกว่าที่ใช้จริง → แยก "โดสที่ซื้อ" กับ "คนที่ฉีด" เป็นคนละตัวแปร · (3) ค่าเฉลี่ยเป็นเศษส่วน → คูณตัวส่วนข้าม</p>
+          <p>รูปด้านบนใช้ <b>ตัวเลขสมมติ</b> (โจทย์ให้แต่สัญลักษณ์) เพื่อให้เห็นว่าโมเดลเลือกอะไร ลองเลื่อน <span class="math">R</span> ดูได้</p></div></div>
+        <div class="stepper" data-fig="vac">
+          <div class="fig"><div class="figbody"></div><p class="figcap"></p>
+            <div class="figctl"><label>ค่าเฉลี่ยขั้นต่ำ <span class="math">R</span> <input type="range" id="vac-r" min="0.25" max="0.9" step="0.01" value="0.6"></label><output id="vac-rv">0.60</output></div>
+          </div>
+          <ol class="steps">
+            <li><h4>ตัดสิ่งที่ไม่เกี่ยวออกก่อน</h4>
+              <ul>
+                <li><span class="math">v₂, v₃</span> ไม่ทำสัญญา → ไม่มีตัวแปรของมัน (หรือเท่ากับ 0)</li>
+                <li>"ไม่ mix-and-match, ไม่มี booster" → คนหนึ่งคนได้วัคซีน <b>ยี่ห้อเดียว</b> จำนวนโดสตายตัว (2 หรือ 1)</li>
+                <li>"ส่งของทันที", "ไม่สนผลข้างเคียง" → ไม่มีเรื่องเวลา ไม่ต้องมีตัวแปรตามเดือน</li>
+                <li>"เศษส่วนได้" → เป็น LP (ไม่ต้องเป็น integer)</li>
+              </ul>
+              <p>เหลือชุดวัคซีน <span class="math">I = {1, 4, 5, 6}</span> และจำนวนโดสต่อคน <span class="math">k₁ = k₄ = k₅ = 2</span>, <span class="math">k₆ = 1</span></p></li>
+            <li><h4>ตัวแปร: แยก "ซื้อ" กับ "ฉีด"</h4>
+              <div class="eq"><span class="r">y_i = จำนวนโดสวัคซีน i ที่ซื้อ &emsp;(i ∈ I)</span><span class="r">z_i = จำนวนคนที่ได้รับวัคซีน i ครบ &emsp;(i ∈ I)</span></div>
+              <p class="why">ทำไมไม่ใช้ตัวแปรเดียว: ถ้าบังคับซื้อขั้นต่ำ m_i มากกว่าที่จะใช้ เราก็ยังต้องจ่ายค่าโดสที่เหลือ — ใช้สองตัวแปรถูกต้องกว่า (และถ้าใช้ตัวเดียวแล้วเขียน assumption ว่า "ใช้ทุกโดสที่ซื้อ" ก็พอรับได้)</p></li>
+            <li><h4>Objective: จ่ายค่าโดสที่ซื้อ</h4>
+              <div class="eq"><span class="r">min &nbsp;c₁y₁ + c₄y₄ + c₅y₅ + c₆y₆</span></div></li>
+            <li><h4>โดสที่ใช้ ≤ โดสที่ซื้อ</h4>
+              <div class="eq"><span class="r">2z₁ ≤ y₁, &emsp;2z₄ ≤ y₄, &emsp;2z₅ ≤ y₅</span><span class="r">z₆ ≤ y₆ <span class="c">(JaesoJose เข็มเดียว)</span></span></div>
+              <p>ในรูป: แท่งเข้ม = โดสที่ใช้ (k_i·z_i) ต้องไม่ยาวเกินแท่งอ่อน = โดสที่ซื้อ</p></li>
+            <li><h4>เงื่อนไขสัญญา: ขั้นต่ำ m_i และสูงสุด n_i</h4>
+              <p>"ตัดสินใจสั่งทั้ง 4 ยี่ห้อ" → ต้องถึงขั้นต่ำของทุกยี่ห้อ</p>
+              <div class="eq"><span class="r">m_i ≤ y_i ≤ n_i &emsp;∀ i ∈ {1, 4, 5, 6}</span></div>
+              <p>ในรูป: เส้นประซ้าย = m_i, เส้นประขวา = n_i</p></li>
+            <li><h4>จำนวนคน</h4>
+              <div class="eq"><span class="r">z₁ + z₄ + z₅ + z₆ ≤ X</span></div>
+              <p class="why">ไม่ต้องฉีดทุกคน (โจทย์บอก) จึงเป็น ≤ ไม่ใช่ =</p></li>
+            <li><h4>ค่าป้องกันเฉลี่ย ≥ R → ทำให้เป็น linear</h4>
+              <p>คนที่ไม่ได้ฉีดมีค่า <span class="math">p₀</span> จำนวน <span class="math">X − Σz_i</span> คน · เฉลี่ยทั้งประเทศ:</p>
+              <div class="eq">
+                <span class="r">[ p₁z₁ + p₄z₄ + p₅z₅ + p₆z₆ + p₀(X − Σz_i) ] / X ≥ R</span>
+                <span class="r">⇔ &nbsp;(p₁ − p₀)z₁ + (p₄ − p₀)z₄ + (p₅ − p₀)z₅ + (p₆ − p₀)z₆ ≥ (R − p₀)X</span>
+              </div>
+              <p>ตัวส่วน <span class="math">X</span> เป็นค่าคงที่ คูณข้ามได้เลย → linear ✓</p>
+              <p class="why">ถ้าตีความว่าเฉลี่ยเฉพาะคนที่ฉีด (ตามตัวอย่าง 10 + 5 คนในโจทย์): <span class="math">Σp_iz_i ≥ R·Σz_i</span> ⇔ <span class="math">Σ(p_i − R)z_i ≥ 0</span> — ก็ linear เหมือนกัน เลือกแบบหนึ่งแล้ว <b>เขียน assumption</b></p></li>
+            <li><h4>Assumption ที่ควรเขียนกำกับ</h4>
+              <ul>
+                <li>ค่าเฉลี่ยคิดทั้งประชากร <span class="math">X</span> (คนไม่ฉีดนับเป็น <span class="math">p₀</span>)</li>
+                <li>โดสที่ซื้อเกินแล้วไม่ได้ใช้ ก็ต้องจ่าย (ทิ้งได้)</li>
+                <li>งบ "มีจำกัด" แต่โจทย์ไม่ให้ตัวเลข → ถ้ามีงบ <span class="math">B</span> ให้เพิ่ม <span class="math">Σc_iy_i ≤ B</span> (ถ้า infeasible แปลว่างบไม่พอ)</li>
+              </ul></li>
+            <li><h4>Standard form</h4>
+              <div class="eq">
+                <span class="r">min c₁y₁ + c₄y₄ + c₅y₅ + c₆y₆</span>
+                <span class="r">s.t. y_i − e_i = m_i &emsp;∀ i ∈ I <span class="c">(ขั้นต่ำ, e = surplus)</span></span>
+                <span class="r">&emsp;&emsp;y_i + s_i = n_i &emsp;∀ i ∈ I <span class="c">(สูงสุด, s = slack)</span></span>
+                <span class="r">&emsp;&emsp;2z_i − y_i + w_i = 0 &emsp;i = 1, 4, 5</span>
+                <span class="r">&emsp;&emsp;z₆ − y₆ + w₆ = 0</span>
+                <span class="r">&emsp;&emsp;z₁ + z₄ + z₅ + z₆ + s_X = X</span>
+                <span class="r">&emsp;&emsp;Σ<sub>i∈I</sub> (p_i − p₀) z_i − e_R = (R − p₀) X</span>
+                <span class="r">&emsp;&emsp;ทุกตัวแปร ≥ 0</span>
+              </div>
+              <p class="why">RHS <span class="math">(R − p₀)X</span> ถ้า <span class="math">R &lt; p₀</span> จะติดลบ → คูณ −1 ทั้งแถว (แต่ปกติ R &gt; p₀ ไม่งั้นไม่ต้องฉีดเลย)</p></li>
+            <li><h4>(แถม) ดูโมเดลทำงานด้วยตัวเลขสมมติ</h4>
+              <p>ตัวเลขในรูป: <span class="math">X = 1000, p₀ = 0.2</span> · Vinosac (p 0.5, ฿10) · Phisonarm (0.95, ฿30) · ZenaCasatra (0.75, ฿15) · JaesoJose (0.65, ฿20, 1 เข็ม)</p>
+              <p>สังเกต: R ต่ำ → ซื้อแค่ขั้นต่ำ · R สูงขึ้น → เลือกยี่ห้อที่ "ได้ค่าป้องกันต่อบาท" ดีที่สุดก่อน (JaesoJose เข็มเดียวคุ้มเพราะ 1 คนใช้ 1 โดส) · R สูงเกินไป → infeasible</p></li>
+          </ol>
+        </div>
+        <div class="done-row"><label class="chk"><input type="checkbox" data-done="vac"> เข้าใจข้อนี้แล้ว</label></div>
+      </section>
+
+      <!-- ================= workforce ================= -->
+      <section class="sec" id="wf">
+        <h2><span class="n">02</span> Hamtaro factory part 2 V2 — จ้างคนงาน 3 เดือน</h2>
+        <details class="prob" open><summary>โจทย์</summary>
+          <div class="en">
+            <p>Initially 50 hamster workers. <b>10% of the workers resign every month.</b> A newly hired hamster must train for <b>one month</b> to become skilled, and <b>40% drop out</b> before training finishes. Salary <b>8,000 THB/month</b> per worker, training <b>500 THB</b> per hamster. <u>He may use fewer workers than required and pay a fine of <b>10,000 THB/person</b> short.</u></p>
+            <div class="tscroll"><table><thead><tr><th>Month</th><th>1</th><th>2</th><th>3</th></tr></thead><tbody><tr><td>Workers required</td><td class="num">50</td><td class="num">100</td><td class="num">70</td></tr></tbody></table></div>
+            <p>The optimal solution does not have to be an integer. Formulate an LP and write the standard form; specify decision variables and assumptions.</p></div>
+        </details>
+        <div class="idea"><div><p><b>โจทย์หลายช่วงเวลา (multi-period)</b>: เขียน "สมการสมดุล" (balance equation) ว่าคนงานเดือนหน้า = เหลือจากเดือนนี้ + คนที่เทรนจบ แล้วทุกอย่างจะเป็น linear เอง</p>
+          <p>รูปด้านบนคือไทม์ไลน์ของคนงาน — ทุกตัวเลขมาจากการแก้ LP จริง ลองเลื่อนค่าปรับดูว่าแผนเปลี่ยนเมื่อไหร่</p></div></div>
+        <div class="stepper" data-fig="wf">
+          <div class="fig"><div class="figbody"></div><p class="figcap"></p>
+            <div class="figctl" data-show="6"><label>ค่าปรับต่อคนที่ขาด <input type="range" id="wf-f" min="5000" max="25000" step="500" value="10000"></label><output id="wf-fv">10,000</output></div>
+          </div>
+          <ol class="steps">
+            <li><h4>วาดไทม์ไลน์ก่อน (สำคัญที่สุดของข้อนี้)</h4>
+              <p>ทุกต้นเดือน t: มีคนงานฝีมือ <span class="math">w_t</span> คน ทำงานเดือนนั้น · จ้างใหม่ <span class="math">h_t</span> ตัวมาเทรน</p>
+              <p>สิ้นเดือน t: คนงานลาออก 10% → เหลือ <span class="math">0.9w_t</span> · คนที่เทรนอยู่หลุด 40% → เหลือ <span class="math">0.6h_t</span> กลายเป็นคนงานฝีมือของเดือน t+1</p>
+              <div class="eq"><span class="r">w_{t+1} = 0.9 w_t + 0.6 h_t</span></div></li>
+            <li><h4>Assumption (ต้องเขียน เพราะโจทย์ไม่บอก)</h4>
+              <ul>
+                <li>50 คนเริ่มต้นเป็นคนงานฝีมือที่ทำงานเดือน 1 ได้เลย → <span class="math">w₁ = 50</span></li>
+                <li>ลาออก 10% เกิดตอน <b>สิ้นเดือน</b> (ทำงานครบเดือนแล้วค่อยออก, ได้เงินเดือนเต็ม)</li>
+                <li>คนที่กำลังเทรน <b>ยังไม่นับ</b> เป็นคนงาน และ <b>ไม่ได้เงินเดือน</b> — จ่ายแค่ค่าเทรน 500 ทุกตัวที่จ้าง (รวมตัวที่หลุดด้วย)</li>
+                <li>ไล่ออกไม่ได้ และจ้างในเดือน 3 ไม่มีประโยชน์ (เทรนจบหลังเดือน 3) → ไม่ต้องมี <span class="math">h₃</span></li>
+              </ul></li>
+            <li><h4>ตัวแปรตัดสินใจ</h4>
+              <div class="eq">
+                <span class="r">h₁, h₂ = จำนวนที่จ้างใหม่ต้นเดือน 1, 2</span>
+                <span class="r">w₂, w₃ = คนงานฝีมือในเดือน 2, 3 <span class="c">(ตัวแปรช่วย)</span></span>
+                <span class="r">u₁, u₂, u₃ = จำนวนคนที่ขาด (โดนปรับ) ในแต่ละเดือน</span>
+              </div></li>
+            <li><h4>สมการสมดุล + จำนวนที่ขาด</h4>
+              <div class="eq">
+                <span class="r">w₂ = 0.9(50) + 0.6h₁ = 45 + 0.6h₁</span>
+                <span class="r">w₃ = 0.9w₂ + 0.6h₂</span>
+                <span class="r">50 + u₁ ≥ 50, &emsp;w₂ + u₂ ≥ 100, &emsp;w₃ + u₃ ≥ 70</span>
+              </div>
+              <p>ความหมาย: คนที่มีจริง + คนที่ขาด ต้องครบที่ต้องการ (ถ้ามีเกิน u = 0 ก็ได้)</p>
+              <p class="trap"><b>กับดัก:</b> อย่าเขียน <span class="math">u_t = req_t − w_t</span> เพราะถ้า <span class="math">w_t</span> มากกว่า req จะได้ u ติดลบ (เหมือนได้เงินคืน) — ใช้ <span class="math">≥</span> กับ <span class="math">u_t ≥ 0</span> แล้ว min จะดัน u ลงเอง</p></li>
+            <li><h4>Objective: เงินเดือน + ค่าเทรน + ค่าปรับ</h4>
+              <div class="eq">
+                <span class="r">min &nbsp;8000(50 + w₂ + w₃) + 500(h₁ + h₂) + 10000(u₁ + u₂ + u₃)</span>
+              </div>
+              <p class="why"><span class="math">8000 × 50</span> ของเดือน 1 เป็นค่าคงที่ จะตัดออกจาก objective ก็ได้ (คำตอบไม่เปลี่ยน)</p></li>
+            <li><h4>Standard form</h4>
+              <div class="eq">
+                <span class="r">min 8000w₂ + 8000w₃ + 500h₁ + 500h₂ + 10000u₁ + 10000u₂ + 10000u₃ (+ 400000)</span>
+                <span class="r">s.t. w₂ − 0.6h₁ = 45</span>
+                <span class="r">&emsp;&emsp;−0.9w₂ + w₃ − 0.6h₂ = 0</span>
+                <span class="r">&emsp;&emsp;u₁ − e₁ = 0</span>
+                <span class="r">&emsp;&emsp;w₂ + u₂ − e₂ = 100</span>
+                <span class="r">&emsp;&emsp;w₃ + u₃ − e₃ = 70</span>
+                <span class="r">&emsp;&emsp;w₂, w₃, h₁, h₂, u₁, u₂, u₃, e₁, e₂, e₃ ≥ 0</span>
+              </div></li>
+            <li><h4>(แถม) คำตอบ — ทำไมยอมโดนปรับในเดือน 2?</h4>
+              <p>แก้ได้: <span class="math">h₁ = 54.63, h₂ = 0, w₂ = 77.78, w₃ = 70, u₂ = 22.22</span> · ต้นทุนรวม <b>1,831,759 บาท</b></p>
+              <p>ทำไมไม่จ้างให้ครบ 100 ในเดือน 2? เพราะคนงานที่เพิ่มในเดือน 2 จะ <b>เหลือ 90% ไปเดือน 3</b> ซึ่งต้องการแค่ 70 → กลายเป็นคนเกินที่ต้องจ่ายเงินเดือนแต่ไล่ออกไม่ได้</p>
+              <div class="eq">
+                <span class="r">ต้นทุนเพิ่ม 1 คนในเดือน 2 = 500/0.6 + 8000 + 0.9 × 8000 ≈ 16,033 บาท</span>
+                <span class="r">ค่าปรับ 1 คน = 10,000 บาท &nbsp;&lt;&nbsp; 16,033 → ยอมจ่ายค่าปรับดีกว่า</span>
+              </div>
+              <p>จุดพอดี: <span class="math">w₂ = 70/0.9 = 77.78</span> → เดือน 3 ได้ 70 พอดี ไม่ต้องจ้างเพิ่ม (h₂ = 0) · ลองเลื่อนค่าปรับให้เกิน 16,033 ดู — LP จะเปลี่ยนไปจ้างให้ครบ 100</p></li>
+          </ol>
+        </div>
+        <div class="done-row"><label class="chk"><input type="checkbox" data-done="wf"> เข้าใจข้อนี้แล้ว</label></div>
+      </section>
+
+      <!-- ================= crisis ================= -->
+      <section class="sec" id="cr">
+        <h2><span class="n">03</span> Hamtaro's first crisis (2021) — เลือกแผนเงินเดือน</h2>
+        <details class="prob" open><summary>โจทย์</summary>
+          <div class="en">
+            <div class="two">
+              <div class="tscroll"><table><thead><tr><th>Strategy</th><th>Weekday pay / hr</th><th>Weekend pay / hr</th></tr></thead><tbody>
+                <tr><td>A</td><td class="num">10</td><td class="num">40</td></tr><tr><td>B</td><td class="num">15</td><td class="num">20</td></tr><tr><td>C</td><td class="num">20</td><td class="num">15</td></tr></tbody></table></div>
+              <div class="tscroll"><table><thead><tr><th></th><th>Weekday</th><th>Weekend</th></tr></thead><tbody>
+                <tr><td>items / workhour</td><td class="num">1</td><td class="num">0.7</td></tr></tbody></table></div>
+            </div>
+            <p>He can choose only <b>one</b> strategy. Needs to create <b>1000 items</b>; at least <b>100 weekend hours</b> for machine maintenance; fractional hours allowed; no other limit on hours.
+            What strategy minimizes salary cost, and how should hours be distributed? Provide a method using LP and the standard form.</p></div>
+        </details>
+        <div class="idea"><div><p><b>"เลือกได้แค่ 1 จาก 3"</b> เป็นการตัดสินใจแบบไม่ต่อเนื่อง LP ตัวเดียวทำไม่ได้ตรง ๆ → วิธีที่ง่ายและถูกต้อง: <b>แก้ LP 3 ตัว (หนึ่งตัวต่อหนึ่ง strategy) แล้วเลือกตัวที่ต้นทุนต่ำสุด</b></p></div></div>
+        <div class="stepper" data-fig="cr">
+          <div class="fig"><div class="figbody"></div><p class="figcap"></p>
+            <div class="figctl"><label>strategy ในรูป <select id="cr-s" class="btn sm"><option value="auto">ตามขั้นที่อ่าน</option><option value="0">A</option><option value="1">B</option><option value="2">C</option></select></label></div>
+          </div>
+          <ol class="steps">
+            <li><h4>ตัวแปร</h4>
+              <div class="eq"><span class="r">d = จำนวนชั่วโมงทำงานวันธรรมดา (weekday) รวม</span><span class="r">e = จำนวนชั่วโมงทำงานวันหยุด (weekend) รวม</span></div>
+              <p class="why">ไม่ต้องแยกเป็นรายคน — โจทย์บอกว่า "shift ชั่วโมงของทุกคนได้" และ "ไม่มีข้อจำกัดชั่วโมงรวม"</p></li>
+            <li><h4>ข้อจำกัด (เหมือนกันทุก strategy)</h4>
+              <div class="eq">
+                <span class="r">1·d + 0.7·e ≥ 1000 <span class="c">(ผลิตให้ได้ 1000 ชิ้น)</span></span>
+                <span class="r">e ≥ 100 <span class="c">(ดูแลเครื่องจักรวันหยุด)</span></span>
+                <span class="r">d, e ≥ 0</span>
+              </div>
+              <p>ในรูป: region สีเขียว = ทุกคู่ (d, e) ที่ทำได้</p></li>
+            <li><h4>Objective ของ strategy k</h4>
+              <div class="eq"><span class="r">LP_k: &nbsp;min &nbsp;a_k·d + b_k·e</span><span class="r">A: 10d + 40e &emsp; B: 15d + 20e &emsp; C: 20d + 15e</span></div></li>
+            <li><h4>แก้ LP_A</h4>
+              <p>คิดแบบ "ราคาต่อชิ้น": weekday <span class="math">10/1 = 10</span> บาท/ชิ้น · weekend <span class="math">40/0.7 ≈ 57.1</span> บาท/ชิ้น → ใช้ weekend <b>น้อยที่สุด</b> (100 ชม.) ที่เหลือใช้ weekday</p>
+              <div class="eq"><span class="r">e = 100 → ได้ 70 ชิ้น &nbsp;⇒&nbsp; d = 1000 − 70 = 930</span><span class="r">cost_A = 10(930) + 40(100) = 13,300</span></div></li>
+            <li><h4>แก้ LP_B</h4>
+              <p>weekday 15 บาท/ชิ้น · weekend <span class="math">20/0.7 ≈ 28.6</span> บาท/ชิ้น → weekday ยังถูกกว่า → e = 100, d = 930</p>
+              <div class="eq"><span class="r">cost_B = 15(930) + 20(100) = 15,950</span></div></li>
+            <li><h4>แก้ LP_C — จุดหลอก</h4>
+              <p>ค่าแรง weekend (15) ถูกกว่า weekday (20) ต่อชั่วโมง แต่ <b>ต่อชิ้น</b>: weekend <span class="math">15/0.7 ≈ 21.4</span> &gt; weekday 20 → weekday ยังคุ้มกว่า!</p>
+              <div class="eq"><span class="r">e = 100, d = 930 &nbsp;⇒&nbsp; cost_C = 20(930) + 15(100) = 20,100</span></div>
+              <p class="trap"><b>กับดัก:</b> เทียบราคา "ต่อชั่วโมง" ไม่ได้ ต้องเทียบ "ต่อชิ้น" เพราะ productivity ไม่เท่ากัน — ในรูปคือความชันของ isocost เทียบกับเส้น 1000 ชิ้น</p></li>
+            <li><h4>เทียบแล้วเลือก</h4>
+              <div class="tscroll"><table><thead><tr><th>Strategy</th><th>(d, e)</th><th>cost</th></tr></thead><tbody>
+                <tr class="on"><td>A</td><td class="m">(930, 100)</td><td class="num">13,300</td></tr>
+                <tr><td>B</td><td class="m">(930, 100)</td><td class="num">15,950</td></tr>
+                <tr><td>C</td><td class="m">(930, 100)</td><td class="num">20,100</td></tr></tbody></table></div>
+              <div class="ans" style="margin:6px 0"><b>คำตอบ</b> เลือก Strategy A · weekday 930 ชม. · weekend 100 ชม. · ค่าแรง 13,300</div></li>
+            <li><h4>Standard form (เขียน 1 ชุด ใช้ได้ทั้ง 3 strategy)</h4>
+              <div class="eq">
+                <span class="r">สำหรับ k ∈ {A, B, C}: &nbsp;min a_k d + b_k e</span>
+                <span class="r">s.t. d + 0.7e − s₁ = 1000</span>
+                <span class="r">&emsp;&emsp;e − s₂ = 100</span>
+                <span class="r">&emsp;&emsp;d, e, s₁, s₂ ≥ 0</span>
+                <span class="r">(a_A, b_A) = (10, 40), (a_B, b_B) = (15, 20), (a_C, b_C) = (20, 15)</span>
+              </div>
+              <p class="why">อีกวิธี (ถ้าเรียน integer programming แล้ว): แยกชั่วโมงตาม strategy <span class="math">d_k, e_k</span> + ตัวแปร 0/1 <span class="math">y_k</span>, <span class="math">Σy_k = 1</span>, <span class="math">d_k + e_k ≤ M·y_k</span> — แต่โจทย์ขอ "LP" จึงใช้วิธีแก้ 3 ตัวก็ครบ</p></li>
+          </ol>
+        </div>
+        <div class="done-row"><label class="chk"><input type="checkbox" data-done="cr"> เข้าใจข้อนี้แล้ว</label></div>
+      </section>
+
+      <footer>
+        <span>ข้อสอบ: Com Eng Math II Quiz 1 · 2021 · ตัวเลขใน "แถม" มาจากการแก้ LP จริง</span>
+        <span>หน้าอื่น: <a href="exam-2020.html">Quiz 1 · 2020</a> · <a href="exam-2025.html">Quiz · 2025</a></span>
+      </footer>
+    </main>
+  </div>
+</div>
+
+<script>
+/* ===== shared helpers for the Optimization exam pages =====
+   Frac (exact fractions for hand-simplex tableaux), lp() (two-phase simplex for the live demos),
+   Plot (SVG builder for 2-D feasible regions) and the step-by-step walkthrough widget */
+const Frac = (() => {
+  const gcd = (a, b) => { a = Math.abs(a); b = Math.abs(b); while (b) [a, b] = [b, a % b]; return a || 1; };
+  class F {
+    constructor(n, d = 1){
+      if (n instanceof F) return n;
+      if (typeof n === 'string'){ const [p, q] = n.split('/'); n = +p; d = q === undefined ? 1 : +q; }
+      if (!Number.isInteger(n) || !Number.isInteger(d)){ const k = 1e6; n = Math.round(n * k); d = Math.round(d * k); }
+      if (d < 0){ n = -n; d = -d; }
+      const g = gcd(n, d); this.n = n / g; this.d = d / g;
+    }
+    add(o){ o = fr(o); return new F(this.n * o.d + o.n * this.d, this.d * o.d); }
+    sub(o){ o = fr(o); return new F(this.n * o.d - o.n * this.d, this.d * o.d); }
+    mul(o){ o = fr(o); return new F(this.n * o.n, this.d * o.d); }
+    div(o){ o = fr(o); return new F(this.n * o.d, this.d * o.n); }
+    neg(){ return new F(-this.n, this.d); }
+    get v(){ return this.n / this.d; }
+    sign(){ return Math.sign(this.n); }
+    toString(){ return this.d === 1 ? String(this.n).replace('-', '−') : (this.n < 0 ? '−' : '') + Math.abs(this.n) + '/' + this.d; }
+  }
+  const fr = x => x instanceof F ? x : new F(x);
+  fr.F = F;
+  return fr;
+})();
+
+/* tableau = {cols:[names], rows:[{bv, v:[Frac], rhs:Frac}]}; rows[0] is the objective row */
+function pivot(T, r, c){
+  const rows = T.rows.map(R => ({bv: R.bv, v: R.v.slice(), rhs: R.rhs}));
+  const p = rows[r].v[c];
+  rows[r].v = rows[r].v.map(a => a.div(p)); rows[r].rhs = rows[r].rhs.div(p); rows[r].bv = T.cols[c];
+  rows.forEach((R, i) => {
+    if (i === r) return;
+    const k = R.v[c];
+    if (k.sign() === 0) return;
+    R.v = R.v.map((a, j) => a.sub(k.mul(rows[r].v[j]))); R.rhs = R.rhs.sub(k.mul(rows[r].rhs));
+  });
+  return {cols: T.cols, rows};
+}
+function mkTab(cols, rows){ return {cols, rows: rows.map(([bv, v, rhs]) => ({bv, v: v.map(x => Frac(x)), rhs: Frac(rhs)}))}; }
+/* opt: {pc, pr, ratio:true, objName} — highlight pivot column / row, add ratio-test column */
+function tabHTML(T, opt = {}){
+  const {pc = -1, pr = -1, ratio = false, negs = false} = opt;
+  let ratios = [];
+  if (ratio && pc >= 0){
+    ratios = T.rows.map((R, i) => i === 0 ? null : (R.v[pc].sign() > 0 ? R.rhs.div(R.v[pc]) : null));
+  }
+  const best = ratios.reduce((b, x, i) => x && (b < 0 || x.v < ratios[b].v) ? i : b, -1);
+  const head = `<thead><tr><th>BV</th>${T.cols.map((c, j) => `<th class="${j === pc ? 'pc' : ''}">${c}</th>`).join('')}<th class="rhs">RHS</th>${ratio && pc >= 0 ? '<th class="rat">ratio</th>' : ''}</tr></thead>`;
+  const body = T.rows.map((R, i) => `<tr class="${i === 0 ? 'r0' : ''} ${i === pr ? 'pr' : ''}"><td>${R.bv}</td>${R.v.map((a, j) => {
+      let cls = j === pc ? 'pc' : '';
+      if (i === pr && j === pc) cls = 'pv';
+      else if (negs && i === 0 && a.sign() < 0) cls += ' neg';
+      return `<td class="${cls}">${a}</td>`;
+    }).join('')}<td class="rhs">${R.rhs}</td>${ratio && pc >= 0 ? `<td class="rat ${i === best ? 'win' : ''}">${i === 0 ? '' : ratios[i] ? `${R.rhs} ÷ ${R.v[pc]} = ${ratios[i]}` : '—'}</td>` : ''}</tr>`).join('');
+  return `<div class="tab"><table>${head}<tbody>${body}</tbody></table></div>`;
+}
+
+/* lp({c, A, b, s, max}) : s[i] in '<=' '>=' '='; all x >= 0. returns {status, x, z} */
+function lp({c, A, b, s, max = false}){
+  const m = A.length, n = c.length, EPS = 1e-9;
+  const rows = [], basis = [];
+  let nx = n;
+  const slackOf = [], artOf = [];
+  A.forEach((row, i) => {
+    let si = s[i], bi = b[i], r = row.slice();
+    if (bi < 0){ r = r.map(v => -v); bi = -bi; si = si === '<=' ? '>=' : si === '>=' ? '<=' : '='; }
+    rows.push({r, b: bi, s: si});
+  });
+  rows.forEach(R => { if (R.s !== '=') slackOf.push(nx++); else slackOf.push(-1); });
+  rows.forEach(R => { if (R.s !== '<=') artOf.push(nx++); else artOf.push(-1); });
+  const N = nx;
+  const T = rows.map((R, i) => {
+    const t = new Array(N + 1).fill(0);
+    R.r.forEach((v, j) => t[j] = v);
+    if (slackOf[i] >= 0) t[slackOf[i]] = R.s === '<=' ? 1 : -1;
+    if (artOf[i] >= 0) t[artOf[i]] = 1;
+    t[N] = R.b;
+    basis.push(R.s === '<=' ? slackOf[i] : artOf[i]);
+    return t;
+  });
+  const isArt = j => artOf.includes(j);
+  function run(cost, allowed){
+    for (let it = 0; it < 5000; it++){
+      let e = -1;
+      for (let j = 0; j < N; j++){
+        if (!allowed(j) || basis.includes(j)) continue;
+        let rc = cost[j];
+        for (let i = 0; i < T.length; i++) rc -= cost[basis[i]] * T[i][j];
+        if (rc < -EPS){ e = j; break; }
+      }
+      if (e < 0) return 'optimal';
+      let r = -1, best = Infinity;
+      for (let i = 0; i < T.length; i++){
+        if (T[i][e] > EPS){
+          const q = T[i][N] / T[i][e];
+          if (q < best - EPS || (Math.abs(q - best) <= EPS && basis[i] < basis[r])){ best = q; r = i; }
+        }
+      }
+      if (r < 0) return 'unbounded';
+      piv(r, e);
+    }
+    return 'iter';
+  }
+  function piv(r, e){
+    const p = T[r][e];
+    for (let j = 0; j <= N; j++) T[r][j] /= p;
+    for (let i = 0; i < T.length; i++){
+      if (i === r) continue;
+      const k = T[i][e];
+      if (Math.abs(k) > 0) for (let j = 0; j <= N; j++) T[i][j] -= k * T[r][j];
+    }
+    basis[r] = e;
+  }
+  const c1 = new Array(N).fill(0); artOf.forEach(j => { if (j >= 0) c1[j] = 1; });
+  run(c1, () => true);
+  const w = T.reduce((acc, t, i) => acc + c1[basis[i]] * t[N], 0);
+  if (w > 1e-7) return {status: 'infeasible'};
+  for (let i = T.length - 1; i >= 0; i--){
+    if (!isArt(basis[i])) continue;
+    const j = T[i].findIndex((v, j) => j < N && !isArt(j) && Math.abs(v) > 1e-9);
+    if (j >= 0) piv(i, j); else { T.splice(i, 1); basis.splice(i, 1); }
+  }
+  const c2 = new Array(N).fill(0); c.forEach((v, j) => c2[j] = max ? -v : v);
+  const st = run(c2, j => !isArt(j));
+  if (st !== 'optimal') return {status: st};
+  const x = new Array(n).fill(0);
+  basis.forEach((j, i) => { if (j < n) x[j] = T[i][N]; });
+  const z = c.reduce((a, v, j) => a + v * x[j], 0);
+  return {status: 'optimal', x, z};
+}
+
+/* ---------- SVG plot builder ---------- */
+function Plot(xr, yr, o = {}){
+  const W = o.w || 640, H = o.h || 400, ml = o.ml ?? 46, mr = o.mr ?? 18, mt = o.mt ?? 14, mb = o.mb ?? 36;
+  const X = x => ml + (x - xr[0]) / (xr[1] - xr[0]) * (W - ml - mr);
+  const Y = y => H - mb - (y - yr[0]) / (yr[1] - yr[0]) * (H - mt - mb);
+  const out = [];
+  const f = v => +v.toFixed(2);
+  const col = c => c && c.startsWith('--') ? `var(${c})` : (c || 'var(--ink)');
+  const box = [[xr[0], yr[0]], [xr[1], yr[0]], [xr[1], yr[1]], [xr[0], yr[1]]];
+  const P = {X, Y, W, H, xr, yr,
+    raw(s){ out.push(s); return P; },
+    grid(dx = 1, dy = dx, lab = {}){
+      for (let x = Math.ceil(xr[0] / dx) * dx; x <= xr[1] + 1e-9; x += dx) out.push(`<line class="grid" x1="${f(X(x))}" x2="${f(X(x))}" y1="${f(Y(yr[0]))}" y2="${f(Y(yr[1]))}"/>`);
+      for (let y = Math.ceil(yr[0] / dy) * dy; y <= yr[1] + 1e-9; y += dy) out.push(`<line class="grid" y1="${f(Y(y))}" y2="${f(Y(y))}" x1="${f(X(xr[0]))}" x2="${f(X(xr[1]))}"/>`);
+      const tx = lab.tx || dx, ty = lab.ty || dy;
+      const x0 = Math.max(xr[0], Math.min(0, xr[1])), y0 = Math.max(yr[0], Math.min(0, yr[1]));
+      out.push(`<line class="axis" x1="${f(X(xr[0]))}" x2="${f(X(xr[1]))}" y1="${f(Y(y0))}" y2="${f(Y(y0))}"/><line class="axis" y1="${f(Y(yr[0]))}" y2="${f(Y(yr[1]))}" x1="${f(X(x0))}" x2="${f(X(x0))}"/>`);
+      for (let x = Math.ceil(xr[0] / tx) * tx; x <= xr[1] + 1e-9; x += tx) if (Math.abs(x) > 1e-9) out.push(`<text class="tick" x="${f(X(x))}" y="${f(Y(y0) + 15)}" text-anchor="middle">${+x.toFixed(3)}</text>`);
+      for (let y = Math.ceil(yr[0] / ty) * ty; y <= yr[1] + 1e-9; y += ty) if (Math.abs(y) > 1e-9) out.push(`<text class="tick" x="${f(X(x0) - 6)}" y="${f(Y(y) + 4)}" text-anchor="end">${+y.toFixed(3)}</text>`);
+      out.push(`<text class="tick" x="${f(X(x0) - 6)}" y="${f(Y(y0) + 15)}" text-anchor="end">0</text>`);
+      if (lab.x) out.push(`<text class="lbl" x="${f(X(xr[1]) - 4)}" y="${f(Y(y0) - 8)}" text-anchor="end">${lab.x}</text>`);
+      if (lab.y) out.push(`<text class="lbl" x="${f(X(x0) + 8)}" y="${f(Y(yr[1]) + 14)}">${lab.y}</text>`);
+      return P;
+    },
+    /* polygon of { a·x + b·y <= c } ∩ view box */
+    region(hps){
+      let poly = box.slice();
+      hps.forEach(([a, b, c]) => {
+        const res = [];
+        for (let i = 0; i < poly.length; i++){
+          const p = poly[i], q = poly[(i + 1) % poly.length];
+          const fp = a * p[0] + b * p[1] - c, fq = a * q[0] + b * q[1] - c;
+          if (fp <= 1e-9) res.push(p);
+          if ((fp < -1e-9 && fq > 1e-9) || (fp > 1e-9 && fq < -1e-9)){ const t = fp / (fp - fq); res.push([p[0] + t * (q[0] - p[0]), p[1] + t * (q[1] - p[1])]); }
+        }
+        poly = res;
+      });
+      return poly;
+    },
+    poly(pts, cls = 'feas', style = ''){ if (pts.length) out.push(`<polygon class="${cls}" style="${style}" points="${pts.map(p => f(X(p[0])) + ',' + f(Y(p[1]))).join(' ')}"/>`); return P; },
+    /* line a·x + b·y = c clipped to view */
+    line(a, b, c, color, o = {}){
+      const pts = [];
+      if (Math.abs(b) > 1e-12){ [xr[0], xr[1]].forEach(x => pts.push([x, (c - a * x) / b])); }
+      if (Math.abs(a) > 1e-12){ [yr[0], yr[1]].forEach(y => pts.push([(c - b * y) / a, y])); }
+      const ins = pts.filter(p => p[0] >= xr[0] - 1e-9 && p[0] <= xr[1] + 1e-9 && p[1] >= yr[0] - 1e-9 && p[1] <= yr[1] + 1e-9);
+      if (ins.length < 2) return P;
+      ins.sort((p, q) => p[0] - q[0] || p[1] - q[1]);
+      const p = ins[0], q = ins[ins.length - 1];
+      P.seg(p, q, color, o);
+      if (o.label){
+        const t = o.at ?? .85, lx = p[0] + t * (q[0] - p[0]), ly = p[1] + t * (q[1] - p[1]);
+        out.push(`<text class="lbl" x="${f(X(lx) + (o.dx ?? 6))}" y="${f(Y(ly) + (o.dy ?? -6))}" style="fill:${col(color)};font-size:13px" text-anchor="${o.anchor || 'start'}">${o.label}</text>`);
+      }
+      return P;
+    },
+    seg(p, q, color, o = {}){ out.push(`<line class="ln ${o.dash ? 'dash' : ''}" x1="${f(X(p[0]))}" y1="${f(Y(p[1]))}" x2="${f(X(q[0]))}" y2="${f(Y(q[1]))}" style="stroke:${col(color)};stroke-width:${o.w || 2};${o.op ? 'opacity:' + o.op : ''}"/>`); return P; },
+    arrow(p, q, color, o = {}){
+      const x1 = X(p[0]), y1 = Y(p[1]), x2 = X(q[0]), y2 = Y(q[1]), a = Math.atan2(y2 - y1, x2 - x1), L = 10;
+      out.push(`<line class="ln" x1="${f(x1)}" y1="${f(y1)}" x2="${f(x2)}" y2="${f(y2)}" style="stroke:${col(color)};stroke-width:${o.w || 2.4}"/><polygon points="${f(x2)},${f(y2)} ${f(x2 - L * Math.cos(a - .4))},${f(y2 - L * Math.sin(a - .4))} ${f(x2 - L * Math.cos(a + .4))},${f(y2 - L * Math.sin(a + .4))}" style="fill:${col(color)}"/>`);
+      if (o.label) out.push(`<text class="lbl" x="${f(x2 + (o.dx ?? 6))}" y="${f(y2 + (o.dy ?? -6))}" style="fill:${col(color)};font-size:13px">${o.label}</text>`);
+      return P;
+    },
+    pt(x, y, color, label, o = {}){
+      out.push(`<circle cx="${f(X(x))}" cy="${f(Y(y))}" r="${o.r || 5.5}" style="fill:${o.hollow ? 'var(--surface)' : col(color)};stroke:${col(color)};stroke-width:2"/>`);
+      if (label) out.push(`<text class="lbl ${o.bold ? 'b' : ''}" x="${f(X(x) + (o.dx ?? 9))}" y="${f(Y(y) + (o.dy ?? -8))}" text-anchor="${o.anchor || 'start'}" style="fill:${col(o.lc || color)};font-size:${o.fs || 13}px">${label}</text>`);
+      return P;
+    },
+    text(x, y, s, o = {}){ out.push(`<text class="${o.cls || ''}" x="${f(X(x))}" y="${f(Y(y))}" text-anchor="${o.anchor || 'middle'}" style="${o.color ? 'fill:' + col(o.color) + ';' : ''}${o.fs ? 'font-size:' + o.fs + 'px;' : ''}${o.fw ? 'font-weight:' + o.fw : ''}">${s}</text>`); return P; },
+    svg(){ return `<svg class="sv" viewBox="0 0 ${W} ${H}" role="img" aria-label="${o.aria || 'figure'}">${out.join('')}</svg>`; }
+  };
+  return P;
+}
+const fmt = (v, d = 2) => { let s = (+v).toFixed(d); if (s.includes('.')) s = s.replace(/\.?0+$/, ''); return s === '-0' ? '0' : s.replace('-', '−'); };
+
+/* ---------- step-by-step walkthrough ---------- */
+const FIGS = {};
+function bootSteppers(){
+  document.querySelectorAll('.stepper').forEach(st => {
+    const ol = st.querySelector('ol.steps'), items = [...ol.children], n = items.length;
+    items.forEach((li, i) => { li.dataset.n = i + 1; });
+    const figEl = st.querySelector('.fig .figbody'), cap = st.querySelector('.fig .figcap');
+    const nav = document.createElement('div'); nav.className = 'snav';
+    nav.innerHTML = `<span class="cnt"></span><span class="dots">${items.map((_, i) => `<button type="button" aria-label="ขั้นที่ ${i + 1}">${i + 1}</button>`).join('')}</span>
+      <button type="button" class="btn sm" data-a="prev">◀ ก่อนหน้า</button><button type="button" class="btn sm primary" data-a="next">ถัดไป ▶</button>
+      <label class="chk"><input type="checkbox" data-a="all"> แสดงทุกขั้น</label>`;
+    st.insertBefore(nav, ol);
+    const dots = [...nav.querySelectorAll('.dots button')];
+    let k = 0, seen = 0;
+    const draw = () => {
+      const fn = FIGS[st.dataset.fig];
+      if (fn && figEl){ const r = fn(k, st) || {}; if (r.svg !== undefined) figEl.innerHTML = r.svg; if (cap) cap.innerHTML = r.cap || ''; }
+    };
+    const set = (j, scroll) => {
+      k = Math.max(0, Math.min(n - 1, j)); seen = Math.max(seen, k);
+      items.forEach((li, i) => { li.classList.toggle('cur', i === k); li.classList.toggle('future', i > k); li.classList.toggle('past', i < k); });
+      dots.forEach((d, i) => { d.classList.toggle('cur', i === k); d.classList.toggle('seen', i <= seen); });
+      nav.querySelector('.cnt').textContent = `ขั้นที่ ${k + 1} / ${n}`;
+      nav.querySelector('[data-a=prev]').disabled = k === 0;
+      nav.querySelector('[data-a=next]').disabled = k === n - 1;
+      draw();
+      if (scroll){
+        /* keep the figure and the step being read on screen together */
+        const all = nav.querySelector('[data-a=all]').checked;
+        const r = (all ? items[k] : st).getBoundingClientRect();
+        if (r.top < 0 || (all && r.bottom > innerHeight)) (all ? items[k] : st).scrollIntoView({block: all ? 'nearest' : 'start', behavior: 'smooth'});
+      }
+    };
+    nav.addEventListener('click', e => {
+      const b = e.target.closest('button'); if (!b) return;
+      if (b.dataset.a === 'prev') set(k - 1, true);
+      else if (b.dataset.a === 'next') set(k + 1, true);
+      else { const i = dots.indexOf(b); if (i >= 0) set(i, true); }
+    });
+    nav.querySelector('[data-a=all]').addEventListener('change', e => ol.classList.toggle('all', e.target.checked));
+    items.forEach((li, i) => li.addEventListener('click', e => { if (i !== k && !e.target.closest('a,button,input,select,label')) set(i); }));
+    st.addEventListener('keydown', e => {
+      if (e.target.closest('input,select,textarea')) return;
+      if (e.key === 'ArrowRight'){ set(k + 1, true); e.preventDefault(); }
+      if (e.key === 'ArrowLeft'){ set(k - 1, true); e.preventDefault(); }
+    });
+    st.tabIndex = -1;
+    st.querySelectorAll('.figctl input, .figctl select').forEach(inp => inp.addEventListener('input', draw));
+    st._redraw = draw;
+    set(0);
+  });
+}
+
+/* table of contents: highlight current section + "understood" ticks kept in this browser */
+function bootToc(storeKey){
+  const links = [...document.querySelectorAll('.toc a[href^="#"]')];
+  const secs = links.map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+  const io = new IntersectionObserver(es => es.forEach(en => {
+    if (!en.isIntersecting) return;
+    links.forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#' + en.target.id));
+  }), {rootMargin: '-30% 0px -60% 0px'});
+  secs.forEach(s => io.observe(s));
+  let done = {};
+  try { done = JSON.parse(localStorage.getItem(storeKey) || '{}'); } catch(_) {}
+  const paint = () => links.forEach(a => a.classList.toggle('done', !!done[a.getAttribute('href').slice(1)]));
+  document.querySelectorAll('input[data-done]').forEach(cb => {
+    cb.checked = !!done[cb.dataset.done];
+    cb.addEventListener('change', () => {
+      done[cb.dataset.done] = cb.checked;
+      try { localStorage.setItem(storeKey, JSON.stringify(done)); } catch(_) {}
+      paint();
+    });
+  });
+  paint();
+}
+
+
+(function(){
+'use strict';
+const $ = s => document.querySelector(s);
+function ctl(st, k){ st.querySelectorAll('.figctl[data-show]').forEach(c => { c.hidden = k < +c.dataset.show; }); }
+
+/* ---------------- vaccines (made-up numbers) ---------------- */
+const VAC = [['Vinosac', .5, 10, 200, 1500, 2, '--mark'], ['Phisonarm', .95, 30, 100, 1200, 2, '--prod'], ['ZenaCasatra', .75, 15, 200, 1000, 2, '--amber'], ['JaesoJose', .65, 20, 100, 800, 1, '--y']];
+const VX = 1000, P0 = .2;
+FIGS.vac = k => {
+  const R = +$('#vac-r').value; $('#vac-rv').textContent = R.toFixed(2);
+  const z = () => new Array(8).fill(0), A = [], b = [], s = [];
+  VAC.forEach((v, i) => {
+    let r = z(); r[i] = 1; A.push(r); b.push(v[3]); s.push('>=');
+    r = z(); r[i] = 1; A.push(r); b.push(v[4]); s.push('<=');
+    r = z(); r[i] = -1; r[4 + i] = v[5]; A.push(r); b.push(0); s.push('<=');
+  });
+  let r = z(); VAC.forEach((_, i) => r[4 + i] = 1); A.push(r); b.push(VX); s.push('<=');
+  r = z(); VAC.forEach((v, i) => r[4 + i] = v[1] - P0); A.push(r); b.push((R - P0) * VX); s.push('>=');
+  const res = lp({c: [...VAC.map(v => v[2]), 0, 0, 0, 0], A, b, s});
+  const W = 760, H = 300, o = [], sc = v => 150 + v / 1600 * 520;
+  o.push(`<text x="20" y="22" style="font-weight:600;fill:var(--ink)">โดสที่ซื้อ (อ่อน) vs โดสที่ใช้ (เข้ม) — ตัวเลขสมมติ</text>`);
+  if (res.status !== 'optimal'){
+    o.push(`<text x="${W / 2}" y="150" text-anchor="middle" style="font-weight:600;font-size:16px;fill:var(--h)">infeasible — ฉีดเต็มที่แล้วค่าเฉลี่ยยังไม่ถึง R = ${R.toFixed(2)}</text>`);
+    return {svg: `<svg class="sv" viewBox="0 0 ${W} ${H}">${o.join('')}</svg>`, cap: 'R สูงเกินกว่าที่วัคซีนที่มีจะทำได้'};
+  }
+  const x = res.x;
+  VAC.forEach((v, i) => {
+    const y = 40 + i * 44, buy = x[i], used = v[5] * x[4 + i];
+    o.push(`<text x="20" y="${y + 13}" style="fill:var(--ink);font-weight:600">${v[0]}</text><text x="20" y="${y + 29}" class="tick">p=${v[1]} · ฿${v[2]} · ${v[5]} เข็ม</text>`);
+    o.push(`<rect x="150" y="${y}" width="${sc(buy) - 150}" height="26" rx="4" style="fill:color-mix(in srgb,var(${v[6]}) 22%,transparent);stroke:var(${v[6]})"/>`);
+    o.push(`<rect x="150" y="${y + 5}" width="${Math.max(0, sc(used) - 150)}" height="16" rx="3" style="fill:color-mix(in srgb,var(${v[6]}) 70%,transparent)"/>`);
+    if (k >= 4){ [[v[3], 'm'], [v[4], 'n']].forEach(([q, l]) => o.push(`<line x1="${sc(q)}" x2="${sc(q)}" y1="${y - 4}" y2="${y + 30}" style="stroke:var(--ink);stroke-dasharray:3 3;stroke-width:1.5"/><text x="${sc(q)}" y="${y - 6}" text-anchor="middle" class="tick">${l}=${q}</text>`)); }
+    o.push(`<text x="${Math.min(sc(buy), 600) + 8}" y="${y + 18}" class="tick" style="fill:var(--ink)">ซื้อ ${fmt(buy, 0)} · ฉีด ${fmt(x[4 + i], 0)} คน</text>`);
+  });
+  const vacc = x.slice(4).reduce((a, v) => a + v, 0);
+  const avg = (VAC.reduce((a, v, i) => a + v[1] * x[4 + i], 0) + P0 * (VX - vacc)) / VX;
+  o.push(`<text x="20" y="232" style="fill:var(--ink)">ฉีดแล้ว ${fmt(vacc, 0)} / ${VX} คน</text><rect x="150" y="220" width="520" height="16" rx="4" style="fill:var(--surface);stroke:var(--line)"/><rect x="150" y="220" width="${vacc / VX * 520}" height="16" rx="4" style="fill:color-mix(in srgb,var(--mark) 40%,transparent)"/>`);
+  o.push(`<text x="20" y="266" style="fill:var(--ink)">ค่าเฉลี่ย ${avg.toFixed(3)}</text><rect x="150" y="254" width="520" height="16" rx="4" style="fill:var(--surface);stroke:var(--line)"/><rect x="150" y="254" width="${avg * 520}" height="16" rx="4" style="fill:color-mix(in srgb,var(--y) 45%,transparent)"/><line x1="${150 + R * 520}" x2="${150 + R * 520}" y1="248" y2="276" style="stroke:var(--h);stroke-width:2"/><text x="${150 + R * 520}" y="290" text-anchor="middle" class="tick" style="fill:var(--h)">R = ${R.toFixed(2)}</text>`);
+  o.push(`<text x="${W - 20}" y="22" text-anchor="end" style="font:600 15px 'IBM Plex Mono',monospace;fill:var(--y)">ต้นทุน ฿${fmt(res.z, 0)}</text>`);
+  const caps = ['4 ยี่ห้อที่เหลือ', 'y = โดสที่ซื้อ (แท่งอ่อน), z = คนที่ฉีด', 'objective จ่ายตามแท่งอ่อน', 'แท่งเข้ม (k·z) ต้องไม่เกินแท่งอ่อน (y)', 'เส้นประ m ≤ y ≤ n', 'ฉีดได้ไม่เกิน X คน', 'แถบล่าง: ค่าเฉลี่ยต้องเลยเส้นแดง R', 'assumption', 'standard form', 'ลองเลื่อน R'];
+  return {svg: `<svg class="sv" viewBox="0 0 ${W} ${H}" role="img" aria-label="vaccine plan">${o.join('')}</svg>`, cap: caps[k]};
+};
+
+/* ---------------- workforce ---------------- */
+function solveWF(F){
+  /* vars w2 w3 h1 h2 u1 u2 u3 */
+  const r = lp({c: [8000, 8000, 500, 500, F, F, F], A: [[1, 0, -.6, 0, 0, 0, 0], [-.9, 1, 0, -.6, 0, 0, 0], [1, 0, 0, 0, 0, 1, 0], [0, 1, 0, 0, 0, 0, 1]], b: [45, 0, 100, 70], s: ['=', '=', '>=', '>=']});
+  const [w2, w3, h1, h2, u1, u2, u3] = r.x;
+  return {w: [50, w2, w3], h: [h1, h2, 0], u: [0, u2, u3], cost: r.z + 400000};
+}
+FIGS.wf = (k, st) => {
+  ctl(st, k);
+  const F = k >= 6 ? +$('#wf-f').value : 10000;
+  $('#wf-fv').textContent = F.toLocaleString('en-US');
+  const S = solveWF(F), req = [50, 100, 70];
+  const W = 820, H = 330, o = [];
+  const colX = [110, 380, 650];
+  const show = k >= 6 || k === 0;
+  colX.forEach((cx, t) => {
+    o.push(`<text x="${cx}" y="24" text-anchor="middle" style="font-weight:600;fill:var(--ink)">เดือน ${t + 1}</text>`);
+    const hgt = v => v * 1.6;
+    /* required bar outline + skilled bar */
+    o.push(`<rect x="${cx - 36}" y="${250 - hgt(req[t])}" width="72" height="${hgt(req[t])}" rx="4" style="fill:none;stroke:var(--ink);stroke-dasharray:5 4"/>`);
+    o.push(`<text x="${cx}" y="${244 - hgt(req[t])}" text-anchor="middle" class="tick">ต้องการ ${req[t]}</text>`);
+    const wv = S.w[t];
+    o.push(`<rect x="${cx - 30}" y="${250 - hgt(wv)}" width="60" height="${hgt(wv)}" rx="4" style="fill:color-mix(in srgb,var(--mark) 45%,transparent);stroke:var(--mark)"/>`);
+    o.push(`<text x="${cx}" y="${Math.max(266 - hgt(wv), 268 - hgt(wv))}" text-anchor="middle" style="font:600 12.5px 'IBM Plex Mono',monospace;fill:var(--ink)">w=${t === 0 ? 50 : show ? fmt(wv, 2) : 'w' + (t + 1)}</text>`);
+    if (k >= 3 && S.u[t] > 1e-6 && show){
+      o.push(`<rect x="${cx - 30}" y="${250 - hgt(req[t])}" width="60" height="${hgt(S.u[t])}" rx="4" style="fill:color-mix(in srgb,var(--h) 25%,transparent);stroke:var(--h);stroke-dasharray:3 3"/><text x="${cx}" y="${266 - hgt(req[t]) + hgt(S.u[t]) / 2}" text-anchor="middle" style="font:600 12px 'IBM Plex Mono',monospace;fill:var(--h)">u=${fmt(S.u[t], 2)}</text>`);
+    }
+    if (t < 2){
+      const nx = colX[t + 1];
+      o.push(`<path d="M${cx + 32},${190} C${cx + 120},${170} ${nx - 120},${170} ${nx - 32},${190}" style="fill:none;stroke:var(--mark);stroke-width:2"/><text x="${(cx + nx) / 2}" y="168" text-anchor="middle" style="fill:var(--mark)">× 0.9 อยู่ต่อ</text>`);
+      if (k >= 0){
+        const hv = S.h[t];
+        o.push(`<rect x="${(cx + nx) / 2 - 46}" y="276" width="92" height="30" rx="6" style="fill:color-mix(in srgb,var(--amber) 18%,transparent);stroke:var(--amber)"/><text x="${(cx + nx) / 2}" y="296" text-anchor="middle" style="font:600 12.5px 'IBM Plex Mono',monospace;fill:var(--amber)">h${t + 1}=${show ? fmt(hv, 2) : '?'}</text>`);
+        o.push(`<path d="M${cx},${291} L${(cx + nx) / 2 - 48},${291}" style="stroke:var(--amber);stroke-width:2;stroke-dasharray:4 4"/><path d="M${(cx + nx) / 2 + 48},${291} C${nx - 40},${291} ${nx - 10},${280} ${nx - 10},${256}" style="fill:none;stroke:var(--amber);stroke-width:2"/><text x="${(cx + nx) / 2 + 70}" y="322" style="fill:var(--amber)">× 0.6 เทรนจบ</text>`);
+      }
+    }
+  });
+  o.push(`<line x1="30" x2="790" y1="250" y2="250" class="axis"/>`);
+  if (show) o.push(`<text x="${W - 16}" y="52" text-anchor="end" style="font:600 14px 'IBM Plex Mono',monospace;fill:var(--y)">ต้นทุน ฿${Math.round(S.cost).toLocaleString('en-US')}</text>`);
+  const caps = ['ไทม์ไลน์ + คำตอบจริง (ค่าปรับ 10,000)', 'assumption: เดือน 1 มี 50 คนพอดี', 'ตัวแปร: h (ส้ม), w (ฟ้า), u (แดง)', 'กล่องแดง = คนที่ขาด → โดนปรับ', 'objective รวม 3 อย่าง', 'standard form', 'เลื่อนค่าปรับเกิน ~16,033 → จ้างให้ครบ 100 ในเดือน 2'];
+  return {svg: `<svg class="sv" viewBox="0 0 ${W} ${H}" role="img" aria-label="workforce timeline">${o.join('')}</svg>`, cap: caps[k]};
+};
+
+/* ---------------- crisis ---------------- */
+const STRAT = [['A', 10, 40], ['B', 15, 20], ['C', 20, 15]];
+FIGS.cr = k => {
+  let si = $('#cr-s').value;
+  si = si === 'auto' ? (k <= 3 ? 0 : k === 4 ? 1 : k === 5 ? 2 : 0) : +si;
+  const [nm, a, bb] = STRAT[si];
+  const P = Plot([-30, 1250], [-80, 1550], {h: 400, ml: 54});
+  if (k >= 1) P.poly(P.region([[-1, -.7, -1000], [0, -1, -100], [-1, 0, 0]]));
+  P.grid(100, 100, {x: 'd (weekday)', y: 'e (weekend)', tx: 200, ty: 200});
+  if (k >= 1){
+    P.line(1, .7, 1000, '--prod', {label: 'd + 0.7e = 1000', at: .2, dx: 8});
+    P.line(0, 1, 100, '--mark', {label: 'e = 100', at: .06, dy: -8});
+  }
+  if (k >= 2){
+    const opt = a * 930 + bb * 100;
+    P.line(a, bb, opt, '--amber', {dash: true, w: 2.4, label: `${nm}: ${a}d + ${bb}e = ${opt.toLocaleString('en-US')}`, at: .3, dx: 10});
+    P.line(a, bb, opt * 1.4, '--amber', {dash: true, w: 1, op: .5});
+    if (k >= 3) P.pt(930, 100, '--y', `optimal (930, 100)`, {r: 7, dx: -12, dy: -14, bold: true, anchor: 'end'});
+    P.pt(0, 1000 / .7, '--h', `ใช้ weekend ล้วน: ${Math.round(bb * 1000 / .7).toLocaleString('en-US')}`, {hollow: true, dx: 14, dy: 30});
+  }
+  const caps = ['ตัวแปร d (แกนนอน), e (แกนตั้ง)', 'region ที่ทำได้ (เขียว)', 'เส้นส้ม = isocost ของ strategy ที่เลือก', 'A: isocost ชันกว่าเส้น 1000 ชิ้น → ไปมุม (930, 100)', 'B: มุมเดิม ต้นทุนสูงขึ้น', 'C: แม้ weekend ถูกกว่าต่อชั่วโมง ก็ยังไปมุมเดิม', 'A ถูกที่สุด', 'standard form'];
+  return {svg: P.svg(), cap: caps[k] + (k >= 2 ? ` · กำลังแสดง strategy ${nm}` : '')};
+};
+
+bootSteppers();
+bootToc('cem-optim-2021');
+})();
+</script>
+
+</body>
+</html>

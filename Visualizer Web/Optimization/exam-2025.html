@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- CP203 Optimization — เฉลย Quiz 2025/1 -->
+<title>Optimization Quiz 2025</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Thai:wght@400;500;600&family=STIX+Two+Text:ital,wght@0,400;0,600;1,400;1,600&display=swap">
+<style>
+<style>
+html,body{margin:0}
+[hidden]{display:none!important}
+img{max-width:100%}
+/* ===== shared tokens & layout for CEMII lecture pages ===== */
+:root{
+  --bg:#EEF1F5; --surface:#FFFFFF; --sunk:#F6F8FB; --ink:#18202D; --muted:#5A6577; --line:#D3DAE4;
+  --grid:rgba(52,86,140,.10); --axis:#8792A5;
+  --x:#1C2638; --h:#D0392C; --mark:#2E6BD9; --prod:#7A4ED3; --y:#12865A; --amber:#B8770F; --on-mark:#FFFFFF;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E1219; --surface:#151B24; --sunk:#111721; --ink:#E5E9F0; --muted:#98A2B3; --line:#29323F;
+    --grid:rgba(150,180,230,.08); --axis:#5F6979;
+    --x:#DDE4EF; --h:#FF6C5E; --mark:#6FA1FF; --prod:#B596FF; --y:#44CF98; --amber:#E8A93E; --on-mark:#0E1219;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E1219; --surface:#151B24; --sunk:#111721; --ink:#E5E9F0; --muted:#98A2B3; --line:#29323F;
+  --grid:rgba(150,180,230,.08); --axis:#5F6979;
+  --x:#DDE4EF; --h:#FF6C5E; --mark:#6FA1FF; --prod:#B596FF; --y:#44CF98; --amber:#E8A93E; --on-mark:#0E1219;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.65 "IBM Plex Sans Thai",system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1240px;margin:0 auto;padding-inline:clamp(16px,3vw,36px);padding-block:28px 72px}
+.math{font-family:"STIX Two Text","Cambria Math","Times New Roman",serif;font-style:italic;letter-spacing:.01em}
+.up{font-style:normal}
+code{font:12.5px/1.4 "IBM Plex Mono",ui-monospace,monospace;background:color-mix(in srgb,var(--ink) 7%,transparent);padding:1px 5px;border-radius:4px;white-space:nowrap}
+:focus-visible{outline:2px solid var(--mark);outline-offset:2px}
+
+header.top{padding-bottom:20px;border-bottom:1px solid var(--line)}
+.eyebrow{font:500 12px/1.4 "IBM Plex Mono",ui-monospace,monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}
+h1{font:600 clamp(28px,4.2vw,42px)/1.06 "STIX Two Text","Times New Roman",serif;margin:0;letter-spacing:-.01em;text-wrap:balance}
+h1 .math{font-weight:400;color:var(--muted);font-size:.58em;margin-left:.3em;white-space:nowrap}
+.lede{margin:10px 0 0;color:var(--muted);max-width:66ch}
+
+.layout{display:grid;grid-template-columns:248px minmax(0,1fr);gap:32px;margin-top:24px;align-items:start}
+@media (max-width:920px){.layout{grid-template-columns:minmax(0,1fr);gap:20px}}
+.toc{position:sticky;top:calc(env(safe-area-inset-top,0px) + 12px);display:flex;flex-direction:column;gap:2px;max-height:calc(100vh - 40px);overflow-y:auto}
+@media (max-width:920px){.toc{position:static;max-height:none;flex-direction:row;flex-wrap:wrap;gap:6px;padding-bottom:4px}}
+.toc .lab{font:500 11.5px/1.4 "IBM Plex Mono",monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+@media (max-width:920px){.toc .lab{width:100%;margin-bottom:2px}}
+.toc a{display:flex;gap:9px;align-items:baseline;padding:7px 10px;border-radius:8px;color:var(--muted);text-decoration:none;font-size:14px;line-height:1.35;border:1px solid transparent}
+.toc a b{font:600 11.5px/1.4 "IBM Plex Mono",monospace;color:var(--muted);flex:none}
+.toc a:hover{background:color-mix(in srgb,var(--mark) 7%,transparent);color:var(--ink)}
+.toc a.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.toc a.on b{color:inherit;opacity:.72}
+
+main{display:flex;flex-direction:column;gap:14px;min-width:0}
+section.sec{scroll-margin-top:24px;padding-block:14px 26px;border-top:1px dashed var(--line)}
+section.sec:first-of-type{border-top:0;padding-top:0}
+section.sec > h2{font:600 24px/1.25 "STIX Two Text","Times New Roman",serif;margin:0 0 4px;display:flex;flex-wrap:wrap;align-items:baseline;gap:10px}
+section.sec > h2 .n{font:600 12px/1 "IBM Plex Mono",monospace;color:var(--mark);letter-spacing:.06em}
+section.sec > h2 .th{font-family:"IBM Plex Sans Thai",sans-serif;font-size:15px;font-weight:400;color:var(--muted)}
+.intro{margin:6px 0 16px;color:var(--muted);max-width:74ch}
+.intro b{color:var(--ink);font-weight:600}
+
+/* formula card */
+.fcard{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:14px}
+.fcard .ftitle{font:500 11.5px/1.4 "IBM Plex Mono",monospace;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin:0 0 10px}
+.fbig{font-size:clamp(19px,2.6vw,25px);line-height:2.1;overflow-x:auto;padding-bottom:2px}
+.fbig.sm{font-size:clamp(17px,2.2vw,21px)}
+.legend-sym{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px 18px;margin-top:14px;padding-top:12px;border-top:1px dashed var(--line)}
+.legend-sym div{display:flex;gap:9px;align-items:baseline;font-size:13.5px;color:var(--muted)}
+.legend-sym .s{font-family:"STIX Two Text",serif;font-style:italic;font-size:17px;color:var(--ink);flex:none;min-width:2.4em}
+.note{margin:10px 0 0;font-size:13.5px;color:var(--muted)}
+.note b{color:var(--ink)}
+.warn{border-left:3px solid var(--amber);padding-left:12px;margin:12px 0 0;font-size:13.5px;color:var(--muted)}
+.warn b{color:var(--ink)}
+
+/* derivation stepper */
+.deriv{margin:0;padding:0;list-style:none;counter-reset:d}
+.deriv li{counter-increment:d;display:grid;grid-template-columns:26px minmax(0,1fr);gap:4px 12px;padding:9px 0;border-top:1px solid var(--line);transition:opacity .2s}
+.deriv li:first-child{border-top:0}
+.deriv li::before{content:counter(d);font:600 11px/18px "IBM Plex Mono",monospace;color:var(--muted);background:var(--sunk);border-radius:50%;width:18px;height:18px;text-align:center;margin-top:5px}
+.deriv li.dim{opacity:.22}
+.deriv .ln{font-size:18px;overflow-x:auto}
+.deriv .why{grid-column:2;font-size:13px;color:var(--muted)}
+.dnav{display:flex;align-items:center;gap:8px;margin-top:12px;flex-wrap:wrap}
+.dnav .cnt{font:500 12.5px/1 "IBM Plex Mono",monospace;color:var(--muted)}
+
+/* figures + controls */
+.plot{margin:0 0 12px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px 6px}
+.plot figcaption{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 14px;align-items:baseline;margin-bottom:2px}
+.pt{font-weight:600;font-size:14px}
+.pt .math{font-weight:400;font-size:15.5px}
+.legend{display:flex;flex-wrap:wrap;gap:2px 12px;font-size:12.5px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:14px;height:3px;border-radius:2px;background:var(--c)}
+.legend i.dash{background:repeating-linear-gradient(90deg,var(--c) 0 4px,transparent 4px 7px)}
+.legend .math{font-size:14px;color:var(--ink)}
+canvas{display:block;width:100%;height:200px;touch-action:pan-y}
+canvas.drag{cursor:ew-resize}
+.ctrls{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin-bottom:12px}
+.ctrl{display:flex;align-items:center;gap:9px;font-size:13.5px;flex:1 1 210px;min-width:0}
+.ctrl > span:first-child{color:var(--muted);white-space:nowrap}
+.ctrl input[type=range]{flex:1;min-width:80px;accent-color:var(--mark)}
+.ctrl output{font:600 13px/1 "IBM Plex Mono",monospace;color:var(--mark);min-width:3.4em;text-align:right;font-variant-numeric:tabular-nums}
+.ctrl select,.ctrl input[type=text]{font:13.5px "IBM Plex Mono",monospace;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:6px 8px;max-width:100%}
+.ctrl select{font-family:"IBM Plex Sans Thai",sans-serif;cursor:pointer;flex:1}
+.btn{appearance:none;font:500 13.5px/1 "IBM Plex Sans Thai",system-ui,sans-serif;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 12px;min-height:34px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{border-color:var(--mark)}
+.btn.primary{background:var(--mark);border-color:var(--mark);color:var(--on-mark)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.sm{min-height:30px;padding:6px 10px;font-size:13px}
+.chk{display:inline-flex;align-items:center;gap:7px;font-size:13.5px;color:var(--muted);cursor:pointer}
+.chk input{accent-color:var(--mark)}
+
+/* readout */
+.out{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 20px;padding:12px 4px;border-block:1px dashed var(--line);margin-bottom:12px;min-height:74px}
+.out .l{display:flex;flex-direction:column;gap:3px;min-width:0;font-size:17px;flex:1 1 320px}
+.out .l .sub{font-size:13px;color:var(--muted)}
+.out .r{font:600 24px/1 "IBM Plex Mono",monospace;color:var(--y);white-space:nowrap}
+.out .r.small{font-size:18px}
+
+/* math bits */
+.bigop{display:inline-flex;align-items:center;vertical-align:middle;margin:0 .1em 0 .12em}
+.bigop .op{font-style:normal;font-size:1.4em;line-height:1}
+.bigop .lims{display:inline-flex;flex-direction:column;justify-content:space-between;font-size:.55em;line-height:1.2;margin-left:.12em;min-height:2.2em}
+.frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;font-size:.86em;line-height:1.25;margin:0 .14em}
+.frac>span:last-child{border-top:1px solid currentColor;padding-top:1px}
+.cases{display:inline-flex;align-items:center;vertical-align:middle}
+.cases .brace{font-size:2.6em;line-height:1;font-style:normal;margin-right:.08em}
+.cases .rows{display:grid;grid-template-columns:auto auto;gap:3px 16px;align-items:center;font-size:.92em}
+.cases .cond{color:var(--muted);white-space:nowrap}
+.box{display:inline-block;border:1.5px solid var(--y);border-radius:8px;padding:2px 10px;background:color-mix(in srgb,var(--y) 8%,transparent)}
+.hl{background:color-mix(in srgb,var(--mark) 16%,transparent);border-radius:4px;padding:0 3px}
+.hl2{background:color-mix(in srgb,var(--prod) 16%,transparent);border-radius:4px;padding:0 3px}
+
+/* tables */
+.tscroll{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface);margin-bottom:12px}
+table{border-collapse:collapse;font:13.5px/1.35 "IBM Plex Sans Thai",sans-serif;width:max-content;min-width:100%}
+th,td{padding:9px 12px;text-align:left;vertical-align:top;border-top:1px solid var(--line)}
+thead th{border-top:0;color:var(--muted);font-weight:500;font-size:12.5px;letter-spacing:.04em;text-transform:uppercase}
+td.m,th.m{font-family:"STIX Two Text",serif;font-style:italic;font-size:15.5px}
+td.num{font-family:"IBM Plex Mono",monospace;font-style:normal;text-align:right;font-variant-numeric:tabular-nums}
+tbody tr.on{background:color-mix(in srgb,var(--mark) 10%,transparent)}
+.mini{font-size:12.5px;color:var(--muted)}
+footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--muted);display:flex;flex-wrap:wrap;gap:6px 18px;justify-content:space-between}
+footer a{color:var(--mark)}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+
+.wrapc{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.verdict{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:15px;padding:6px 12px;border-radius:999px}
+.verdict.ok{color:var(--y);background:color-mix(in srgb,var(--y) 13%,transparent)}
+.verdict.bad{color:var(--h);background:color-mix(in srgb,var(--h) 13%,transparent)}
+.calc{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center}
+.calc input[type=number]{width:110px;font:14px "IBM Plex Mono",monospace;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+
+/* ===== exam walkthrough pages (Optimization) ===== */
+section.sec > h2 .pts{font:500 12px/1 "IBM Plex Mono",monospace;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:4px 9px;letter-spacing:.03em}
+.prob{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--x);border-radius:12px;padding:12px 16px 14px;margin:8px 0 14px}
+.prob > summary{cursor:pointer;font:500 11.5px/1.6 "IBM Plex Mono",monospace;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);list-style:none}
+.prob > summary::-webkit-details-marker{display:none}
+.prob > summary::before{content:"▸ ";color:var(--mark)}
+.prob[open] > summary::before{content:"▾ "}
+.prob .en{font-size:14px;color:var(--ink);margin:8px 0 0}
+.prob .en p{margin:6px 0}
+.prob .th-sum{margin:10px 0 0;padding-top:10px;border-top:1px dashed var(--line);font-size:14px;color:var(--muted)}
+.prob .th-sum b{color:var(--ink)}
+.prob table{font-size:13px}
+.idea{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:start;background:color-mix(in srgb,var(--amber) 9%,var(--surface));border:1px solid color-mix(in srgb,var(--amber) 35%,var(--line));border-radius:12px;padding:12px 14px;margin:0 0 14px;font-size:14px}
+.idea::before{content:"💡";font-size:18px;line-height:1.3}
+.idea b{font-weight:600}
+.idea p{margin:0 0 6px}.idea p:last-child{margin:0}
+
+/* stepper */
+.stepper{background:var(--surface);border:1px solid var(--line);border-radius:14px;margin-bottom:14px;overflow:hidden}
+.stepper .fig{background:var(--sunk);border-bottom:1px solid var(--line);padding:10px 10px 6px;position:relative}
+.stepper .fig svg{display:block;width:100%;height:auto;max-height:440px}
+.stepper .fig .figcap{font-size:12.5px;color:var(--muted);text-align:center;margin:2px 0 0;min-height:1.6em}
+.stepper .fig .figctl{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;justify-content:center;padding:6px 4px 2px;font-size:13px}
+.stepper .fig .figctl label{display:inline-flex;align-items:center;gap:8px;color:var(--muted)}
+.stepper .fig .figctl input[type=range]{width:min(220px,46vw);accent-color:var(--mark)}
+.stepper .fig .figctl output{font:600 12.5px/1 "IBM Plex Mono",monospace;color:var(--mark);min-width:3.2em}
+.snav{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:10px 14px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--surface);z-index:1}
+.snav .cnt{font:500 12.5px/1 "IBM Plex Mono",monospace;color:var(--muted);margin-right:auto}
+.snav .dots{display:flex;gap:4px;flex-wrap:wrap}
+.snav .dots button{appearance:none;width:22px;height:22px;border-radius:50%;border:1px solid var(--line);background:var(--sunk);font:600 10.5px/1 "IBM Plex Mono",monospace;color:var(--muted);cursor:pointer;padding:0}
+.snav .dots button.seen{background:color-mix(in srgb,var(--mark) 18%,var(--surface));color:var(--ink)}
+.snav .dots button.cur{background:var(--mark);border-color:var(--mark);color:var(--on-mark)}
+ol.steps{list-style:none;margin:0;padding:6px 14px 10px}
+ol.steps > li{display:grid;grid-template-columns:30px minmax(0,1fr);gap:2px 12px;padding:12px 0;border-top:1px solid var(--line)}
+ol.steps > li:first-child{border-top:0}
+ol.steps > li::before{content:attr(data-n);font:600 12px/24px "IBM Plex Mono",monospace;color:var(--muted);background:var(--sunk);border:1px solid var(--line);border-radius:50%;width:24px;height:24px;text-align:center}
+ol.steps > li.future, ol.steps > li.past{display:none}
+ol.steps.all > li.future, ol.steps.all > li.past{display:grid}
+ol.steps.all > li.future{opacity:.55}
+ol.steps > li.cur::before{background:var(--mark);border-color:var(--mark);color:var(--on-mark)}
+ol.steps > li.cur{background:linear-gradient(90deg,color-mix(in srgb,var(--mark) 7%,transparent),transparent 70%);margin-inline:-14px;padding-inline:14px}
+ol.steps > li > *{grid-column:2}
+ol.steps > li > h4{margin:0 0 4px;font-size:15.5px;font-weight:600;line-height:1.4}
+ol.steps > li p{margin:4px 0 8px;max-width:78ch}
+ol.steps > li ul{margin:4px 0 8px;padding-left:20px}
+ol.steps > li ul li{margin:3px 0}
+.eq{font-family:"STIX Two Text","Cambria Math","Times New Roman",serif;font-size:17.5px;line-height:1.9;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:8px 14px;margin:6px 0 10px;overflow-x:auto}
+.eq .r{display:block;white-space:nowrap}
+.eq .c{color:var(--muted);font-family:"IBM Plex Sans Thai",sans-serif;font-style:normal;font-size:13px;margin-left:14px}
+.eq i,.eq var{font-style:italic}
+.eq .n{font-style:normal}
+.why{font-size:13.5px;color:var(--muted);border-left:3px solid var(--line);padding-left:10px;margin:6px 0 8px}
+.why b{color:var(--ink)}
+.trap{font-size:13.5px;border-left:3px solid var(--h);padding:4px 10px;margin:8px 0;background:color-mix(in srgb,var(--h) 6%,transparent);border-radius:0 8px 8px 0}
+.trap b{color:var(--h)}
+.ans{border:1.5px solid var(--y);background:color-mix(in srgb,var(--y) 8%,var(--surface));border-radius:12px;padding:12px 16px;margin:0 0 14px;font-size:14.5px}
+.ans > b:first-child{display:block;font:600 11.5px/1.6 "IBM Plex Mono",monospace;letter-spacing:.07em;text-transform:uppercase;color:var(--y);margin-bottom:4px}
+.ans p{margin:4px 0}
+.c-mark{color:var(--mark)} .c-h{color:var(--h)} .c-y{color:var(--y)} .c-prod{color:var(--prod)} .c-amber{color:var(--amber)} .c-mut{color:var(--muted)}
+.tag{display:inline-block;font:600 11px/1.5 "IBM Plex Mono",monospace;border-radius:6px;padding:0 6px;margin-right:4px;vertical-align:1px}
+.tag.t{color:var(--y);background:color-mix(in srgb,var(--y) 14%,transparent)}
+.tag.f{color:var(--h);background:color-mix(in srgb,var(--h) 14%,transparent)}
+.tag.b{color:var(--mark);background:color-mix(in srgb,var(--mark) 14%,transparent)}
+
+/* simplex tableau */
+.tab{overflow-x:auto;margin:6px 0 10px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.tab table{font:13.5px/1.3 "IBM Plex Mono",monospace;min-width:0;width:100%}
+.tab th,.tab td{padding:6px 10px;text-align:right;border-top:1px solid var(--line);white-space:nowrap}
+.tab thead th{text-transform:none;font:italic 15px "STIX Two Text",serif;color:var(--ink);letter-spacing:0}
+.tab td:first-child,.tab th:first-child{text-align:left;font:italic 15px "STIX Two Text",serif;color:var(--muted)}
+.tab tr.r0 td{background:color-mix(in srgb,var(--amber) 8%,transparent)}
+.tab .pc{background:color-mix(in srgb,var(--mark) 12%,transparent)}
+.tab .pr td{background:color-mix(in srgb,var(--prod) 10%,transparent)}
+.tab td.pv{background:var(--mark);color:var(--on-mark);font-weight:600;border-radius:4px}
+.tab td.neg{color:var(--h);font-weight:600}
+.tab td.rat{color:var(--muted);border-left:1px dashed var(--line)}
+.tab td.rat.win{color:var(--prod);font-weight:600}
+.tab th.rhs,.tab td.rhs{border-left:1px solid var(--line)}
+
+/* svg figure classes */
+.sv text{font:12px "IBM Plex Sans Thai",sans-serif;fill:var(--muted)}
+.sv .lbl{font:italic 14px "STIX Two Text",serif;fill:var(--ink)}
+.sv .lbl.b{font-weight:600}
+.sv .tick{font:11px "IBM Plex Mono",monospace;fill:var(--muted)}
+.sv .grid{stroke:var(--grid);stroke-width:1}
+.sv .axis{stroke:var(--axis);stroke-width:1.3}
+.sv .feas{fill:color-mix(in srgb,var(--y) 20%,transparent);stroke:var(--y);stroke-width:2}
+.sv .bad{fill:color-mix(in srgb,var(--h) 14%,transparent);stroke:var(--h);stroke-width:2}
+.sv .ln{stroke-width:2;fill:none}
+.sv .dash{stroke-dasharray:6 5}
+
+/* progress */
+.done-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:4px 0 0}
+.toc a .ok{margin-left:auto;color:var(--y);font-weight:600;visibility:hidden}
+.toc a.done .ok{visibility:visible}
+.toc .grp{font:500 11px/1.4 "IBM Plex Mono",monospace;letter-spacing:.07em;color:var(--muted);margin:10px 10px 2px}
+@media (max-width:920px){.toc .grp{display:none}}
+.kbd{font:500 11.5px/1 "IBM Plex Mono",monospace;border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:2px 5px;color:var(--muted)}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px 18px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">CP203 · Optimization · ข้อสอบเก่า Quiz · 2025/1 (20 Oct 2025)</p>
+    <h1>เฉลย Quiz · 2025 <span class="math">integer programming</span></h1>
+    <p class="lede">ข้อ 6–7 ของปี 2025 เป็นโจทย์ที่ตัวแปรต้องเป็น <b>จำนวนเต็ม</b> (เขตเลือกตั้ง, ชิ้นสินค้า) — เฉลยไล่ทีละขั้นเหมือนเดิม และแก้คำตอบจริงให้ดู (ข้อ 7 ใช้ตัวอย่างตัวเลขสมมติ เพราะโจทย์ให้แต่สัญลักษณ์)</p>
+  </header>
+
+  <div class="layout">
+    <nav class="toc" aria-label="ข้อ">
+      <span class="lab">ข้อสอบ 2025</span>
+      <a href="#el"><b>Q6</b><span>Election madness</span><span class="ok">✓</span></a>
+      <a href="#sh"><b>Q7</b><span>Hamtaro pet shop (shelf)</span><span class="ok">✓</span></a>
+    </nav>
+
+    <main>
+      <!-- ================= election ================= -->
+      <section class="sec" id="el">
+        <h2><span class="n">Q6</span> Election madness <span class="pts">5 pts</span></h2>
+        <details class="prob" open><summary>โจทย์</summary>
+          <div class="en">
+            <p>Parliament of <b>400 seats</b>, one per constituency, no party list. Majority = 201. Hamtaro wants as many seats as possible. <b>100 constituencies</b> are certain wins. Others:</p>
+            <div class="tscroll"><table><thead><tr><th>Voting trend</th><th>No. of constituencies</th><th>Campaigns needed</th><th>Advanced campaigns needed</th></tr></thead><tbody>
+              <tr><td>Very close</td><td class="num">30</td><td class="num">1</td><td class="num">0</td></tr>
+              <tr><td>Trailing a bit</td><td class="num">50</td><td class="num">3</td><td class="num">0</td></tr>
+              <tr><td>Trailing considerably</td><td class="num">70</td><td class="num">7</td><td class="num">1</td></tr>
+              <tr><td>Almost no chance</td><td class="num">50</td><td class="num">16</td><td class="num">3</td></tr>
+              <tr><td>Impossible to flip</td><td class="num">100</td><td>N/A</td><td>N/A</td></tr></tbody></table></div>
+            <p>Campaign = <b>1M SFD</b>, advanced campaign = <b>5M SFD</b>. "Buying a cobra" costs <b>70M SFD</b> and flips <b>any</b> constituency (including impossible ones) without campaigns; at most <b>5 cobras</b>. Budget <b>1 billion SFD</b>. What is the maximum number of seats? Formulate as a linear/integer program.</p>
+          </div>
+        </details>
+        <div class="idea"><div><p><b>ไอเดีย</b>: ทุกเขตมีค่าเท่ากัน (1 ที่นั่ง) แต่ "ราคา" ต่างกัน → แปลงทุกอย่างเป็น <b>ราคาต่อ 1 เขต</b> ก่อน แล้วจะเห็นว่าควรซื้อเขตถูกสุดก่อน</p></div></div>
+        <div class="stepper" data-fig="el">
+          <div class="fig"><div class="figbody"></div><p class="figcap"></p>
+            <div class="figctl" data-show="8"><label>งบหาเสียง (ล้าน SFD) <input type="range" id="el-b" min="0" max="3000" step="10" value="1000"></label><output id="el-bv">1000</output></div>
+          </div>
+          <ol class="steps">
+            <li><h4>นับเขตก่อน</h4>
+              <p><span class="math">100 + 30 + 50 + 70 + 50 + 100 = 400</span> ครบทุกเขต · ชนะแน่ 100 เขต · ที่เหลือ 300 เขตต้อง "ซื้อ" ด้วยการหาเสียงหรือซื้องูเห่า</p>
+              <p>ในรูป: แถบที่นั่ง 400 ช่อง — สีเทา = ชนะแน่, เส้นแดง = majority 201</p></li>
+            <li><h4>ราคาต่อ 1 เขต (ต้องใช้ทั้ง campaign และ advanced ตามตาราง)</h4>
+              <div class="tscroll"><table><thead><tr><th>ประเภท</th><th>คำนวณ</th><th>ล้าน SFD / เขต</th><th>จำนวน</th></tr></thead><tbody>
+                <tr><td>Very close</td><td class="m">1·1 + 0·5</td><td class="num">1</td><td class="num">30</td></tr>
+                <tr><td>Trailing a bit</td><td class="m">3·1 + 0·5</td><td class="num">3</td><td class="num">50</td></tr>
+                <tr><td>Trailing considerably</td><td class="m">7·1 + 1·5</td><td class="num">12</td><td class="num">70</td></tr>
+                <tr><td>Almost no chance</td><td class="m">16·1 + 3·5</td><td class="num">31</td><td class="num">50</td></tr>
+                <tr><td>ซื้องูเห่า (เขตไหนก็ได้)</td><td class="m">—</td><td class="num">70</td><td class="num">≤ 5</td></tr></tbody></table></div>
+              <p class="why">Assumption: การ flip เขตหนึ่งต้องจ่ายทั้ง campaign และ advanced campaign ตามจำนวนในตาราง · งบ 1 billion = 1000 ล้าน</p></li>
+            <li><h4>ตัวแปรตัดสินใจ (จำนวนเต็ม)</h4>
+              <div class="eq">
+                <span class="r">x_k = จำนวนเขตประเภท k ที่ flip ด้วยการหาเสียง &emsp;k = 1…4</span>
+                <span class="r">y_k = จำนวนเขตประเภท k ที่ flip ด้วยงูเห่า &emsp;k = 1…5 <span class="c">(k = 5 คือ impossible)</span></span>
+                <span class="r">x_k, y_k ∈ ℤ, ≥ 0</span>
+              </div>
+              <p class="why">ต้องเป็นจำนวนเต็ม เพราะ flip ครึ่งเขตไม่ได้ — นี่คือ <b>integer program</b> (โจทย์บอก "linear/integer program")</p></li>
+            <li><h4>Objective: ที่นั่งมากที่สุด</h4>
+              <div class="eq"><span class="r">max &nbsp;100 + x₁ + x₂ + x₃ + x₄ + y₁ + y₂ + y₃ + y₄ + y₅</span></div></li>
+            <li><h4>ข้อจำกัด</h4>
+              <div class="eq">
+                <span class="r">1x₁ + 3x₂ + 12x₃ + 31x₄ + 70(y₁ + y₂ + y₃ + y₄ + y₅) ≤ 1000 <span class="c">(งบ)</span></span>
+                <span class="r">x₁ + y₁ ≤ 30, &nbsp;x₂ + y₂ ≤ 50, &nbsp;x₃ + y₃ ≤ 70, &nbsp;x₄ + y₄ ≤ 50, &nbsp;y₅ ≤ 100 <span class="c">(เขตมีจำกัด)</span></span>
+                <span class="r">y₁ + y₂ + y₃ + y₄ + y₅ ≤ 5 <span class="c">(งูเห่าไม่เกิน 5)</span></span>
+              </div>
+              <p class="why">ตัวแปรเดียวกันห้ามนับซ้ำ: เขตหนึ่ง flip ด้วยวิธีเดียว จึงรวม <span class="math">x_k + y_k</span> ไม่เกินจำนวนเขต</p></li>
+            <li><h4>เขียนรวมเป็น IP (คำตอบที่ต้องส่ง)</h4>
+              <div class="eq">
+                <span class="r">max 100 + Σ<sub>k=1..4</sub> x_k + Σ<sub>k=1..5</sub> y_k</span>
+                <span class="r">s.t. x₁ + 3x₂ + 12x₃ + 31x₄ + 70Σ<sub>k</sub> y_k ≤ 1000</span>
+                <span class="r">&emsp;&emsp;x_k + y_k ≤ N_k &emsp;(N = 30, 50, 70, 50) · y₅ ≤ 100</span>
+                <span class="r">&emsp;&emsp;Σ<sub>k</sub> y_k ≤ 5</span>
+                <span class="r">&emsp;&emsp;x_k, y_k ∈ ℤ<sub>≥0</sub></span>
+              </div></li>
+            <li><h4>แก้: ซื้อเขตที่ถูกที่สุดก่อน</h4>
+              <p>ทุกเขตให้ 1 ที่นั่งเท่ากัน → อยากได้จำนวนมากสุดภายใต้งบ = เลือกของถูกก่อนเสมอ (สลับเขตแพงออกแล้วใส่เขตถูกกว่าเข้าไปไม่มีทางแย่ลง)</p>
+              <div class="eq">
+                <span class="r">Very close 30 เขต × 1 = 30 &emsp;→ เหลือ 970</span>
+                <span class="r">Trailing a bit 50 เขต × 3 = 150 &emsp;→ เหลือ 820</span>
+                <span class="r">Trailing considerably: ⌊820 / 12⌋ = 68 เขต × 12 = 816 &emsp;→ เหลือ 4</span>
+                <span class="r">เหลือ 4 ล้าน ซื้ออะไรไม่ได้อีก (ถูกสุดที่เหลือคือ 12)</span>
+              </div></li>
+            <li><h4>คำตอบ + ตรวจ</h4>
+              <div class="ans" style="margin:6px 0"><b>คำตอบ</b> 100 + 30 + 50 + 68 = <b>248 ที่นั่ง</b> (x = (30, 50, 68, 0), ไม่ซื้องูเห่า) · ใช้งบ 996 ล้าน · เกิน majority 201 ✓</div>
+              <ul>
+                <li>ทำไมไม่ซื้องูเห่า: 70 ล้าน/เขต แพงกว่าทุกแบบที่ยังเหลือ (12 หรือ 31) — ไม่ผิดกฎหมายด้วย 😅</li>
+                <li>ถ้าคลาย integer (LP relaxation): ได้ <span class="math">x₃ = 68.33</span> → 248.33 ที่นั่ง ซึ่งเป็นไปไม่ได้จริง ปัดลงเป็น 248 พอดีในข้อนี้ (แต่โดยทั่วไป ปัดเศษ LP ไม่รับประกันว่า optimal)</li>
+              </ul></li>
+            <li><h4>(แถม) ถ้างบเปลี่ยน?</h4>
+              <p>เลื่อน slider: งบเกิน <span class="math">30 + 150 + 840 + 1550 = 2570</span> ล้าน ถึงจะเริ่มซื้องูเห่า (ตอนนั้นซื้อเขตอื่นหมดแล้ว) และได้สูงสุด <span class="math">300 + 5 = 305</span> ที่นั่งที่ 2920 ล้าน</p>
+              <p>ต้องใช้งบเท่าไหร่ถึงชนะเกินครึ่ง (201)? ต้อง flip 101 เขต: 30 + 50 + 21 เขต → <span class="math">30 + 150 + 21·12 = 432</span> ล้าน</p></li>
+          </ol>
+        </div>
+        <div class="done-row"><label class="chk"><input type="checkbox" data-done="el"> เข้าใจข้อนี้แล้ว</label></div>
+      </section>
+
+      <!-- ================= shelf ================= -->
+      <section class="sec" id="sh">
+        <h2><span class="n">Q7</span> Hamtaro first crisis (2025) — จัดชั้นวางหน้าร้าน <span class="pts">4 pts + bonus 3</span></h2>
+        <details class="prob" open><summary>โจทย์</summary>
+          <div class="en">
+            <p>Front shelf has <span class="math">P</span> levels, each of width <span class="math">W</span>, height <span class="math">H</span>, depth <span class="math">D</span>. <span class="math">N</span> products; product <span class="math">i</span> has quantity <span class="math">n_i</span>, dimensions <span class="math">w_i, h_i, d_i</span> and attractiveness <span class="math">A_ij</span> when placed on level <span class="math">j</span>. Assumptions:
+              (1) orientation cannot be changed · (2) multiple copies of the same item allowed without penalty · (3) only one row of items per level (no items behind) · (4) no stacking.</p>
+            <p>7.1 maximize attractiveness: which item, which level, how many? Formulate a mathematical program. ·
+               7.2 orientation may change but rotating halves attractiveness ·
+               7.3 also allow multiple rows per level, but item and orientation must be the same ·
+               7.4 (bonus) also allow stacking.</p>
+          </div>
+        </details>
+        <div class="idea"><div><p><b>ไอเดีย</b>: ภายใต้ assumption 3, 4 ของบนชั้นหนึ่งเรียงเป็น <b>แถวเดียวจากซ้ายไปขวา</b> → ทรัพยากรที่ใช้หมดคือ <b>ความกว้าง</b> อย่างเดียว ส่วนความสูง/ความลึกแค่ต้อง "ใส่ได้" → เป็น knapsack หลายใบ (multiple knapsack)</p>
+          <p>รูปด้านบนเป็นตัวอย่างสมมติ: ชั้น 2 ระดับ <span class="math">W = 100, H = 30, D = 40</span> และสินค้า 4 แบบ — คำตอบในรูปแก้ด้วย integer programming จริง</p></div></div>
+        <div class="stepper" data-fig="sh">
+          <div class="fig"><div class="figbody"></div><p class="figcap"></p>
+            <div class="figctl"><label>แสดงคำตอบของ <select id="sh-m" class="btn sm"><option value="auto">ตามขั้นที่อ่าน</option><option value="71">7.1</option><option value="72">7.2 หมุนได้</option><option value="73">7.3 หลายแถว</option><option value="74">7.4 ซ้อนได้</option></select></label></div>
+          </div>
+          <ol class="steps">
+            <li><h4>อะไรคงที่ อะไรเลือกได้</h4>
+              <p>คงที่: <span class="math">P, W, H, D, n_i, w_i, h_i, d_i, A_ij</span> · เลือกได้: <b>วางสินค้า i บนชั้น j กี่ชิ้น</b></p>
+              <p>ตารางตัวอย่างในรูป (ตัวเลขสมมติ):</p>
+              <div class="tscroll"><table><thead><tr><th>สินค้า</th><th class="m">w × h × d</th><th class="m">n_i</th><th class="m">A_i1 / A_i2</th></tr></thead><tbody>
+                <tr><td>Dog food</td><td class="num">30 × 28 × 15</td><td class="num">4</td><td class="num">9 / 6</td></tr>
+                <tr><td>Cat toys</td><td class="num">20 × 12 × 10</td><td class="num">10</td><td class="num">5 / 4</td></tr>
+                <tr><td>Hamster wheel</td><td class="num">25 × 25 × 25</td><td class="num">2</td><td class="num">8 / 3</td></tr>
+                <tr><td>Cat tree (สูง!)</td><td class="num">15 × 40 × 12</td><td class="num">2</td><td class="num">10 / 10</td></tr></tbody></table></div></li>
+            <li><h4>ตัวแปร</h4>
+              <div class="eq"><span class="r">x_ij ∈ ℤ<sub>≥0</sub> = จำนวนชิ้นของสินค้า i ที่วางบนชั้น j &emsp;(i = 1…N, j = 1…P)</span></div>
+              <p class="why">ต้องเป็นจำนวนเต็ม (วางครึ่งชิ้นไม่ได้) → integer program · assumption 2 ทำให้ชิ้นซ้ำกันนับความน่าสนใจได้เต็ม ๆ ทุกชิ้น</p></li>
+            <li><h4>Objective</h4>
+              <div class="eq"><span class="r">max &nbsp;Σ<sub>i</sub> Σ<sub>j</sub> A_ij x_ij</span></div></li>
+            <li><h4>ข้อจำกัดความกว้าง (หัวใจของข้อ)</h4>
+              <p>แถวเดียว ไม่ซ้อน → ของบนชั้น j เรียงต่อกัน ความกว้างรวมไม่เกิน <span class="math">W</span></p>
+              <div class="eq"><span class="r">Σ<sub>i</sub> w_i x_ij ≤ W &emsp;∀ j = 1…P</span></div></li>
+            <li><h4>ข้อจำกัดจำนวน + ต้องใส่ได้</h4>
+              <div class="eq">
+                <span class="r">Σ<sub>j</sub> x_ij ≤ n_i &emsp;∀ i <span class="c">(ของมีจำกัด)</span></span>
+                <span class="r">x_ij = 0 &emsp;ถ้า h_i &gt; H หรือ d_i &gt; D <span class="c">(สูง/ลึกเกินชั้น วางไม่ได้)</span></span>
+              </div>
+              <p>ในตัวอย่าง: Cat tree สูง 40 &gt; H = 30 → วางไม่ได้เลย (ใน 7.1)</p></li>
+            <li><h4>7.1 คำตอบ (formulation ครบ)</h4>
+              <div class="eq">
+                <span class="r">max Σ<sub>i,j</sub> A_ij x_ij</span>
+                <span class="r">s.t. Σ<sub>i</sub> w_i x_ij ≤ W &emsp;∀ j</span>
+                <span class="r">&emsp;&emsp;Σ<sub>j</sub> x_ij ≤ n_i &emsp;∀ i</span>
+                <span class="r">&emsp;&emsp;x_ij = 0 &emsp;∀ (i, j) ที่ h_i &gt; H หรือ d_i &gt; D</span>
+                <span class="r">&emsp;&emsp;x_ij ∈ ℤ<sub>≥0</sub></span>
+              </div>
+              <p>ตัวอย่างในรูปได้ความน่าสนใจ <b>50</b> — สังเกตว่าของที่ "ชั้นบนน่าสนใจกว่ามาก" (wheel 8 vs 3) ถูกยกไปชั้น 1</p></li>
+            <li><h4>7.2 หมุนได้ แต่ความน่าสนใจหารสอง</h4>
+              <p>กล่องหนึ่งวางได้ 6 ทิศ (สลับว่ามิติไหนเป็น กว้าง/สูง/ลึก) → ให้ <span class="math">o ∈ {1…6}</span> แทนทิศ และ <span class="math">(w_io, h_io, d_io)</span> เป็นขนาดในทิศนั้น (<span class="math">o = 1</span> คือทิศเดิม)</p>
+              <div class="eq">
+                <span class="r">ตัวแปร x_ijo ∈ ℤ<sub>≥0</sub></span>
+                <span class="r">max Σ<sub>i,j</sub> A_ij x_ij1 + Σ<sub>i,j</sub> Σ<sub>o≥2</sub> ½A_ij x_ijo</span>
+                <span class="r">s.t. Σ<sub>i,o</sub> w_io x_ijo ≤ W &emsp;∀ j</span>
+                <span class="r">&emsp;&emsp;Σ<sub>j,o</sub> x_ijo ≤ n_i &emsp;∀ i</span>
+                <span class="r">&emsp;&emsp;x_ijo = 0 &emsp;ถ้า h_io &gt; H หรือ d_io &gt; D</span>
+              </div>
+              <p>ในรูป: Cat tree นอนลง (กว้าง 12 ลึก 40) วางได้แล้ว · Dog food บางชิ้นถูกหมุนให้ "แคบ" ลง (15 แทน 30) เพื่อเบียดที่ → ได้ <b>55.5</b> (ชิ้นที่หมุนมีเส้นประ ↻)</p></li>
+            <li><h4>7.3 หลายแถว (วางซ้อนไปด้านหลัง) — แต่ต้องเป็นของเดียวกัน ทิศเดียวกัน</h4>
+              <p>มองเป็น "คอลัมน์" จากหน้าไปหลัง: คอลัมน์ของสินค้า i ทิศ o กว้าง <span class="math">w_io</span> และจุได้ <span class="math">k_io = ⌊D / d_io⌋</span> ชิ้น</p>
+              <div class="eq">
+                <span class="r">y_ijo ∈ ℤ<sub>≥0</sub> = จำนวนคอลัมน์ &emsp;x_ijo ∈ ℤ<sub>≥0</sub> = จำนวนชิ้น</span>
+                <span class="r">x_ijo ≤ k_io · y_ijo <span class="c">(ชิ้นไม่เกินที่คอลัมน์จุได้)</span></span>
+                <span class="r">Σ<sub>i,o</sub> w_io y_ijo ≤ W &emsp;∀ j <span class="c">(ความกว้างนับตามคอลัมน์)</span></span>
+                <span class="r">Σ<sub>j,o</sub> x_ijo ≤ n_i, &emsp;objective เหมือน 7.2</span>
+              </div>
+              <p>ในรูป: ตัวเลข ×k บนกล่อง = ชิ้นที่อยู่เรียงไปข้างหลัง → ได้ <b>100</b></p>
+              <p class="why">ถ้าตีความว่าลูกค้าเห็นแค่แถวหน้า ความน่าสนใจควรคิดต่อคอลัมน์ (ใช้ y แทน x ใน objective) — เขียน assumption ที่เลือกไว้</p></li>
+            <li><h4>7.4 (bonus) ซ้อนขึ้นด้านบนได้ด้วย</h4>
+              <p>ถ้ายังบังคับให้แต่ละคอลัมน์เป็นของชนิดเดียว ทิศเดียว: คอลัมน์กลายเป็น "บล็อก" ที่จุได้</p>
+              <div class="eq"><span class="r">k_io = ⌊H / h_io⌋ · ⌊D / d_io⌋</span></div>
+              <p>formulation เหมือน 7.3 ทุกอย่าง เปลี่ยนแค่ <span class="math">k_io</span> → ตัวอย่างได้ <b>104</b> (Cat toys ซ้อน 2 ชั้น × ลึก 4 = 8 ต่อคอลัมน์)</p>
+              <p class="why">ถ้ายอมให้ของ <b>ต่างชนิดกัน</b> ซ้อนกันได้ จะกลายเป็น 3D bin packing ซึ่งต้องมีตัวแปรตำแหน่ง (x, y, z) ของแต่ละชิ้น + ข้อจำกัดไม่ทับกัน (ใช้ binary + big-M) — ยากกว่ามาก การอธิบายว่าทำไมยากก็ได้คะแนนส่วนหนึ่ง</p></li>
+          </ol>
+        </div>
+        <div class="done-row"><label class="chk"><input type="checkbox" data-done="sh"> เข้าใจข้อนี้แล้ว</label></div>
+      </section>
+
+      <footer>
+        <span>ข้อสอบ: Com Eng Math II Quiz 2025/1 ข้อ 6–7 · คำตอบตัวอย่างข้อ 7 แก้ด้วย integer programming (scipy milp) แล้วฝังไว้</span>
+        <span>หน้าอื่น: <a href="exam-2020.html">Quiz 1 · 2020</a> · <a href="exam-2021.html">Quiz 1 · 2021</a></span>
+      </footer>
+    </main>
+  </div>
+</div>
+
+<script>
+/* ===== shared helpers for the Optimization exam pages =====
+   Frac (exact fractions for hand-simplex tableaux), lp() (two-phase simplex for the live demos),
+   Plot (SVG builder for 2-D feasible regions) and the step-by-step walkthrough widget */
+const Frac = (() => {
+  const gcd = (a, b) => { a = Math.abs(a); b = Math.abs(b); while (b) [a, b] = [b, a % b]; return a || 1; };
+  class F {
+    constructor(n, d = 1){
+      if (n instanceof F) return n;
+      if (typeof n === 'string'){ const [p, q] = n.split('/'); n = +p; d = q === undefined ? 1 : +q; }
+      if (!Number.isInteger(n) || !Number.isInteger(d)){ const k = 1e6; n = Math.round(n * k); d = Math.round(d * k); }
+      if (d < 0){ n = -n; d = -d; }
+      const g = gcd(n, d); this.n = n / g; this.d = d / g;
+    }
+    add(o){ o = fr(o); return new F(this.n * o.d + o.n * this.d, this.d * o.d); }
+    sub(o){ o = fr(o); return new F(this.n * o.d - o.n * this.d, this.d * o.d); }
+    mul(o){ o = fr(o); return new F(this.n * o.n, this.d * o.d); }
+    div(o){ o = fr(o); return new F(this.n * o.d, this.d * o.n); }
+    neg(){ return new F(-this.n, this.d); }
+    get v(){ return this.n / this.d; }
+    sign(){ return Math.sign(this.n); }
+    toString(){ return this.d === 1 ? String(this.n).replace('-', '−') : (this.n < 0 ? '−' : '') + Math.abs(this.n) + '/' + this.d; }
+  }
+  const fr = x => x instanceof F ? x : new F(x);
+  fr.F = F;
+  return fr;
+})();
+
+/* tableau = {cols:[names], rows:[{bv, v:[Frac], rhs:Frac}]}; rows[0] is the objective row */
+function pivot(T, r, c){
+  const rows = T.rows.map(R => ({bv: R.bv, v: R.v.slice(), rhs: R.rhs}));
+  const p = rows[r].v[c];
+  rows[r].v = rows[r].v.map(a => a.div(p)); rows[r].rhs = rows[r].rhs.div(p); rows[r].bv = T.cols[c];
+  rows.forEach((R, i) => {
+    if (i === r) return;
+    const k = R.v[c];
+    if (k.sign() === 0) return;
+    R.v = R.v.map((a, j) => a.sub(k.mul(rows[r].v[j]))); R.rhs = R.rhs.sub(k.mul(rows[r].rhs));
+  });
+  return {cols: T.cols, rows};
+}
+function mkTab(cols, rows){ return {cols, rows: rows.map(([bv, v, rhs]) => ({bv, v: v.map(x => Frac(x)), rhs: Frac(rhs)}))}; }
+/* opt: {pc, pr, ratio:true, objName} — highlight pivot column / row, add ratio-test column */
+function tabHTML(T, opt = {}){
+  const {pc = -1, pr = -1, ratio = false, negs = false} = opt;
+  let ratios = [];
+  if (ratio && pc >= 0){
+    ratios = T.rows.map((R, i) => i === 0 ? null : (R.v[pc].sign() > 0 ? R.rhs.div(R.v[pc]) : null));
+  }
+  const best = ratios.reduce((b, x, i) => x && (b < 0 || x.v < ratios[b].v) ? i : b, -1);
+  const head = `<thead><tr><th>BV</th>${T.cols.map((c, j) => `<th class="${j === pc ? 'pc' : ''}">${c}</th>`).join('')}<th class="rhs">RHS</th>${ratio && pc >= 0 ? '<th class="rat">ratio</th>' : ''}</tr></thead>`;
+  const body = T.rows.map((R, i) => `<tr class="${i === 0 ? 'r0' : ''} ${i === pr ? 'pr' : ''}"><td>${R.bv}</td>${R.v.map((a, j) => {
+      let cls = j === pc ? 'pc' : '';
+      if (i === pr && j === pc) cls = 'pv';
+      else if (negs && i === 0 && a.sign() < 0) cls += ' neg';
+      return `<td class="${cls}">${a}</td>`;
+    }).join('')}<td class="rhs">${R.rhs}</td>${ratio && pc >= 0 ? `<td class="rat ${i === best ? 'win' : ''}">${i === 0 ? '' : ratios[i] ? `${R.rhs} ÷ ${R.v[pc]} = ${ratios[i]}` : '—'}</td>` : ''}</tr>`).join('');
+  return `<div class="tab"><table>${head}<tbody>${body}</tbody></table></div>`;
+}
+
+/* lp({c, A, b, s, max}) : s[i] in '<=' '>=' '='; all x >= 0. returns {status, x, z} */
+function lp({c, A, b, s, max = false}){
+  const m = A.length, n = c.length, EPS = 1e-9;
+  const rows = [], basis = [];
+  let nx = n;
+  const slackOf = [], artOf = [];
+  A.forEach((row, i) => {
+    let si = s[i], bi = b[i], r = row.slice();
+    if (bi < 0){ r = r.map(v => -v); bi = -bi; si = si === '<=' ? '>=' : si === '>=' ? '<=' : '='; }
+    rows.push({r, b: bi, s: si});
+  });
+  rows.forEach(R => { if (R.s !== '=') slackOf.push(nx++); else slackOf.push(-1); });
+  rows.forEach(R => { if (R.s !== '<=') artOf.push(nx++); else artOf.push(-1); });
+  const N = nx;
+  const T = rows.map((R, i) => {
+    const t = new Array(N + 1).fill(0);
+    R.r.forEach((v, j) => t[j] = v);
+    if (slackOf[i] >= 0) t[slackOf[i]] = R.s === '<=' ? 1 : -1;
+    if (artOf[i] >= 0) t[artOf[i]] = 1;
+    t[N] = R.b;
+    basis.push(R.s === '<=' ? slackOf[i] : artOf[i]);
+    return t;
+  });
+  const isArt = j => artOf.includes(j);
+  function run(cost, allowed){
+    for (let it = 0; it < 5000; it++){
+      let e = -1;
+      for (let j = 0; j < N; j++){
+        if (!allowed(j) || basis.includes(j)) continue;
+        let rc = cost[j];
+        for (let i = 0; i < T.length; i++) rc -= cost[basis[i]] * T[i][j];
+        if (rc < -EPS){ e = j; break; }
+      }
+      if (e < 0) return 'optimal';
+      let r = -1, best = Infinity;
+      for (let i = 0; i < T.length; i++){
+        if (T[i][e] > EPS){
+          const q = T[i][N] / T[i][e];
+          if (q < best - EPS || (Math.abs(q - best) <= EPS && basis[i] < basis[r])){ best = q; r = i; }
+        }
+      }
+      if (r < 0) return 'unbounded';
+      piv(r, e);
+    }
+    return 'iter';
+  }
+  function piv(r, e){
+    const p = T[r][e];
+    for (let j = 0; j <= N; j++) T[r][j] /= p;
+    for (let i = 0; i < T.length; i++){
+      if (i === r) continue;
+      const k = T[i][e];
+      if (Math.abs(k) > 0) for (let j = 0; j <= N; j++) T[i][j] -= k * T[r][j];
+    }
+    basis[r] = e;
+  }
+  const c1 = new Array(N).fill(0); artOf.forEach(j => { if (j >= 0) c1[j] = 1; });
+  run(c1, () => true);
+  const w = T.reduce((acc, t, i) => acc + c1[basis[i]] * t[N], 0);
+  if (w > 1e-7) return {status: 'infeasible'};
+  for (let i = T.length - 1; i >= 0; i--){
+    if (!isArt(basis[i])) continue;
+    const j = T[i].findIndex((v, j) => j < N && !isArt(j) && Math.abs(v) > 1e-9);
+    if (j >= 0) piv(i, j); else { T.splice(i, 1); basis.splice(i, 1); }
+  }
+  const c2 = new Array(N).fill(0); c.forEach((v, j) => c2[j] = max ? -v : v);
+  const st = run(c2, j => !isArt(j));
+  if (st !== 'optimal') return {status: st};
+  const x = new Array(n).fill(0);
+  basis.forEach((j, i) => { if (j < n) x[j] = T[i][N]; });
+  const z = c.reduce((a, v, j) => a + v * x[j], 0);
+  return {status: 'optimal', x, z};
+}
+
+/* ---------- SVG plot builder ---------- */
+function Plot(xr, yr, o = {}){
+  const W = o.w || 640, H = o.h || 400, ml = o.ml ?? 46, mr = o.mr ?? 18, mt = o.mt ?? 14, mb = o.mb ?? 36;
+  const X = x => ml + (x - xr[0]) / (xr[1] - xr[0]) * (W - ml - mr);
+  const Y = y => H - mb - (y - yr[0]) / (yr[1] - yr[0]) * (H - mt - mb);
+  const out = [];
+  const f = v => +v.toFixed(2);
+  const col = c => c && c.startsWith('--') ? `var(${c})` : (c || 'var(--ink)');
+  const box = [[xr[0], yr[0]], [xr[1], yr[0]], [xr[1], yr[1]], [xr[0], yr[1]]];
+  const P = {X, Y, W, H, xr, yr,
+    raw(s){ out.push(s); return P; },
+    grid(dx = 1, dy = dx, lab = {}){
+      for (let x = Math.ceil(xr[0] / dx) * dx; x <= xr[1] + 1e-9; x += dx) out.push(`<line class="grid" x1="${f(X(x))}" x2="${f(X(x))}" y1="${f(Y(yr[0]))}" y2="${f(Y(yr[1]))}"/>`);
+      for (let y = Math.ceil(yr[0] / dy) * dy; y <= yr[1] + 1e-9; y += dy) out.push(`<line class="grid" y1="${f(Y(y))}" y2="${f(Y(y))}" x1="${f(X(xr[0]))}" x2="${f(X(xr[1]))}"/>`);
+      const tx = lab.tx || dx, ty = lab.ty || dy;
+      const x0 = Math.max(xr[0], Math.min(0, xr[1])), y0 = Math.max(yr[0], Math.min(0, yr[1]));
+      out.push(`<line class="axis" x1="${f(X(xr[0]))}" x2="${f(X(xr[1]))}" y1="${f(Y(y0))}" y2="${f(Y(y0))}"/><line class="axis" y1="${f(Y(yr[0]))}" y2="${f(Y(yr[1]))}" x1="${f(X(x0))}" x2="${f(X(x0))}"/>`);
+      for (let x = Math.ceil(xr[0] / tx) * tx; x <= xr[1] + 1e-9; x += tx) if (Math.abs(x) > 1e-9) out.push(`<text class="tick" x="${f(X(x))}" y="${f(Y(y0) + 15)}" text-anchor="middle">${+x.toFixed(3)}</text>`);
+      for (let y = Math.ceil(yr[0] / ty) * ty; y <= yr[1] + 1e-9; y += ty) if (Math.abs(y) > 1e-9) out.push(`<text class="tick" x="${f(X(x0) - 6)}" y="${f(Y(y) + 4)}" text-anchor="end">${+y.toFixed(3)}</text>`);
+      out.push(`<text class="tick" x="${f(X(x0) - 6)}" y="${f(Y(y0) + 15)}" text-anchor="end">0</text>`);
+      if (lab.x) out.push(`<text class="lbl" x="${f(X(xr[1]) - 4)}" y="${f(Y(y0) - 8)}" text-anchor="end">${lab.x}</text>`);
+      if (lab.y) out.push(`<text class="lbl" x="${f(X(x0) + 8)}" y="${f(Y(yr[1]) + 14)}">${lab.y}</text>`);
+      return P;
+    },
+    /* polygon of { a·x + b·y <= c } ∩ view box */
+    region(hps){
+      let poly = box.slice();
+      hps.forEach(([a, b, c]) => {
+        const res = [];
+        for (let i = 0; i < poly.length; i++){
+          const p = poly[i], q = poly[(i + 1) % poly.length];
+          const fp = a * p[0] + b * p[1] - c, fq = a * q[0] + b * q[1] - c;
+          if (fp <= 1e-9) res.push(p);
+          if ((fp < -1e-9 && fq > 1e-9) || (fp > 1e-9 && fq < -1e-9)){ const t = fp / (fp - fq); res.push([p[0] + t * (q[0] - p[0]), p[1] + t * (q[1] - p[1])]); }
+        }
+        poly = res;
+      });
+      return poly;
+    },
+    poly(pts, cls = 'feas', style = ''){ if (pts.length) out.push(`<polygon class="${cls}" style="${style}" points="${pts.map(p => f(X(p[0])) + ',' + f(Y(p[1]))).join(' ')}"/>`); return P; },
+    /* line a·x + b·y = c clipped to view */
+    line(a, b, c, color, o = {}){
+      const pts = [];
+      if (Math.abs(b) > 1e-12){ [xr[0], xr[1]].forEach(x => pts.push([x, (c - a * x) / b])); }
+      if (Math.abs(a) > 1e-12){ [yr[0], yr[1]].forEach(y => pts.push([(c - b * y) / a, y])); }
+      const ins = pts.filter(p => p[0] >= xr[0] - 1e-9 && p[0] <= xr[1] + 1e-9 && p[1] >= yr[0] - 1e-9 && p[1] <= yr[1] + 1e-9);
+      if (ins.length < 2) return P;
+      ins.sort((p, q) => p[0] - q[0] || p[1] - q[1]);
+      const p = ins[0], q = ins[ins.length - 1];
+      P.seg(p, q, color, o);
+      if (o.label){
+        const t = o.at ?? .85, lx = p[0] + t * (q[0] - p[0]), ly = p[1] + t * (q[1] - p[1]);
+        out.push(`<text class="lbl" x="${f(X(lx) + (o.dx ?? 6))}" y="${f(Y(ly) + (o.dy ?? -6))}" style="fill:${col(color)};font-size:13px" text-anchor="${o.anchor || 'start'}">${o.label}</text>`);
+      }
+      return P;
+    },
+    seg(p, q, color, o = {}){ out.push(`<line class="ln ${o.dash ? 'dash' : ''}" x1="${f(X(p[0]))}" y1="${f(Y(p[1]))}" x2="${f(X(q[0]))}" y2="${f(Y(q[1]))}" style="stroke:${col(color)};stroke-width:${o.w || 2};${o.op ? 'opacity:' + o.op : ''}"/>`); return P; },
+    arrow(p, q, color, o = {}){
+      const x1 = X(p[0]), y1 = Y(p[1]), x2 = X(q[0]), y2 = Y(q[1]), a = Math.atan2(y2 - y1, x2 - x1), L = 10;
+      out.push(`<line class="ln" x1="${f(x1)}" y1="${f(y1)}" x2="${f(x2)}" y2="${f(y2)}" style="stroke:${col(color)};stroke-width:${o.w || 2.4}"/><polygon points="${f(x2)},${f(y2)} ${f(x2 - L * Math.cos(a - .4))},${f(y2 - L * Math.sin(a - .4))} ${f(x2 - L * Math.cos(a + .4))},${f(y2 - L * Math.sin(a + .4))}" style="fill:${col(color)}"/>`);
+      if (o.label) out.push(`<text class="lbl" x="${f(x2 + (o.dx ?? 6))}" y="${f(y2 + (o.dy ?? -6))}" style="fill:${col(color)};font-size:13px">${o.label}</text>`);
+      return P;
+    },
+    pt(x, y, color, label, o = {}){
+      out.push(`<circle cx="${f(X(x))}" cy="${f(Y(y))}" r="${o.r || 5.5}" style="fill:${o.hollow ? 'var(--surface)' : col(color)};stroke:${col(color)};stroke-width:2"/>`);
+      if (label) out.push(`<text class="lbl ${o.bold ? 'b' : ''}" x="${f(X(x) + (o.dx ?? 9))}" y="${f(Y(y) + (o.dy ?? -8))}" text-anchor="${o.anchor || 'start'}" style="fill:${col(o.lc || color)};font-size:${o.fs || 13}px">${label}</text>`);
+      return P;
+    },
+    text(x, y, s, o = {}){ out.push(`<text class="${o.cls || ''}" x="${f(X(x))}" y="${f(Y(y))}" text-anchor="${o.anchor || 'middle'}" style="${o.color ? 'fill:' + col(o.color) + ';' : ''}${o.fs ? 'font-size:' + o.fs + 'px;' : ''}${o.fw ? 'font-weight:' + o.fw : ''}">${s}</text>`); return P; },
+    svg(){ return `<svg class="sv" viewBox="0 0 ${W} ${H}" role="img" aria-label="${o.aria || 'figure'}">${out.join('')}</svg>`; }
+  };
+  return P;
+}
+const fmt = (v, d = 2) => { let s = (+v).toFixed(d); if (s.includes('.')) s = s.replace(/\.?0+$/, ''); return s === '-0' ? '0' : s.replace('-', '−'); };
+
+/* ---------- step-by-step walkthrough ---------- */
+const FIGS = {};
+function bootSteppers(){
+  document.querySelectorAll('.stepper').forEach(st => {
+    const ol = st.querySelector('ol.steps'), items = [...ol.children], n = items.length;
+    items.forEach((li, i) => { li.dataset.n = i + 1; });
+    const figEl = st.querySelector('.fig .figbody'), cap = st.querySelector('.fig .figcap');
+    const nav = document.createElement('div'); nav.className = 'snav';
+    nav.innerHTML = `<span class="cnt"></span><span class="dots">${items.map((_, i) => `<button type="button" aria-label="ขั้นที่ ${i + 1}">${i + 1}</button>`).join('')}</span>
+      <button type="button" class="btn sm" data-a="prev">◀ ก่อนหน้า</button><button type="button" class="btn sm primary" data-a="next">ถัดไป ▶</button>
+      <label class="chk"><input type="checkbox" data-a="all"> แสดงทุกขั้น</label>`;
+    st.insertBefore(nav, ol);
+    const dots = [...nav.querySelectorAll('.dots button')];
+    let k = 0, seen = 0;
+    const draw = () => {
+      const fn = FIGS[st.dataset.fig];
+      if (fn && figEl){ const r = fn(k, st) || {}; if (r.svg !== undefined) figEl.innerHTML = r.svg; if (cap) cap.innerHTML = r.cap || ''; }
+    };
+    const set = (j, scroll) => {
+      k = Math.max(0, Math.min(n - 1, j)); seen = Math.max(seen, k);
+      items.forEach((li, i) => { li.classList.toggle('cur', i === k); li.classList.toggle('future', i > k); li.classList.toggle('past', i < k); });
+      dots.forEach((d, i) => { d.classList.toggle('cur', i === k); d.classList.toggle('seen', i <= seen); });
+      nav.querySelector('.cnt').textContent = `ขั้นที่ ${k + 1} / ${n}`;
+      nav.querySelector('[data-a=prev]').disabled = k === 0;
+      nav.querySelector('[data-a=next]').disabled = k === n - 1;
+      draw();
+      if (scroll){
+        /* keep the figure and the step being read on screen together */
+        const all = nav.querySelector('[data-a=all]').checked;
+        const r = (all ? items[k] : st).getBoundingClientRect();
+        if (r.top < 0 || (all && r.bottom > innerHeight)) (all ? items[k] : st).scrollIntoView({block: all ? 'nearest' : 'start', behavior: 'smooth'});
+      }
+    };
+    nav.addEventListener('click', e => {
+      const b = e.target.closest('button'); if (!b) return;
+      if (b.dataset.a === 'prev') set(k - 1, true);
+      else if (b.dataset.a === 'next') set(k + 1, true);
+      else { const i = dots.indexOf(b); if (i >= 0) set(i, true); }
+    });
+    nav.querySelector('[data-a=all]').addEventListener('change', e => ol.classList.toggle('all', e.target.checked));
+    items.forEach((li, i) => li.addEventListener('click', e => { if (i !== k && !e.target.closest('a,button,input,select,label')) set(i); }));
+    st.addEventListener('keydown', e => {
+      if (e.target.closest('input,select,textarea')) return;
+      if (e.key === 'ArrowRight'){ set(k + 1, true); e.preventDefault(); }
+      if (e.key === 'ArrowLeft'){ set(k - 1, true); e.preventDefault(); }
+    });
+    st.tabIndex = -1;
+    st.querySelectorAll('.figctl input, .figctl select').forEach(inp => inp.addEventListener('input', draw));
+    st._redraw = draw;
+    set(0);
+  });
+}
+
+/* table of contents: highlight current section + "understood" ticks kept in this browser */
+function bootToc(storeKey){
+  const links = [...document.querySelectorAll('.toc a[href^="#"]')];
+  const secs = links.map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+  const io = new IntersectionObserver(es => es.forEach(en => {
+    if (!en.isIntersecting) return;
+    links.forEach(a => a.classList.toggle('on', a.getAttribute('href') === '#' + en.target.id));
+  }), {rootMargin: '-30% 0px -60% 0px'});
+  secs.forEach(s => io.observe(s));
+  let done = {};
+  try { done = JSON.parse(localStorage.getItem(storeKey) || '{}'); } catch(_) {}
+  const paint = () => links.forEach(a => a.classList.toggle('done', !!done[a.getAttribute('href').slice(1)]));
+  document.querySelectorAll('input[data-done]').forEach(cb => {
+    cb.checked = !!done[cb.dataset.done];
+    cb.addEventListener('change', () => {
+      done[cb.dataset.done] = cb.checked;
+      try { localStorage.setItem(storeKey, JSON.stringify(done)); } catch(_) {}
+      paint();
+    });
+  });
+  paint();
+}
+
+
+(function(){
+'use strict';
+const $ = s => document.querySelector(s);
+function ctl(st, k){ st.querySelectorAll('.figctl[data-show]').forEach(c => { c.hidden = k < +c.dataset.show; }); }
+
+/* ---------------- election: greedy is exact (every seat counts 1) ---------------- */
+const CAT = [['Very close', 1, 30, '--y'], ['Trailing a bit', 3, 50, '--mark'], ['Trailing considerably', 12, 70, '--prod'], ['Almost no chance', 31, 50, '--amber']];
+function elect(B){
+  let left = B; const take = [];
+  CAT.forEach(([, c, n]) => { const t = Math.min(n, Math.floor(left / c + 1e-9)); take.push(t); left -= t * c; });
+  const cob = Math.min(5, Math.floor(left / 70 + 1e-9)); left -= cob * 70;
+  return {take, cob, left, seats: 100 + take.reduce((a, v) => a + v, 0) + cob};
+}
+FIGS.el = (k, st) => {
+  ctl(st, k);
+  const B = k >= 8 ? +$('#el-b').value : 1000; $('#el-bv').textContent = B;
+  const R = elect(B), W = 820, H = 272, o = [];
+  const sx = v => 20 + v / 400 * (W - 40);
+  o.push(`<text x="20" y="22" style="font-weight:600;fill:var(--ink)">ที่นั่ง 400 เขต</text>`);
+  let at = 0;
+  const seg = (n, c, lab, op = 55) => { if (n <= 0) return; o.push(`<rect x="${sx(at)}" y="34" width="${sx(at + n) - sx(at)}" height="34" style="fill:color-mix(in srgb,var(${c}) ${op}%,transparent);stroke:var(${c})"/>`); if (lab && n >= 14) o.push(`<text x="${(sx(at) + sx(at + n)) / 2}" y="56" text-anchor="middle" style="fill:var(--ink);font-size:11.5px">${lab}</text>`); at += n; };
+  seg(100, '--muted', 'ชนะแน่ 100', 30);
+  if (k >= 6) CAT.forEach((c, i) => seg(R.take[i], c[3], `+${R.take[i]}`));
+  if (k >= 6) seg(R.cob, '--h', R.cob ? `🐍${R.cob}` : '');
+  const rest = 400 - at;
+  o.push(`<rect x="${sx(at)}" y="34" width="${sx(400) - sx(at)}" height="34" style="fill:none;stroke:var(--line);stroke-dasharray:4 4"/>`);
+  o.push(`<line x1="${sx(201)}" x2="${sx(201)}" y1="28" y2="74" style="stroke:var(--h);stroke-width:2"/><text x="${sx(201)}" y="86" text-anchor="middle" class="tick" style="fill:var(--h)">201 majority</text>`);
+  if (k >= 6) o.push(`<text x="${W - 20}" y="22" text-anchor="end" style="font:600 15px 'IBM Plex Mono',monospace;fill:var(--y)">${R.seats} ที่นั่ง</text>`);
+  /* cost per seat ladder */
+  if (k >= 1){
+    o.push(`<text x="20" y="114" style="font-weight:600;fill:var(--ink)">ราคาต่อ 1 เขต (ล้าน SFD) และที่ซื้อได้ด้วยงบ ${B} ล้าน</text>`);
+    const rows = CAT.map((c, i) => [c[0], c[1], c[2], c[3], R.take[i]]).concat([['ซื้องูเห่า', 70, 5, '--h', R.cob]]);
+    rows.forEach(([nm, c, n, col, t], i) => {
+      const y = 126 + i * 23, bw = c / 70 * 300;
+      o.push(`<text x="20" y="${y + 14}" style="fill:var(--ink);font-size:12.5px">${nm}</text><rect x="190" y="${y + 2}" width="${bw}" height="15" rx="3" style="fill:color-mix(in srgb,var(${col}) 45%,transparent)"/><text x="${196 + bw}" y="${y + 14}" class="tick" style="fill:var(--ink)">${c}</text>`);
+      if (k >= 6) o.push(`<text x="560" y="${y + 14}" class="tick" style="fill:var(${t ? col : '--muted'})">ซื้อ ${t} / ${n} เขต = ${t * c} ล้าน</text>`);
+    });
+    if (k >= 6) o.push(`<text x="560" y="${126 + 5 * 23 + 14}" class="tick" style="fill:var(--ink)">เหลือ ${fmt(R.left, 0)} ล้าน</text>`);
+  }
+  const caps = ['400 เขต: 100 ชนะแน่ · ต้องการ 201 เพื่อเกินครึ่ง', 'แปลงเป็นราคาต่อเขต: งูเห่าแพงสุด', 'ตัวแปร x (หาเสียง), y (งูเห่า)', 'objective = นับที่นั่ง', 'งบ + จำนวนเขต + งูเห่า ≤ 5', 'IP ครบ', 'ซื้อจากถูกไปแพง จนงบไม่พอ', '248 ที่นั่ง', 'เลื่อนงบดูว่าเมื่อไหร่ถึงคุ้มซื้องูเห่า'];
+  return {svg: `<svg class="sv" viewBox="0 0 ${W} ${H}" role="img" aria-label="seats">${o.join('')}</svg>`, cap: caps[k]};
+};
+
+/* ---------------- shelf: optimal layouts solved offline with scipy milp ---------------- */
+const SHELF = {W: 100, H: 30, D: 40, P: 2};
+const ITEMS = [['Dog food', '--amber'], ['Cat toys', '--prod'], ['Hamster wheel', '--mark'], ['Cat tree', '--y']];
+const SOL = {"71":{"value":50.0,"layout":[{"i":0,"j":0,"o":0,"dims":[30,28,15],"k":1,"q":1,"cols":1,"a":9},{"i":0,"j":1,"o":0,"dims":[30,28,15],"k":1,"q":2,"cols":2,"a":6},{"i":1,"j":0,"o":0,"dims":[20,12,10],"k":1,"q":1,"cols":1,"a":5},{"i":1,"j":1,"o":0,"dims":[20,12,10],"k":1,"q":2,"cols":2,"a":4},{"i":2,"j":0,"o":0,"dims":[25,25,25],"k":1,"q":2,"cols":2,"a":8}]},"72":{"value":55.5,"layout":[{"i":0,"j":0,"o":0,"dims":[30,28,15],"k":1,"q":2,"cols":2,"a":9},{"i":0,"j":0,"o":5,"dims":[15,28,30],"k":1,"q":1,"cols":1,"a":4.5},{"i":0,"j":1,"o":5,"dims":[15,28,30],"k":1,"q":1,"cols":1,"a":3.0},{"i":1,"j":1,"o":0,"dims":[20,12,10],"k":1,"q":3,"cols":3,"a":4},{"i":2,"j":0,"o":0,"dims":[25,25,25],"k":1,"q":1,"cols":1,"a":8},{"i":3,"j":1,"o":4,"dims":[12,15,40],"k":1,"q":2,"cols":2,"a":5.0}]},"73":{"value":100.0,"layout":[{"i":0,"j":0,"o":0,"dims":[30,28,15],"k":2,"q":2,"cols":1,"a":9},{"i":0,"j":1,"o":0,"dims":[30,28,15],"k":2,"q":2,"cols":1,"a":6},{"i":1,"j":0,"o":0,"dims":[20,12,10],"k":4,"q":4,"cols":1,"a":5},{"i":1,"j":1,"o":0,"dims":[20,12,10],"k":4,"q":6,"cols":2,"a":4},{"i":2,"j":0,"o":0,"dims":[25,25,25],"k":1,"q":2,"cols":2,"a":8},{"i":3,"j":1,"o":1,"dims":[15,12,40],"k":1,"q":2,"cols":2,"a":5.0}]},"74":{"value":104.0,"layout":[{"i":0,"j":0,"o":0,"dims":[30,28,15],"k":2,"q":2,"cols":1,"a":9},{"i":0,"j":1,"o":0,"dims":[30,28,15],"k":2,"q":2,"cols":1,"a":6},{"i":1,"j":0,"o":0,"dims":[20,12,10],"k":8,"q":8,"cols":1,"a":5},{"i":1,"j":1,"o":0,"dims":[20,12,10],"k":8,"q":2,"cols":1,"a":4},{"i":2,"j":0,"o":0,"dims":[25,25,25],"k":1,"q":2,"cols":2,"a":8},{"i":3,"j":1,"o":1,"dims":[15,12,40],"k":2,"q":2,"cols":1,"a":5.0}]}};
+FIGS.sh = k => {
+  let m = $('#sh-m').value;
+  if (m === 'auto') m = k <= 5 ? '71' : k === 6 ? '72' : k === 7 ? '73' : '74';
+  const S = SOL[m], Wpx = 760, sx = 6, sy = 4, lvlH = SHELF.H * sy, x0 = 40, o = [];
+  const top = [40, 40 + lvlH + 40];
+  for (let j = 0; j < SHELF.P; j++){
+    const y0 = top[j];
+    o.push(`<text x="${x0 - 8}" y="${y0 + lvlH / 2}" text-anchor="end" style="font-weight:600;fill:var(--ink)">ชั้น ${j + 1}</text>`);
+    o.push(`<rect x="${x0}" y="${y0}" width="${SHELF.W * sx}" height="${lvlH}" style="fill:var(--surface);stroke:var(--line)"/><line x1="${x0 - 4}" x2="${x0 + SHELF.W * sx + 4}" y1="${y0 + lvlH}" y2="${y0 + lvlH}" style="stroke:var(--ink);stroke-width:4"/>`);
+    let cx = x0, used = 0;
+    S.layout.filter(L => L.j === j).forEach(L => {
+      const [w, h, d] = L.dims, col = ITEMS[L.i][1], rot = L.o !== 0;
+      const stack = m === '74' ? Math.floor(SHELF.H / h) : 1;
+      let q = L.q;
+      for (let c = 0; c < L.cols; c++){
+        const inCol = Math.min(L.k, Math.ceil(q / (L.cols - c)));
+        q -= inCol;
+        const tiers = Math.min(stack, inCol), deep = Math.ceil(inCol / tiers);
+        for (let t = 0; t < tiers; t++){
+          o.push(`<rect x="${cx + 1}" y="${y0 + lvlH - (t + 1) * h * sy + 1}" width="${w * sx - 2}" height="${h * sy - 2}" rx="3" style="fill:color-mix(in srgb,var(${col}) 40%,transparent);stroke:var(${col});stroke-width:2;${rot ? 'stroke-dasharray:5 3' : ''}"/>`);
+        }
+        const lbl = (rot ? '↻' : '') + (deep > 1 ? `×${deep}` : '');
+        if (lbl) o.push(`<text x="${cx + w * sx / 2}" y="${y0 + lvlH - h * sy / 2 + 4}" text-anchor="middle" style="font:600 12px 'IBM Plex Mono',monospace;fill:var(--ink)">${lbl}</text>`);
+        cx += w * sx; used += w;
+      }
+    });
+    o.push(`<text x="${x0 + SHELF.W * sx + 10}" y="${y0 + lvlH - 4}" class="tick">ใช้ ${used}/${SHELF.W}</text>`);
+  }
+  ITEMS.forEach(([nm, col], i) => o.push(`<rect x="${x0 + i * 150}" y="${top[1] + lvlH + 22}" width="14" height="14" rx="3" style="fill:color-mix(in srgb,var(${col}) 40%,transparent);stroke:var(${col})"/><text x="${x0 + i * 150 + 20}" y="${top[1] + lvlH + 34}" style="fill:var(--ink)">${nm}</text>`));
+  o.push(`<text x="${Wpx - 10}" y="24" text-anchor="end" style="font:600 15px 'IBM Plex Mono',monospace;fill:var(--y)">${m.replace('7', '7.')} · attractiveness ${fmt(S.value, 1)}</text><text x="${x0}" y="24" style="fill:var(--muted)">มุมมองด้านหน้า · ↻ = หมุน · ×k = เรียงไปข้างหลัง k ชิ้น</text>`);
+  const caps = ['ตัวอย่างสมมติ: ชั้น 2 ระดับ กว้าง 100', 'x_ij = จำนวนชิ้นบนชั้น j', 'ชั้น 1 ให้ค่ามากกว่า', 'กว้างรวมต่อชั้น ≤ 100', 'Cat tree สูงเกิน วางไม่ได้', '7.1 optimal = 50', '7.2 หมุนได้ → 55.5', '7.3 เรียงไปข้างหลัง → 100', '7.4 ซ้อนขึ้นได้ → 104'];
+  return {svg: `<svg class="sv" viewBox="0 0 ${Wpx} ${top[1] + lvlH + 46}" role="img" aria-label="shelf">${o.join('')}</svg>`, cap: caps[k] || ''};
+};
+
+bootSteppers();
+bootToc('cem-optim-2025');
+})();
+</script>
+
+</body>
+</html>
