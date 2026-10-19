@@ -303,13 +303,13 @@ ol.steps > li ul li{margin:3px 0}
         <h2><span class="n">01</span> Our arms will be full of vaccines</h2>
         <details class="prob" open><summary>โจทย์</summary>
           <div class="en">
-            <p>Six vaccine providers with price per dose <span class="math">c_i ≥ 0</span> and fatality prevention rate <span class="math">0 ≤ p_i ≤ 1</span>. Rate is obtained after <b>two doses</b>, except <b>JaesoJose (single shot)</b>. For vaccine <span class="math">v_i</span> the government must buy at least <span class="math">m_i</span> doses to make the contract, and at most <span class="math">n_i</span> doses can be delivered.
+            <p>Six vaccine providers with price per dose <span class="math">c<sub>i</sub> ≥ 0</span> and fatality prevention rate <span class="math">0 ≤ p<sub>i</sub> ≤ 1</span>. Rate is obtained after <b>two doses</b>, except <b>JaesoJose (single shot)</b>. For vaccine <span class="math">v<sub>i</sub></span> the government must buy at least <span class="math">m<sub>i</sub></span> doses to make the contract, and at most <span class="math">n<sub>i</sub></span> doses can be delivered.
             The average prevention rate must be no less than <span class="math">R</span>. There are <span class="math">X</span> people. Minimize the cost.</p>
             <p>No mix-and-match · no boosters · fractional vaccines OK · <b>no contract with BiZerTech (v₂) and Oderman (v₃)</b>, but <b>order all other four</b> · average rate is the weighted average (e.g. 10 Vinosac + 5 ZenaCasatra → (10p₁ + 5p₅)/15) · unvaccinated person has rate <span class="math">p₀</span>; not everyone needs to be vaccinated.</p>
           </div>
           <p class="th-sum">สรุป: ซื้อวัคซีน 4 ยี่ห้อ <span class="math">v₁, v₄, v₅, v₆</span> ให้ค่าป้องกันเฉลี่ย ≥ R โดยจ่ายน้อยที่สุด</p>
         </details>
-        <div class="idea"><div><p><b>จุดที่คนพลาด</b>: (1) วัคซีนส่วนใหญ่ใช้ <b>2 โดส/คน</b> แต่ JaesoJose ใช้ 1 · (2) ต้องซื้อ "อย่างน้อย m_i" ซึ่งอาจมากกว่าที่ใช้จริง → แยก "โดสที่ซื้อ" กับ "คนที่ฉีด" เป็นคนละตัวแปร · (3) ค่าเฉลี่ยเป็นเศษส่วน → คูณตัวส่วนข้าม</p>
+        <div class="idea"><div><p><b>จุดที่คนพลาด</b>: (1) วัคซีนส่วนใหญ่ใช้ <b>2 โดส/คน</b> แต่ JaesoJose ใช้ 1 · (2) ต้องซื้อ "อย่างน้อย m<sub>i</sub>" ซึ่งอาจมากกว่าที่ใช้จริง → แยก "โดสที่ซื้อ" กับ "คนที่ฉีด" เป็นคนละตัวแปร · (3) ค่าเฉลี่ยเป็นเศษส่วน → คูณตัวส่วนข้าม</p>
           <p>รูปด้านบนใช้ <b>ตัวเลขสมมติ</b> (โจทย์ให้แต่สัญลักษณ์) เพื่อให้เห็นว่าโมเดลเลือกอะไร ลองเลื่อน <span class="math">R</span> ดูได้</p></div></div>
         <div class="stepper" data-fig="vac">
           <div class="fig"><div class="figbody"></div><p class="figcap"></p>
@@ -325,43 +325,43 @@ ol.steps > li ul li{margin:3px 0}
               </ul>
               <p>เหลือชุดวัคซีน <span class="math">I = {1, 4, 5, 6}</span> และจำนวนโดสต่อคน <span class="math">k₁ = k₄ = k₅ = 2</span>, <span class="math">k₆ = 1</span></p></li>
             <li><h4>ตัวแปร: แยก "ซื้อ" กับ "ฉีด"</h4>
-              <div class="eq"><span class="r">y_i = จำนวนโดสวัคซีน i ที่ซื้อ &emsp;(i ∈ I)</span><span class="r">z_i = จำนวนคนที่ได้รับวัคซีน i ครบ &emsp;(i ∈ I)</span></div>
-              <p class="why">ทำไมไม่ใช้ตัวแปรเดียว: ถ้าบังคับซื้อขั้นต่ำ m_i มากกว่าที่จะใช้ เราก็ยังต้องจ่ายค่าโดสที่เหลือ — ใช้สองตัวแปรถูกต้องกว่า (และถ้าใช้ตัวเดียวแล้วเขียน assumption ว่า "ใช้ทุกโดสที่ซื้อ" ก็พอรับได้)</p></li>
+              <div class="eq"><span class="r">y<sub>i</sub> = จำนวนโดสวัคซีน i ที่ซื้อ &emsp;(i ∈ I)</span><span class="r">z<sub>i</sub> = จำนวนคนที่ได้รับวัคซีน i ครบ &emsp;(i ∈ I)</span></div>
+              <p class="why">ทำไมไม่ใช้ตัวแปรเดียว: ถ้าบังคับซื้อขั้นต่ำ m<sub>i</sub> มากกว่าที่จะใช้ เราก็ยังต้องจ่ายค่าโดสที่เหลือ — ใช้สองตัวแปรถูกต้องกว่า (และถ้าใช้ตัวเดียวแล้วเขียน assumption ว่า "ใช้ทุกโดสที่ซื้อ" ก็พอรับได้)</p></li>
             <li><h4>Objective: จ่ายค่าโดสที่ซื้อ</h4>
               <div class="eq"><span class="r">min &nbsp;c₁y₁ + c₄y₄ + c₅y₅ + c₆y₆</span></div></li>
             <li><h4>โดสที่ใช้ ≤ โดสที่ซื้อ</h4>
               <div class="eq"><span class="r">2z₁ ≤ y₁, &emsp;2z₄ ≤ y₄, &emsp;2z₅ ≤ y₅</span><span class="r">z₆ ≤ y₆ <span class="c">(JaesoJose เข็มเดียว)</span></span></div>
-              <p>ในรูป: แท่งเข้ม = โดสที่ใช้ (k_i·z_i) ต้องไม่ยาวเกินแท่งอ่อน = โดสที่ซื้อ</p></li>
-            <li><h4>เงื่อนไขสัญญา: ขั้นต่ำ m_i และสูงสุด n_i</h4>
+              <p>ในรูป: แท่งเข้ม = โดสที่ใช้ (k<sub>i</sub>·z<sub>i</sub>) ต้องไม่ยาวเกินแท่งอ่อน = โดสที่ซื้อ</p></li>
+            <li><h4>เงื่อนไขสัญญา: ขั้นต่ำ m<sub>i</sub> และสูงสุด n<sub>i</sub></h4>
               <p>"ตัดสินใจสั่งทั้ง 4 ยี่ห้อ" → ต้องถึงขั้นต่ำของทุกยี่ห้อ</p>
-              <div class="eq"><span class="r">m_i ≤ y_i ≤ n_i &emsp;∀ i ∈ {1, 4, 5, 6}</span></div>
-              <p>ในรูป: เส้นประซ้าย = m_i, เส้นประขวา = n_i</p></li>
+              <div class="eq"><span class="r">m<sub>i</sub> ≤ y<sub>i</sub> ≤ n<sub>i</sub> &emsp;∀ i ∈ {1, 4, 5, 6}</span></div>
+              <p>ในรูป: เส้นประซ้าย = m<sub>i</sub>, เส้นประขวา = n<sub>i</sub></p></li>
             <li><h4>จำนวนคน</h4>
               <div class="eq"><span class="r">z₁ + z₄ + z₅ + z₆ ≤ X</span></div>
               <p class="why">ไม่ต้องฉีดทุกคน (โจทย์บอก) จึงเป็น ≤ ไม่ใช่ =</p></li>
             <li><h4>ค่าป้องกันเฉลี่ย ≥ R → ทำให้เป็น linear</h4>
-              <p>คนที่ไม่ได้ฉีดมีค่า <span class="math">p₀</span> จำนวน <span class="math">X − Σz_i</span> คน · เฉลี่ยทั้งประเทศ:</p>
+              <p>คนที่ไม่ได้ฉีดมีค่า <span class="math">p₀</span> จำนวน <span class="math">X − Σz<sub>i</sub></span> คน · เฉลี่ยทั้งประเทศ:</p>
               <div class="eq">
-                <span class="r">[ p₁z₁ + p₄z₄ + p₅z₅ + p₆z₆ + p₀(X − Σz_i) ] / X ≥ R</span>
+                <span class="r">[ p₁z₁ + p₄z₄ + p₅z₅ + p₆z₆ + p₀(X − Σz<sub>i</sub>) ] / X ≥ R</span>
                 <span class="r">⇔ &nbsp;(p₁ − p₀)z₁ + (p₄ − p₀)z₄ + (p₅ − p₀)z₅ + (p₆ − p₀)z₆ ≥ (R − p₀)X</span>
               </div>
               <p>ตัวส่วน <span class="math">X</span> เป็นค่าคงที่ คูณข้ามได้เลย → linear ✓</p>
-              <p class="why">ถ้าตีความว่าเฉลี่ยเฉพาะคนที่ฉีด (ตามตัวอย่าง 10 + 5 คนในโจทย์): <span class="math">Σp_iz_i ≥ R·Σz_i</span> ⇔ <span class="math">Σ(p_i − R)z_i ≥ 0</span> — ก็ linear เหมือนกัน เลือกแบบหนึ่งแล้ว <b>เขียน assumption</b></p></li>
+              <p class="why">ถ้าตีความว่าเฉลี่ยเฉพาะคนที่ฉีด (ตามตัวอย่าง 10 + 5 คนในโจทย์): <span class="math">Σp<sub>i</sub> z<sub>i</sub> ≥ R·Σz<sub>i</sub></span> ⇔ <span class="math">Σ(p<sub>i</sub> − R)z<sub>i</sub> ≥ 0</span> — ก็ linear เหมือนกัน เลือกแบบหนึ่งแล้ว <b>เขียน assumption</b></p></li>
             <li><h4>Assumption ที่ควรเขียนกำกับ</h4>
               <ul>
                 <li>ค่าเฉลี่ยคิดทั้งประชากร <span class="math">X</span> (คนไม่ฉีดนับเป็น <span class="math">p₀</span>)</li>
                 <li>โดสที่ซื้อเกินแล้วไม่ได้ใช้ ก็ต้องจ่าย (ทิ้งได้)</li>
-                <li>งบ "มีจำกัด" แต่โจทย์ไม่ให้ตัวเลข → ถ้ามีงบ <span class="math">B</span> ให้เพิ่ม <span class="math">Σc_iy_i ≤ B</span> (ถ้า infeasible แปลว่างบไม่พอ)</li>
+                <li>งบ "มีจำกัด" แต่โจทย์ไม่ให้ตัวเลข → ถ้ามีงบ <span class="math">B</span> ให้เพิ่ม <span class="math">Σc<sub>i</sub> y<sub>i</sub> ≤ B</span> (ถ้า infeasible แปลว่างบไม่พอ)</li>
               </ul></li>
             <li><h4>Standard form</h4>
               <div class="eq">
                 <span class="r">min c₁y₁ + c₄y₄ + c₅y₅ + c₆y₆</span>
-                <span class="r">s.t. y_i − e_i = m_i &emsp;∀ i ∈ I <span class="c">(ขั้นต่ำ, e = surplus)</span></span>
-                <span class="r">&emsp;&emsp;y_i + s_i = n_i &emsp;∀ i ∈ I <span class="c">(สูงสุด, s = slack)</span></span>
-                <span class="r">&emsp;&emsp;2z_i − y_i + w_i = 0 &emsp;i = 1, 4, 5</span>
+                <span class="r">s.t. y<sub>i</sub> − e<sub>i</sub> = m<sub>i</sub> &emsp;∀ i ∈ I <span class="c">(ขั้นต่ำ, e = surplus)</span></span>
+                <span class="r">&emsp;&emsp;y<sub>i</sub> + s<sub>i</sub> = n<sub>i</sub> &emsp;∀ i ∈ I <span class="c">(สูงสุด, s = slack)</span></span>
+                <span class="r">&emsp;&emsp;2z<sub>i</sub> − y<sub>i</sub> + w<sub>i</sub> = 0 &emsp;i = 1, 4, 5</span>
                 <span class="r">&emsp;&emsp;z₆ − y₆ + w₆ = 0</span>
-                <span class="r">&emsp;&emsp;z₁ + z₄ + z₅ + z₆ + s_X = X</span>
-                <span class="r">&emsp;&emsp;Σ<sub>i∈I</sub> (p_i − p₀) z_i − e_R = (R − p₀) X</span>
+                <span class="r">&emsp;&emsp;z₁ + z₄ + z₅ + z₆ + s<sub>X</sub> = X</span>
+                <span class="r">&emsp;&emsp;Σ<sub>i∈I</sub> (p<sub>i</sub> − p₀) z<sub>i</sub> − e<sub>R</sub> = (R − p₀) X</span>
                 <span class="r">&emsp;&emsp;ทุกตัวแปร ≥ 0</span>
               </div>
               <p class="why">RHS <span class="math">(R − p₀)X</span> ถ้า <span class="math">R &lt; p₀</span> จะติดลบ → คูณ −1 ทั้งแถว (แต่ปกติ R &gt; p₀ ไม่งั้นไม่ต้องฉีดเลย)</p></li>
@@ -390,9 +390,9 @@ ol.steps > li ul li{margin:3px 0}
           </div>
           <ol class="steps">
             <li><h4>วาดไทม์ไลน์ก่อน (สำคัญที่สุดของข้อนี้)</h4>
-              <p>ทุกต้นเดือน t: มีคนงานฝีมือ <span class="math">w_t</span> คน ทำงานเดือนนั้น · จ้างใหม่ <span class="math">h_t</span> ตัวมาเทรน</p>
-              <p>สิ้นเดือน t: คนงานลาออก 10% → เหลือ <span class="math">0.9w_t</span> · คนที่เทรนอยู่หลุด 40% → เหลือ <span class="math">0.6h_t</span> กลายเป็นคนงานฝีมือของเดือน t+1</p>
-              <div class="eq"><span class="r">w_{t+1} = 0.9 w_t + 0.6 h_t</span></div></li>
+              <p>ทุกต้นเดือน t: มีคนงานฝีมือ <span class="math">w<sub>t</sub></span> คน ทำงานเดือนนั้น · จ้างใหม่ <span class="math">h<sub>t</sub></span> ตัวมาเทรน</p>
+              <p>สิ้นเดือน t: คนงานลาออก 10% → เหลือ <span class="math">0.9w<sub>t</sub></span> · คนที่เทรนอยู่หลุด 40% → เหลือ <span class="math">0.6h<sub>t</sub></span> กลายเป็นคนงานฝีมือของเดือน t+1</p>
+              <div class="eq"><span class="r">w<sub>t+1</sub> = 0.9 w<sub>t</sub> + 0.6 h<sub>t</sub></span></div></li>
             <li><h4>Assumption (ต้องเขียน เพราะโจทย์ไม่บอก)</h4>
               <ul>
                 <li>50 คนเริ่มต้นเป็นคนงานฝีมือที่ทำงานเดือน 1 ได้เลย → <span class="math">w₁ = 50</span></li>
@@ -413,7 +413,7 @@ ol.steps > li ul li{margin:3px 0}
                 <span class="r">50 + u₁ ≥ 50, &emsp;w₂ + u₂ ≥ 100, &emsp;w₃ + u₃ ≥ 70</span>
               </div>
               <p>ความหมาย: คนที่มีจริง + คนที่ขาด ต้องครบที่ต้องการ (ถ้ามีเกิน u = 0 ก็ได้)</p>
-              <p class="trap"><b>กับดัก:</b> อย่าเขียน <span class="math">u_t = req_t − w_t</span> เพราะถ้า <span class="math">w_t</span> มากกว่า req จะได้ u ติดลบ (เหมือนได้เงินคืน) — ใช้ <span class="math">≥</span> กับ <span class="math">u_t ≥ 0</span> แล้ว min จะดัน u ลงเอง</p></li>
+              <p class="trap"><b>กับดัก:</b> อย่าเขียน <span class="math">u<sub>t</sub> = req<sub>t</sub> − w<sub>t</sub></span> เพราะถ้า <span class="math">w<sub>t</sub></span> มากกว่า req จะได้ u ติดลบ (เหมือนได้เงินคืน) — ใช้ <span class="math">≥</span> กับ <span class="math">u<sub>t</sub> ≥ 0</span> แล้ว min จะดัน u ลงเอง</p></li>
             <li><h4>Objective: เงินเดือน + ค่าเทรน + ค่าปรับ</h4>
               <div class="eq">
                 <span class="r">min &nbsp;8000(50 + w₂ + w₃) + 500(h₁ + h₂) + 10000(u₁ + u₂ + u₃)</span>
@@ -473,16 +473,16 @@ ol.steps > li ul li{margin:3px 0}
               </div>
               <p>ในรูป: region สีเขียว = ทุกคู่ (d, e) ที่ทำได้</p></li>
             <li><h4>Objective ของ strategy k</h4>
-              <div class="eq"><span class="r">LP_k: &nbsp;min &nbsp;a_k·d + b_k·e</span><span class="r">A: 10d + 40e &emsp; B: 15d + 20e &emsp; C: 20d + 15e</span></div></li>
-            <li><h4>แก้ LP_A</h4>
+              <div class="eq"><span class="r">LP<sub>k</sub>: &nbsp;min &nbsp;a<sub>k</sub>·d + b<sub>k</sub>·e</span><span class="r">A: 10d + 40e &emsp; B: 15d + 20e &emsp; C: 20d + 15e</span></div></li>
+            <li><h4>แก้ LP<sub>A</sub></h4>
               <p>คิดแบบ "ราคาต่อชิ้น": weekday <span class="math">10/1 = 10</span> บาท/ชิ้น · weekend <span class="math">40/0.7 ≈ 57.1</span> บาท/ชิ้น → ใช้ weekend <b>น้อยที่สุด</b> (100 ชม.) ที่เหลือใช้ weekday</p>
-              <div class="eq"><span class="r">e = 100 → ได้ 70 ชิ้น &nbsp;⇒&nbsp; d = 1000 − 70 = 930</span><span class="r">cost_A = 10(930) + 40(100) = 13,300</span></div></li>
-            <li><h4>แก้ LP_B</h4>
+              <div class="eq"><span class="r">e = 100 → ได้ 70 ชิ้น &nbsp;⇒&nbsp; d = 1000 − 70 = 930</span><span class="r">cost<sub>A</sub> = 10(930) + 40(100) = 13,300</span></div></li>
+            <li><h4>แก้ LP<sub>B</sub></h4>
               <p>weekday 15 บาท/ชิ้น · weekend <span class="math">20/0.7 ≈ 28.6</span> บาท/ชิ้น → weekday ยังถูกกว่า → e = 100, d = 930</p>
-              <div class="eq"><span class="r">cost_B = 15(930) + 20(100) = 15,950</span></div></li>
-            <li><h4>แก้ LP_C — จุดหลอก</h4>
+              <div class="eq"><span class="r">cost<sub>B</sub> = 15(930) + 20(100) = 15,950</span></div></li>
+            <li><h4>แก้ LP<sub>C</sub> — จุดหลอก</h4>
               <p>ค่าแรง weekend (15) ถูกกว่า weekday (20) ต่อชั่วโมง แต่ <b>ต่อชิ้น</b>: weekend <span class="math">15/0.7 ≈ 21.4</span> &gt; weekday 20 → weekday ยังคุ้มกว่า!</p>
-              <div class="eq"><span class="r">e = 100, d = 930 &nbsp;⇒&nbsp; cost_C = 20(930) + 15(100) = 20,100</span></div>
+              <div class="eq"><span class="r">e = 100, d = 930 &nbsp;⇒&nbsp; cost<sub>C</sub> = 20(930) + 15(100) = 20,100</span></div>
               <p class="trap"><b>กับดัก:</b> เทียบราคา "ต่อชั่วโมง" ไม่ได้ ต้องเทียบ "ต่อชิ้น" เพราะ productivity ไม่เท่ากัน — ในรูปคือความชันของ isocost เทียบกับเส้น 1000 ชิ้น</p></li>
             <li><h4>เทียบแล้วเลือก</h4>
               <div class="tscroll"><table><thead><tr><th>Strategy</th><th>(d, e)</th><th>cost</th></tr></thead><tbody>
@@ -492,13 +492,13 @@ ol.steps > li ul li{margin:3px 0}
               <div class="ans" style="margin:6px 0"><b>คำตอบ</b> เลือก Strategy A · weekday 930 ชม. · weekend 100 ชม. · ค่าแรง 13,300</div></li>
             <li><h4>Standard form (เขียน 1 ชุด ใช้ได้ทั้ง 3 strategy)</h4>
               <div class="eq">
-                <span class="r">สำหรับ k ∈ {A, B, C}: &nbsp;min a_k d + b_k e</span>
+                <span class="r">สำหรับ k ∈ {A, B, C}: &nbsp;min a<sub>k</sub> d + b<sub>k</sub> e</span>
                 <span class="r">s.t. d + 0.7e − s₁ = 1000</span>
                 <span class="r">&emsp;&emsp;e − s₂ = 100</span>
                 <span class="r">&emsp;&emsp;d, e, s₁, s₂ ≥ 0</span>
-                <span class="r">(a_A, b_A) = (10, 40), (a_B, b_B) = (15, 20), (a_C, b_C) = (20, 15)</span>
+                <span class="r">(a<sub>A</sub>, b<sub>A</sub>) = (10, 40), (a<sub>B</sub>, b<sub>B</sub>) = (15, 20), (a<sub>C</sub>, b<sub>C</sub>) = (20, 15)</span>
               </div>
-              <p class="why">อีกวิธี (ถ้าเรียน integer programming แล้ว): แยกชั่วโมงตาม strategy <span class="math">d_k, e_k</span> + ตัวแปร 0/1 <span class="math">y_k</span>, <span class="math">Σy_k = 1</span>, <span class="math">d_k + e_k ≤ M·y_k</span> — แต่โจทย์ขอ "LP" จึงใช้วิธีแก้ 3 ตัวก็ครบ</p></li>
+              <p class="why">อีกวิธี (ถ้าเรียน integer programming แล้ว): แยกชั่วโมงตาม strategy <span class="math">d<sub>k</sub>, e<sub>k</sub></span> + ตัวแปร 0/1 <span class="math">y<sub>k</sub></span>, <span class="math">Σy<sub>k</sub> = 1</span>, <span class="math">d<sub>k</sub> + e<sub>k</sub> ≤ M·y<sub>k</sub></span> — แต่โจทย์ขอ "LP" จึงใช้วิธีแก้ 3 ตัวก็ครบ</p></li>
           </ol>
         </div>
         <div class="done-row"><label class="chk"><input type="checkbox" data-done="cr"> เข้าใจข้อนี้แล้ว</label></div>

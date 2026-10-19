@@ -312,9 +312,9 @@ ol.steps > li ul li{margin:3px 0}
               <p class="why">Assumption: การ flip เขตหนึ่งต้องจ่ายทั้ง campaign และ advanced campaign ตามจำนวนในตาราง · งบ 1 billion = 1000 ล้าน</p></li>
             <li><h4>ตัวแปรตัดสินใจ (จำนวนเต็ม)</h4>
               <div class="eq">
-                <span class="r">x_k = จำนวนเขตประเภท k ที่ flip ด้วยการหาเสียง &emsp;k = 1…4</span>
-                <span class="r">y_k = จำนวนเขตประเภท k ที่ flip ด้วยงูเห่า &emsp;k = 1…5 <span class="c">(k = 5 คือ impossible)</span></span>
-                <span class="r">x_k, y_k ∈ ℤ, ≥ 0</span>
+                <span class="r">x<sub>k</sub> = จำนวนเขตประเภท k ที่ flip ด้วยการหาเสียง &emsp;k = 1…4</span>
+                <span class="r">y<sub>k</sub> = จำนวนเขตประเภท k ที่ flip ด้วยงูเห่า &emsp;k = 1…5 <span class="c">(k = 5 คือ impossible)</span></span>
+                <span class="r">x<sub>k</sub>, y<sub>k</sub> ∈ ℤ, ≥ 0</span>
               </div>
               <p class="why">ต้องเป็นจำนวนเต็ม เพราะ flip ครึ่งเขตไม่ได้ — นี่คือ <b>integer program</b> (โจทย์บอก "linear/integer program")</p></li>
             <li><h4>Objective: ที่นั่งมากที่สุด</h4>
@@ -325,14 +325,14 @@ ol.steps > li ul li{margin:3px 0}
                 <span class="r">x₁ + y₁ ≤ 30, &nbsp;x₂ + y₂ ≤ 50, &nbsp;x₃ + y₃ ≤ 70, &nbsp;x₄ + y₄ ≤ 50, &nbsp;y₅ ≤ 100 <span class="c">(เขตมีจำกัด)</span></span>
                 <span class="r">y₁ + y₂ + y₃ + y₄ + y₅ ≤ 5 <span class="c">(งูเห่าไม่เกิน 5)</span></span>
               </div>
-              <p class="why">ตัวแปรเดียวกันห้ามนับซ้ำ: เขตหนึ่ง flip ด้วยวิธีเดียว จึงรวม <span class="math">x_k + y_k</span> ไม่เกินจำนวนเขต</p></li>
+              <p class="why">ตัวแปรเดียวกันห้ามนับซ้ำ: เขตหนึ่ง flip ด้วยวิธีเดียว จึงรวม <span class="math">x<sub>k</sub> + y<sub>k</sub></span> ไม่เกินจำนวนเขต</p></li>
             <li><h4>เขียนรวมเป็น IP (คำตอบที่ต้องส่ง)</h4>
               <div class="eq">
-                <span class="r">max 100 + Σ<sub>k=1..4</sub> x_k + Σ<sub>k=1..5</sub> y_k</span>
-                <span class="r">s.t. x₁ + 3x₂ + 12x₃ + 31x₄ + 70Σ<sub>k</sub> y_k ≤ 1000</span>
-                <span class="r">&emsp;&emsp;x_k + y_k ≤ N_k &emsp;(N = 30, 50, 70, 50) · y₅ ≤ 100</span>
-                <span class="r">&emsp;&emsp;Σ<sub>k</sub> y_k ≤ 5</span>
-                <span class="r">&emsp;&emsp;x_k, y_k ∈ ℤ<sub>≥0</sub></span>
+                <span class="r">max 100 + Σ<sub>k=1..4</sub> x<sub>k</sub> + Σ<sub>k=1..5</sub> y<sub>k</sub></span>
+                <span class="r">s.t. x₁ + 3x₂ + 12x₃ + 31x₄ + 70Σ<sub>k</sub> y<sub>k</sub> ≤ 1000</span>
+                <span class="r">&emsp;&emsp;x<sub>k</sub> + y<sub>k</sub> ≤ N<sub>k</sub> &emsp;(N = 30, 50, 70, 50) · y₅ ≤ 100</span>
+                <span class="r">&emsp;&emsp;Σ<sub>k</sub> y<sub>k</sub> ≤ 5</span>
+                <span class="r">&emsp;&emsp;x<sub>k</sub>, y<sub>k</sub> ∈ ℤ<sub>≥0</sub></span>
               </div></li>
             <li><h4>แก้: ซื้อเขตที่ถูกที่สุดก่อน</h4>
               <p>ทุกเขตให้ 1 ที่นั่งเท่ากัน → อยากได้จำนวนมากสุดภายใต้งบ = เลือกของถูกก่อนเสมอ (สลับเขตแพงออกแล้วใส่เขตถูกกว่าเข้าไปไม่มีทางแย่ลง)</p>
@@ -361,7 +361,7 @@ ol.steps > li ul li{margin:3px 0}
         <h2><span class="n">Q7</span> Hamtaro first crisis (2025) — จัดชั้นวางหน้าร้าน <span class="pts">4 pts + bonus 3</span></h2>
         <details class="prob" open><summary>โจทย์</summary>
           <div class="en">
-            <p>Front shelf has <span class="math">P</span> levels, each of width <span class="math">W</span>, height <span class="math">H</span>, depth <span class="math">D</span>. <span class="math">N</span> products; product <span class="math">i</span> has quantity <span class="math">n_i</span>, dimensions <span class="math">w_i, h_i, d_i</span> and attractiveness <span class="math">A_ij</span> when placed on level <span class="math">j</span>. Assumptions:
+            <p>Front shelf has <span class="math">P</span> levels, each of width <span class="math">W</span>, height <span class="math">H</span>, depth <span class="math">D</span>. <span class="math">N</span> products; product <span class="math">i</span> has quantity <span class="math">n<sub>i</sub></span>, dimensions <span class="math">w<sub>i</sub>, h<sub>i</sub>, d<sub>i</sub></span> and attractiveness <span class="math">A<sub>ij</sub></span> when placed on level <span class="math">j</span>. Assumptions:
               (1) orientation cannot be changed · (2) multiple copies of the same item allowed without penalty · (3) only one row of items per level (no items behind) · (4) no stacking.</p>
             <p>7.1 maximize attractiveness: which item, which level, how many? Formulate a mathematical program. ·
                7.2 orientation may change but rotating halves attractiveness ·
@@ -377,60 +377,60 @@ ol.steps > li ul li{margin:3px 0}
           </div>
           <ol class="steps">
             <li><h4>อะไรคงที่ อะไรเลือกได้</h4>
-              <p>คงที่: <span class="math">P, W, H, D, n_i, w_i, h_i, d_i, A_ij</span> · เลือกได้: <b>วางสินค้า i บนชั้น j กี่ชิ้น</b></p>
+              <p>คงที่: <span class="math">P, W, H, D, n<sub>i</sub>, w<sub>i</sub>, h<sub>i</sub>, d<sub>i</sub>, A<sub>ij</sub></span> · เลือกได้: <b>วางสินค้า i บนชั้น j กี่ชิ้น</b></p>
               <p>ตารางตัวอย่างในรูป (ตัวเลขสมมติ):</p>
-              <div class="tscroll"><table><thead><tr><th>สินค้า</th><th class="m">w × h × d</th><th class="m">n_i</th><th class="m">A_i1 / A_i2</th></tr></thead><tbody>
+              <div class="tscroll"><table><thead><tr><th>สินค้า</th><th class="m">w × h × d</th><th class="m">n<sub>i</sub></th><th class="m">A<sub>i1</sub> / A<sub>i2</sub></th></tr></thead><tbody>
                 <tr><td>Dog food</td><td class="num">30 × 28 × 15</td><td class="num">4</td><td class="num">9 / 6</td></tr>
                 <tr><td>Cat toys</td><td class="num">20 × 12 × 10</td><td class="num">10</td><td class="num">5 / 4</td></tr>
                 <tr><td>Hamster wheel</td><td class="num">25 × 25 × 25</td><td class="num">2</td><td class="num">8 / 3</td></tr>
                 <tr><td>Cat tree (สูง!)</td><td class="num">15 × 40 × 12</td><td class="num">2</td><td class="num">10 / 10</td></tr></tbody></table></div></li>
             <li><h4>ตัวแปร</h4>
-              <div class="eq"><span class="r">x_ij ∈ ℤ<sub>≥0</sub> = จำนวนชิ้นของสินค้า i ที่วางบนชั้น j &emsp;(i = 1…N, j = 1…P)</span></div>
+              <div class="eq"><span class="r">x<sub>ij</sub> ∈ ℤ<sub>≥0</sub> = จำนวนชิ้นของสินค้า i ที่วางบนชั้น j &emsp;(i = 1…N, j = 1…P)</span></div>
               <p class="why">ต้องเป็นจำนวนเต็ม (วางครึ่งชิ้นไม่ได้) → integer program · assumption 2 ทำให้ชิ้นซ้ำกันนับความน่าสนใจได้เต็ม ๆ ทุกชิ้น</p></li>
             <li><h4>Objective</h4>
-              <div class="eq"><span class="r">max &nbsp;Σ<sub>i</sub> Σ<sub>j</sub> A_ij x_ij</span></div></li>
+              <div class="eq"><span class="r">max &nbsp;Σ<sub>i</sub> Σ<sub>j</sub> A<sub>ij</sub> x<sub>ij</sub></span></div></li>
             <li><h4>ข้อจำกัดความกว้าง (หัวใจของข้อ)</h4>
               <p>แถวเดียว ไม่ซ้อน → ของบนชั้น j เรียงต่อกัน ความกว้างรวมไม่เกิน <span class="math">W</span></p>
-              <div class="eq"><span class="r">Σ<sub>i</sub> w_i x_ij ≤ W &emsp;∀ j = 1…P</span></div></li>
+              <div class="eq"><span class="r">Σ<sub>i</sub> w<sub>i</sub> x<sub>ij</sub> ≤ W &emsp;∀ j = 1…P</span></div></li>
             <li><h4>ข้อจำกัดจำนวน + ต้องใส่ได้</h4>
               <div class="eq">
-                <span class="r">Σ<sub>j</sub> x_ij ≤ n_i &emsp;∀ i <span class="c">(ของมีจำกัด)</span></span>
-                <span class="r">x_ij = 0 &emsp;ถ้า h_i &gt; H หรือ d_i &gt; D <span class="c">(สูง/ลึกเกินชั้น วางไม่ได้)</span></span>
+                <span class="r">Σ<sub>j</sub> x<sub>ij</sub> ≤ n<sub>i</sub> &emsp;∀ i <span class="c">(ของมีจำกัด)</span></span>
+                <span class="r">x<sub>ij</sub> = 0 &emsp;ถ้า h<sub>i</sub> &gt; H หรือ d<sub>i</sub> &gt; D <span class="c">(สูง/ลึกเกินชั้น วางไม่ได้)</span></span>
               </div>
               <p>ในตัวอย่าง: Cat tree สูง 40 &gt; H = 30 → วางไม่ได้เลย (ใน 7.1)</p></li>
             <li><h4>7.1 คำตอบ (formulation ครบ)</h4>
               <div class="eq">
-                <span class="r">max Σ<sub>i,j</sub> A_ij x_ij</span>
-                <span class="r">s.t. Σ<sub>i</sub> w_i x_ij ≤ W &emsp;∀ j</span>
-                <span class="r">&emsp;&emsp;Σ<sub>j</sub> x_ij ≤ n_i &emsp;∀ i</span>
-                <span class="r">&emsp;&emsp;x_ij = 0 &emsp;∀ (i, j) ที่ h_i &gt; H หรือ d_i &gt; D</span>
-                <span class="r">&emsp;&emsp;x_ij ∈ ℤ<sub>≥0</sub></span>
+                <span class="r">max Σ<sub>i,j</sub> A<sub>ij</sub> x<sub>ij</sub></span>
+                <span class="r">s.t. Σ<sub>i</sub> w<sub>i</sub> x<sub>ij</sub> ≤ W &emsp;∀ j</span>
+                <span class="r">&emsp;&emsp;Σ<sub>j</sub> x<sub>ij</sub> ≤ n<sub>i</sub> &emsp;∀ i</span>
+                <span class="r">&emsp;&emsp;x<sub>ij</sub> = 0 &emsp;∀ (i, j) ที่ h<sub>i</sub> &gt; H หรือ d<sub>i</sub> &gt; D</span>
+                <span class="r">&emsp;&emsp;x<sub>ij</sub> ∈ ℤ<sub>≥0</sub></span>
               </div>
               <p>ตัวอย่างในรูปได้ความน่าสนใจ <b>50</b> — สังเกตว่าของที่ "ชั้นบนน่าสนใจกว่ามาก" (wheel 8 vs 3) ถูกยกไปชั้น 1</p></li>
             <li><h4>7.2 หมุนได้ แต่ความน่าสนใจหารสอง</h4>
-              <p>กล่องหนึ่งวางได้ 6 ทิศ (สลับว่ามิติไหนเป็น กว้าง/สูง/ลึก) → ให้ <span class="math">o ∈ {1…6}</span> แทนทิศ และ <span class="math">(w_io, h_io, d_io)</span> เป็นขนาดในทิศนั้น (<span class="math">o = 1</span> คือทิศเดิม)</p>
+              <p>กล่องหนึ่งวางได้ 6 ทิศ (สลับว่ามิติไหนเป็น กว้าง/สูง/ลึก) → ให้ <span class="math">o ∈ {1…6}</span> แทนทิศ และ <span class="math">(w<sub>io</sub>, h<sub>io</sub>, d<sub>io</sub>)</span> เป็นขนาดในทิศนั้น (<span class="math">o = 1</span> คือทิศเดิม)</p>
               <div class="eq">
-                <span class="r">ตัวแปร x_ijo ∈ ℤ<sub>≥0</sub></span>
-                <span class="r">max Σ<sub>i,j</sub> A_ij x_ij1 + Σ<sub>i,j</sub> Σ<sub>o≥2</sub> ½A_ij x_ijo</span>
-                <span class="r">s.t. Σ<sub>i,o</sub> w_io x_ijo ≤ W &emsp;∀ j</span>
-                <span class="r">&emsp;&emsp;Σ<sub>j,o</sub> x_ijo ≤ n_i &emsp;∀ i</span>
-                <span class="r">&emsp;&emsp;x_ijo = 0 &emsp;ถ้า h_io &gt; H หรือ d_io &gt; D</span>
+                <span class="r">ตัวแปร x<sub>ijo</sub> ∈ ℤ<sub>≥0</sub></span>
+                <span class="r">max Σ<sub>i,j</sub> A<sub>ij</sub> x<sub>ij1</sub> + Σ<sub>i,j</sub> Σ<sub>o≥2</sub> ½A<sub>ij</sub> x<sub>ijo</sub></span>
+                <span class="r">s.t. Σ<sub>i,o</sub> w<sub>io</sub> x<sub>ijo</sub> ≤ W &emsp;∀ j</span>
+                <span class="r">&emsp;&emsp;Σ<sub>j,o</sub> x<sub>ijo</sub> ≤ n<sub>i</sub> &emsp;∀ i</span>
+                <span class="r">&emsp;&emsp;x<sub>ijo</sub> = 0 &emsp;ถ้า h<sub>io</sub> &gt; H หรือ d<sub>io</sub> &gt; D</span>
               </div>
               <p>ในรูป: Cat tree นอนลง (กว้าง 12 ลึก 40) วางได้แล้ว · Dog food บางชิ้นถูกหมุนให้ "แคบ" ลง (15 แทน 30) เพื่อเบียดที่ → ได้ <b>55.5</b> (ชิ้นที่หมุนมีเส้นประ ↻)</p></li>
             <li><h4>7.3 หลายแถว (วางซ้อนไปด้านหลัง) — แต่ต้องเป็นของเดียวกัน ทิศเดียวกัน</h4>
-              <p>มองเป็น "คอลัมน์" จากหน้าไปหลัง: คอลัมน์ของสินค้า i ทิศ o กว้าง <span class="math">w_io</span> และจุได้ <span class="math">k_io = ⌊D / d_io⌋</span> ชิ้น</p>
+              <p>มองเป็น "คอลัมน์" จากหน้าไปหลัง: คอลัมน์ของสินค้า i ทิศ o กว้าง <span class="math">w<sub>io</sub></span> และจุได้ <span class="math">k<sub>io</sub> = ⌊D / d<sub>io</sub>⌋</span> ชิ้น</p>
               <div class="eq">
-                <span class="r">y_ijo ∈ ℤ<sub>≥0</sub> = จำนวนคอลัมน์ &emsp;x_ijo ∈ ℤ<sub>≥0</sub> = จำนวนชิ้น</span>
-                <span class="r">x_ijo ≤ k_io · y_ijo <span class="c">(ชิ้นไม่เกินที่คอลัมน์จุได้)</span></span>
-                <span class="r">Σ<sub>i,o</sub> w_io y_ijo ≤ W &emsp;∀ j <span class="c">(ความกว้างนับตามคอลัมน์)</span></span>
-                <span class="r">Σ<sub>j,o</sub> x_ijo ≤ n_i, &emsp;objective เหมือน 7.2</span>
+                <span class="r">y<sub>ijo</sub> ∈ ℤ<sub>≥0</sub> = จำนวนคอลัมน์ &emsp;x<sub>ijo</sub> ∈ ℤ<sub>≥0</sub> = จำนวนชิ้น</span>
+                <span class="r">x<sub>ijo</sub> ≤ k<sub>io</sub> · y<sub>ijo</sub> <span class="c">(ชิ้นไม่เกินที่คอลัมน์จุได้)</span></span>
+                <span class="r">Σ<sub>i,o</sub> w<sub>io</sub> y<sub>ijo</sub> ≤ W &emsp;∀ j <span class="c">(ความกว้างนับตามคอลัมน์)</span></span>
+                <span class="r">Σ<sub>j,o</sub> x<sub>ijo</sub> ≤ n<sub>i</sub>, &emsp;objective เหมือน 7.2</span>
               </div>
               <p>ในรูป: ตัวเลข ×k บนกล่อง = ชิ้นที่อยู่เรียงไปข้างหลัง → ได้ <b>100</b></p>
               <p class="why">ถ้าตีความว่าลูกค้าเห็นแค่แถวหน้า ความน่าสนใจควรคิดต่อคอลัมน์ (ใช้ y แทน x ใน objective) — เขียน assumption ที่เลือกไว้</p></li>
             <li><h4>7.4 (bonus) ซ้อนขึ้นด้านบนได้ด้วย</h4>
               <p>ถ้ายังบังคับให้แต่ละคอลัมน์เป็นของชนิดเดียว ทิศเดียว: คอลัมน์กลายเป็น "บล็อก" ที่จุได้</p>
-              <div class="eq"><span class="r">k_io = ⌊H / h_io⌋ · ⌊D / d_io⌋</span></div>
-              <p>formulation เหมือน 7.3 ทุกอย่าง เปลี่ยนแค่ <span class="math">k_io</span> → ตัวอย่างได้ <b>104</b> (Cat toys ซ้อน 2 ชั้น × ลึก 4 = 8 ต่อคอลัมน์)</p>
+              <div class="eq"><span class="r">k<sub>io</sub> = ⌊H / h<sub>io</sub>⌋ · ⌊D / d<sub>io</sub>⌋</span></div>
+              <p>formulation เหมือน 7.3 ทุกอย่าง เปลี่ยนแค่ <span class="math">k<sub>io</sub></span> → ตัวอย่างได้ <b>104</b> (Cat toys ซ้อน 2 ชั้น × ลึก 4 = 8 ต่อคอลัมน์)</p>
               <p class="why">ถ้ายอมให้ของ <b>ต่างชนิดกัน</b> ซ้อนกันได้ จะกลายเป็น 3D bin packing ซึ่งต้องมีตัวแปรตำแหน่ง (x, y, z) ของแต่ละชิ้น + ข้อจำกัดไม่ทับกัน (ใช้ binary + big-M) — ยากกว่ามาก การอธิบายว่าทำไมยากก็ได้คะแนนส่วนหนึ่ง</p></li>
           </ol>
         </div>
@@ -808,7 +808,7 @@ FIGS.sh = k => {
   }
   ITEMS.forEach(([nm, col], i) => o.push(`<rect x="${x0 + i * 150}" y="${top[1] + lvlH + 22}" width="14" height="14" rx="3" style="fill:color-mix(in srgb,var(${col}) 40%,transparent);stroke:var(${col})"/><text x="${x0 + i * 150 + 20}" y="${top[1] + lvlH + 34}" style="fill:var(--ink)">${nm}</text>`));
   o.push(`<text x="${Wpx - 10}" y="24" text-anchor="end" style="font:600 15px 'IBM Plex Mono',monospace;fill:var(--y)">${m.replace('7', '7.')} · attractiveness ${fmt(S.value, 1)}</text><text x="${x0}" y="24" style="fill:var(--muted)">มุมมองด้านหน้า · ↻ = หมุน · ×k = เรียงไปข้างหลัง k ชิ้น</text>`);
-  const caps = ['ตัวอย่างสมมติ: ชั้น 2 ระดับ กว้าง 100', 'x_ij = จำนวนชิ้นบนชั้น j', 'ชั้น 1 ให้ค่ามากกว่า', 'กว้างรวมต่อชั้น ≤ 100', 'Cat tree สูงเกิน วางไม่ได้', '7.1 optimal = 50', '7.2 หมุนได้ → 55.5', '7.3 เรียงไปข้างหลัง → 100', '7.4 ซ้อนขึ้นได้ → 104'];
+  const caps = ['ตัวอย่างสมมติ: ชั้น 2 ระดับ กว้าง 100', 'x<sub>ij</sub> = จำนวนชิ้นบนชั้น j', 'ชั้น 1 ให้ค่ามากกว่า', 'กว้างรวมต่อชั้น ≤ 100', 'Cat tree สูงเกิน วางไม่ได้', '7.1 optimal = 50', '7.2 หมุนได้ → 55.5', '7.3 เรียงไปข้างหลัง → 100', '7.4 ซ้อนขึ้นได้ → 104'];
   return {svg: `<svg class="sv" viewBox="0 0 ${Wpx} ${top[1] + lvlH + 46}" role="img" aria-label="shelf">${o.join('')}</svg>`, cap: caps[k] || ''};
 };
 

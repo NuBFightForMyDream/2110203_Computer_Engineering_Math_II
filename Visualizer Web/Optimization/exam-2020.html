@@ -295,7 +295,7 @@ ol.steps > li ul li{margin:3px 0}
             <thead><tr><th>เจออะไรในโจทย์</th><th>แปลงยังไง</th><th>ตัวอย่าง</th></tr></thead>
             <tbody>
               <tr><td>ข้อจำกัด <span class="math">≤</span></td><td>บวก <b>slack</b> <span class="math">s ≥ 0</span></td><td class="m">3x₁ + x₂ ≤ 15 → 3x₁ + x₂ + s₁ = 15</td></tr>
-              <tr><td>ข้อจำกัด <span class="math">≥</span></td><td>ลบ <b>surplus</b> <span class="math">e ≥ 0</span></td><td class="m">x_H ≥ 0.25 → x_H − e₃ = 0.25</td></tr>
+              <tr><td>ข้อจำกัด <span class="math">≥</span></td><td>ลบ <b>surplus</b> <span class="math">e ≥ 0</span></td><td class="m">x<sub>H</sub> ≥ 0.25 → x<sub>H</sub> − e₃ = 0.25</td></tr>
               <tr><td>RHS ติดลบ</td><td>คูณ −1 ทั้งแถว (เครื่องหมายกลับ)</td><td class="m">x − y ≤ −2 → −x + y ≥ 2</td></tr>
               <tr><td>ตัวแปร free (unrestricted)</td><td>แยก <span class="math">x = x⁺ − x⁻</span> ทั้งคู่ ≥ 0</td><td class="m">x₂ free → x₂ = x₂⁺ − x₂⁻</td></tr>
               <tr><td>ตัวแปร <span class="math">≤ 0</span> หรือ <span class="math">≤ −3</span></td><td>เปลี่ยนตัวแปร</td><td class="m">x₁ ≤ −3 → x₁ = −3 − x₁′, x₁′ ≥ 0</td></tr>
@@ -581,7 +581,7 @@ ol.steps > li ul li{margin:3px 0}
               <div data-tab="q5-p2"></div></li>
             <li><h4>เช็ค optimal → เสร็จ</h4>
               <p>แถว 0 = <span class="math">2/3, 0, 0, 5/3</span> ไม่มีค่าติดลบ → <b>optimal</b> · RHS = −20 คือ <span class="math">−z = −20</span> → <span class="math">z = 20</span></p>
-              <div class="ans" style="margin:6px 0"><b>คำตอบ</b> x₁ = 0, x₂ = x₂⁺ − x₂⁻ = 4 − 0 = 4, z_min = 20</div>
+              <div class="ans" style="margin:6px 0"><b>คำตอบ</b> x₁ = 0, x₂ = x₂⁺ − x₂⁻ = 4 − 0 = 4, z<sub>min</sub> = 20</div>
               <p class="why">x₂⁻ มีค่า 0 ในแถว 0 แต่ไม่ใช่ alternative optimum จริง — ถ้าเพิ่ม x₂⁻ ระบบจะเพิ่ม x₂⁺ ตามเท่ากัน ค่า x₂ ที่แท้จริงยังเป็น 4</p></li>
             <li><h4>ตรวจคำตอบแบบไม่ใช้ tableau</h4>
               <div class="eq"><span class="r">−x₁ + 3x₂ ≥ 12 &nbsp;⇒&nbsp; x₂ ≥ 4 + x₁/3</span><span class="r">z = −x₁ + 5x₂ ≥ −x₁ + 5(4 + x₁/3) = 20 + (2/3)x₁ ≥ 20</span></div>
@@ -613,45 +613,45 @@ ol.steps > li ul li{margin:3px 0}
           <ol class="steps">
             <li><h4>เลือกตัวแปรตัดสินใจ</h4>
               <p>สิ่งที่ Hamtaro เลือกได้คือ "ใส่เมล็ดแต่ละเกรดเท่าไหร่" → ให้ใน <b>น้ำ 1 กรัม</b> มี</p>
-              <div class="eq"><span class="r">x_T, x_L, x_M, x_H = กรัมของเมล็ด terrible, low, medium, high (ใน 1 g)</span></div>
+              <div class="eq"><span class="r">x<sub>T</sub>, x<sub>L</sub>, x<sub>M</sub>, x<sub>H</sub> = กรัมของเมล็ด terrible, low, medium, high (ใน 1 g)</span></div>
               <p class="why">ทำไมคิดต่อ 1 กรัม: โจทย์ไม่ได้บอกปริมาณรวม และทุกเงื่อนไขเป็นเปอร์เซ็นต์ → ผลต่อ 1 กรัมคูณขึ้นไปได้กับทุกปริมาณ</p></li>
             <li><h4>Objective: ต้นทุนต่อกรัม</h4>
-              <div class="eq"><span class="r">min &nbsp;0.01x_T + 0.3x_L + 0.7x_M + 1.2x_H</span></div>
+              <div class="eq"><span class="r">min &nbsp;0.01x<sub>T</sub> + 0.3x<sub>L</sub> + 0.7x<sub>M</sub> + 1.2x<sub>H</sub></span></div>
               <p>ถ้ามีแค่นี้ คำตอบคือ "ไม่ใส่อะไรเลย" (ต้นทุน 0) — ดูรูป ซึ่งไร้สาระ → ต้องมีข้อจำกัด</p></li>
             <li><h4>ข้อจำกัด: รวมกันต้องเป็น 1 กรัม</h4>
-              <div class="eq"><span class="r">x_T + x_L + x_M + x_H = 1</span></div>
+              <div class="eq"><span class="r">x<sub>T</sub> + x<sub>L</sub> + x<sub>M</sub> + x<sub>H</sub> = 1</span></div>
               <p>ตอนนี้ LP จะเลือกของถูกสุดล้วน ๆ (terrible 100%) ต้นทุน 0.01 — แต่โปรตีนแค่ 25%</p></li>
             <li><h4>ข้อจำกัด: โปรตีนอย่างน้อย 60%</h4>
               <p>โปรตีนในส่วนผสม 1 g = ค่าเฉลี่ยถ่วงน้ำหนักของแต่ละเกรด:</p>
-              <div class="eq"><span class="r">25x_T + 40x_L + 70x_M + 90x_H ≥ 60</span></div>
+              <div class="eq"><span class="r">25x<sub>T</sub> + 40x<sub>L</sub> + 70x<sub>M</sub> + 90x<sub>H</sub> ≥ 60</span></div>
               <p class="why">เช่น ผสม terrible ครึ่ง high ครึ่ง: 25(0.5) + 90(0.5) = 57.5% → ยังไม่ผ่าน</p></li>
             <li><h4>ข้อจำกัด: ไขมันไม่เกิน 5%</h4>
-              <div class="eq"><span class="r">10x_T + 7x_L + 4x_M + 1x_H ≤ 5</span></div></li>
+              <div class="eq"><span class="r">10x<sub>T</sub> + 7x<sub>L</sub> + 4x<sub>M</sub> + 1x<sub>H</sub> ≤ 5</span></div></li>
             <li><h4>ข้อจำกัด: high-grade อย่างน้อย 25% (เพื่อโฆษณา)</h4>
-              <div class="eq"><span class="r">x_H ≥ 0.25</span></div>
+              <div class="eq"><span class="r">x<sub>H</sub> ≥ 0.25</span></div>
               <p>และตัวแปรทุกตัว <span class="math">≥ 0</span> — ได้ LP ครบแล้ว</p>
               <div class="eq">
-                <span class="r">min 0.01x_T + 0.3x_L + 0.7x_M + 1.2x_H</span>
-                <span class="r">s.t. 25x_T + 40x_L + 70x_M + 90x_H ≥ 60</span>
-                <span class="r">&emsp;&emsp;10x_T + 7x_L + 4x_M + x_H ≤ 5</span>
-                <span class="r">&emsp;&emsp;x_H ≥ 0.25</span>
-                <span class="r">&emsp;&emsp;x_T + x_L + x_M + x_H = 1</span>
-                <span class="r">&emsp;&emsp;x_T, x_L, x_M, x_H ≥ 0</span>
+                <span class="r">min 0.01x<sub>T</sub> + 0.3x<sub>L</sub> + 0.7x<sub>M</sub> + 1.2x<sub>H</sub></span>
+                <span class="r">s.t. 25x<sub>T</sub> + 40x<sub>L</sub> + 70x<sub>M</sub> + 90x<sub>H</sub> ≥ 60</span>
+                <span class="r">&emsp;&emsp;10x<sub>T</sub> + 7x<sub>L</sub> + 4x<sub>M</sub> + x<sub>H</sub> ≤ 5</span>
+                <span class="r">&emsp;&emsp;x<sub>H</sub> ≥ 0.25</span>
+                <span class="r">&emsp;&emsp;x<sub>T</sub> + x<sub>L</sub> + x<sub>M</sub> + x<sub>H</sub> = 1</span>
+                <span class="r">&emsp;&emsp;x<sub>T</sub>, x<sub>L</sub>, x<sub>M</sub>, x<sub>H</sub> ≥ 0</span>
               </div></li>
             <li><h4>Standard form (คำตอบที่ต้องเขียนส่ง)</h4>
               <p><span class="math">≥</span> ลบ surplus · <span class="math">≤</span> บวก slack · RHS เป็นบวกหมดแล้ว</p>
               <div class="eq">
-                <span class="r">min 0.01x_T + 0.3x_L + 0.7x_M + 1.2x_H</span>
-                <span class="r">s.t. 25x_T + 40x_L + 70x_M + 90x_H − e₁ = 60</span>
-                <span class="r">&emsp;&emsp;10x_T + 7x_L + 4x_M + x_H + s₂ = 5</span>
-                <span class="r">&emsp;&emsp;x_H − e₃ = 0.25</span>
-                <span class="r">&emsp;&emsp;x_T + x_L + x_M + x_H = 1</span>
-                <span class="r">&emsp;&emsp;x_T, x_L, x_M, x_H, e₁, s₂, e₃ ≥ 0</span>
+                <span class="r">min 0.01x<sub>T</sub> + 0.3x<sub>L</sub> + 0.7x<sub>M</sub> + 1.2x<sub>H</sub></span>
+                <span class="r">s.t. 25x<sub>T</sub> + 40x<sub>L</sub> + 70x<sub>M</sub> + 90x<sub>H</sub> − e₁ = 60</span>
+                <span class="r">&emsp;&emsp;10x<sub>T</sub> + 7x<sub>L</sub> + 4x<sub>M</sub> + x<sub>H</sub> + s₂ = 5</span>
+                <span class="r">&emsp;&emsp;x<sub>H</sub> − e₃ = 0.25</span>
+                <span class="r">&emsp;&emsp;x<sub>T</sub> + x<sub>L</sub> + x<sub>M</sub> + x<sub>H</sub> = 1</span>
+                <span class="r">&emsp;&emsp;x<sub>T</sub>, x<sub>L</sub>, x<sub>M</sub>, x<sub>H</sub>, e₁, s₂, e₃ ≥ 0</span>
               </div></li>
             <li><h4>(แถม) คำตอบจริง + ลองเปลี่ยนเงื่อนไขเอง</h4>
               <p>แก้ LP ได้ <span class="math">x = (1/6, 1/4, 1/3, 1/4)</span> ต้นทุน <b>0.61 บาท/กรัม</b> — โปรตีน = 60% และไขมัน = 5% พอดี (ข้อจำกัดทั้งสอง "ตึง")</p>
               <p>ลองเลื่อน slider ใต้รูป: ถ้าบังคับโปรตีนสูงขึ้น ต้นทุนเพิ่ม · ถ้าขั้นต่ำ high เกินที่จำเป็น ต้นทุนก็เพิ่ม</p>
-              <p class="why">อีกแบบที่ใช้ได้: ให้ตัวแปรเป็นกรัมจริง (ไม่บังคับรวม = 1) แล้วเขียน % เป็น <span class="math">25x_T + … ≥ 60(x_T + x_L + x_M + x_H)</span> ⇒ <span class="math">−35x_T − 20x_L + 10x_M + 30x_H ≥ 0</span> — ต้องมีปริมาณที่ต้องผลิตกำหนดไว้ด้วย ไม่งั้นคำตอบคือ 0</p></li>
+              <p class="why">อีกแบบที่ใช้ได้: ให้ตัวแปรเป็นกรัมจริง (ไม่บังคับรวม = 1) แล้วเขียน % เป็น <span class="math">25x<sub>T</sub> + … ≥ 60(x<sub>T</sub> + x<sub>L</sub> + x<sub>M</sub> + x<sub>H</sub>)</span> ⇒ <span class="math">−35x<sub>T</sub> − 20x<sub>L</sub> + 10x<sub>M</sub> + 30x<sub>H</sub> ≥ 0</span> — ต้องมีปริมาณที่ต้องผลิตกำหนดไว้ด้วย ไม่งั้นคำตอบคือ 0</p></li>
           </ol>
         </div>
         <div class="done-row"><label class="chk"><input type="checkbox" data-done="q6"> เข้าใจข้อนี้แล้ว</label></div>
@@ -671,35 +671,35 @@ ol.steps > li ul li{margin:3px 0}
           <div class="fig"><div class="figbody"></div><p class="figcap"></p></div>
           <ol class="steps">
             <li><h4>ตัวแปร: (โรงงาน × สินค้า) = 4 ตัว</h4>
-              <div class="eq"><span class="r">x_CA, x_CB = จำนวน A, B ที่ผลิตที่ China</span><span class="r">x_NA, x_NB = จำนวน A, B ที่ผลิตที่ North Korea</span></div>
+              <div class="eq"><span class="r">x<sub>CA</sub>, x<sub>CB</sub> = จำนวน A, B ที่ผลิตที่ China</span><span class="r">x<sub>NA</sub>, x<sub>NB</sub> = จำนวน A, B ที่ผลิตที่ North Korea</span></div>
               <p class="why">กฎทั่วไป: ถ้าโจทย์มีตาราง 2 มิติ (ที่ไหน × อะไร) ตัวแปรมักเป็น "จำนวนในแต่ละช่องของตาราง"</p></li>
             <li><h4>Objective: ต้นทุนรวม (Table B)</h4>
-              <div class="eq"><span class="r">min &nbsp;20x_CA + 30x_CB + 40x_NA + 45x_NB</span></div></li>
+              <div class="eq"><span class="r">min &nbsp;20x<sub>CA</sub> + 30x<sub>CB</sub> + 40x<sub>NA</sub> + 45x<sub>NB</sub></span></div></li>
             <li><h4>ข้อจำกัด: demand</h4>
-              <div class="eq"><span class="r">x_CA + x_NA ≥ 200 <span class="c">(A รวม)</span></span><span class="r">x_CB + x_NB ≥ 300 <span class="c">(B รวม)</span></span></div>
+              <div class="eq"><span class="r">x<sub>CA</sub> + x<sub>NA</sub> ≥ 200 <span class="c">(A รวม)</span></span><span class="r">x<sub>CB</sub> + x<sub>NB</sub> ≥ 300 <span class="c">(B รวม)</span></span></div>
               <p>ถ้ามีแค่นี้: ผลิตที่ China หมด (ถูกกว่า) ต้นทุน 13,000 แต่ใช้ชั่วโมง China ไป <span class="math">0.7·200 + 0.75·300 = 365 &gt; 240</span> ชม. ❌ (แท่งแดงในรูป)</p></li>
             <li><h4>ข้อจำกัด: ชั่วโมงของแต่ละโรงงาน (Table A, C)</h4>
-              <div class="eq"><span class="r">0.7x_CA + 0.75x_CB ≤ 240 <span class="c">(China)</span></span><span class="r">0.75x_NA + 0.6x_NB ≤ 300 <span class="c">(North Korea)</span></span></div>
+              <div class="eq"><span class="r">0.7x<sub>CA</sub> + 0.75x<sub>CB</sub> ≤ 240 <span class="c">(China)</span></span><span class="r">0.75x<sub>NA</sub> + 0.6x<sub>NB</sub> ≤ 300 <span class="c">(North Korea)</span></span></div>
               <p>ตอนนี้งานบางส่วนต้องย้ายไป North Korea</p></li>
             <li><h4>ข้อจำกัด "อย่างน้อยครึ่งหนึ่ง" → ทำให้เป็น linear</h4>
               <div class="eq">
-                <span class="r">x_CA ≥ ½(x_CA + x_NA) &nbsp;⇒&nbsp; ½x_CA − ½x_NA ≥ 0 &nbsp;⇒&nbsp; <b>x_CA − x_NA ≥ 0</b></span>
-                <span class="r">x_NB ≥ ½(x_CB + x_NB) &nbsp;⇒&nbsp; <b>x_NB − x_CB ≥ 0</b></span>
+                <span class="r">x<sub>CA</sub> ≥ ½(x<sub>CA</sub> + x<sub>NA</sub>) &nbsp;⇒&nbsp; ½x<sub>CA</sub> − ½x<sub>NA</sub> ≥ 0 &nbsp;⇒&nbsp; <b>x<sub>CA</sub> − x<sub>NA</sub> ≥ 0</b></span>
+                <span class="r">x<sub>NB</sub> ≥ ½(x<sub>CB</sub> + x<sub>NB</sub>) &nbsp;⇒&nbsp; <b>x<sub>NB</sub> − x<sub>CB</sub> ≥ 0</b></span>
               </div>
-              <p class="trap"><b>กับดัก:</b> อย่าเขียน <span class="math">x_CA ≥ 100</span> — "ครึ่งหนึ่ง" คือครึ่งของที่ผลิต <b>จริง</b> ซึ่งอาจมากกว่า 200 ได้</p></li>
+              <p class="trap"><b>กับดัก:</b> อย่าเขียน <span class="math">x<sub>CA</sub> ≥ 100</span> — "ครึ่งหนึ่ง" คือครึ่งของที่ผลิต <b>จริง</b> ซึ่งอาจมากกว่า 200 ได้</p></li>
             <li><h4>Standard form</h4>
               <div class="eq">
-                <span class="r">min 20x_CA + 30x_CB + 40x_NA + 45x_NB</span>
-                <span class="r">s.t. 0.7x_CA + 0.75x_CB + s₁ = 240</span>
-                <span class="r">&emsp;&emsp;0.75x_NA + 0.6x_NB + s₂ = 300</span>
-                <span class="r">&emsp;&emsp;x_CA + x_NA − e₃ = 200</span>
-                <span class="r">&emsp;&emsp;x_CB + x_NB − e₄ = 300</span>
-                <span class="r">&emsp;&emsp;x_CA − x_NA − e₅ = 0</span>
-                <span class="r">&emsp;&emsp;−x_CB + x_NB − e₆ = 0</span>
+                <span class="r">min 20x<sub>CA</sub> + 30x<sub>CB</sub> + 40x<sub>NA</sub> + 45x<sub>NB</sub></span>
+                <span class="r">s.t. 0.7x<sub>CA</sub> + 0.75x<sub>CB</sub> + s₁ = 240</span>
+                <span class="r">&emsp;&emsp;0.75x<sub>NA</sub> + 0.6x<sub>NB</sub> + s₂ = 300</span>
+                <span class="r">&emsp;&emsp;x<sub>CA</sub> + x<sub>NA</sub> − e₃ = 200</span>
+                <span class="r">&emsp;&emsp;x<sub>CB</sub> + x<sub>NB</sub> − e₄ = 300</span>
+                <span class="r">&emsp;&emsp;x<sub>CA</sub> − x<sub>NA</sub> − e₅ = 0</span>
+                <span class="r">&emsp;&emsp;−x<sub>CB</sub> + x<sub>NB</sub> − e₆ = 0</span>
                 <span class="r">&emsp;&emsp;ทุกตัวแปร ≥ 0</span>
               </div></li>
             <li><h4>(แถม) คำตอบและเหตุผล</h4>
-              <p>แก้ได้ <span class="math">x_CA = 200, x_CB = 133.3, x_NA = 0, x_NB = 166.7</span> ต้นทุน <b>15,500 บาท</b></p>
+              <p>แก้ได้ <span class="math">x<sub>CA</sub> = 200, x<sub>CB</sub> = 133.3, x<sub>NA</sub> = 0, x<sub>NB</sub> = 166.7</span> ต้นทุน <b>15,500 บาท</b></p>
               <p>ทำไมให้ China ทำ A ก่อน? เทียบ "ประหยัดได้ต่อ 1 ชั่วโมงของ China": A ถูกกว่า NK 20 บาท ใช้ 0.7 ชม. → 28.6 บาท/ชม. · B ถูกกว่า 15 บาท ใช้ 0.75 ชม. → 20 บาท/ชม. → ชั่วโมง China ที่มีจำกัดควรใช้กับ A ก่อน</p></li>
           </ol>
         </div>
@@ -710,11 +710,11 @@ ol.steps > li ul li{margin:3px 0}
       <section class="sec" id="q8">
         <h2><span class="n">Q8</span> Hamtaro first crisis — กระจายสินค้าตอนของไม่พอ <span class="pts">4 pts</span></h2>
         <details class="prob" open><summary>โจทย์</summary>
-          <div class="en"><p><span class="math">N</span> factories at <span class="math">(x_fi, y_fi)</span> producing <span class="math">p_i</span> snacks/day; <span class="math">M</span> stores at <span class="math">(x_si, y_si)</span> demanding <span class="math">s_i</span>/day; <span class="math">Σp_i &lt; Σs_i</span>; goods can only travel <span class="math">D</span> km from where they are produced.
+          <div class="en"><p><span class="math">N</span> factories at <span class="math">(x<sub>fi</sub>, y<sub>fi</sub>)</span> producing <span class="math">p<sub>i</sub></span> snacks/day; <span class="math">M</span> stores at <span class="math">(x<sub>si</sub>, y<sub>si</sub>)</span> demanding <span class="math">s<sub>i</sub></span>/day; <span class="math">Σp<sub>i</sub> &lt; Σs<sub>i</sub></span>; goods can only travel <span class="math">D</span> km from where they are produced.
             Dissatisfaction of a store = (unmet supplies) / (demanded supplies).</p>
             <p>8.1 minimize the <b>average</b> dissatisfaction · 8.2 minimize the dissatisfaction of the <b>most dissatisfied</b> store · 8.3 compare the optimal values.</p></div>
         </details>
-        <div class="idea"><div><p><b>Hint ของโจทย์</b>: ระยะทาง, <span class="math">p_i</span>, <span class="math">s_j</span>, <span class="math">D</span> เป็น <b>ค่าคงที่</b> (รู้ก่อนแก้) — ตัวแปรมีแค่ "ส่งจากโรงงานไหนไปร้านไหนเท่าไหร่" ดังนั้นสูตรระยะทางที่มีรากที่สองไม่ทำให้ไม่ linear</p>
+        <div class="idea"><div><p><b>Hint ของโจทย์</b>: ระยะทาง, <span class="math">p<sub>i</sub></span>, <span class="math">s<sub>j</sub></span>, <span class="math">D</span> เป็น <b>ค่าคงที่</b> (รู้ก่อนแก้) — ตัวแปรมีแค่ "ส่งจากโรงงานไหนไปร้านไหนเท่าไหร่" ดังนั้นสูตรระยะทางที่มีรากที่สองไม่ทำให้ไม่ linear</p>
           <p>รูปด้านบนเป็นตัวอย่างขนาดเล็ก (3 โรงงาน 5 ร้าน — ตัวเลขสมมติ) แก้ LP จริงสด ๆ: ลองสลับ 8.1 / 8.2 และเลื่อน <span class="math">D</span></p></div></div>
         <div class="stepper" data-fig="q8">
           <div class="fig"><div class="figbody"></div><p class="figcap"></p>
@@ -723,46 +723,46 @@ ol.steps > li ul li{margin:3px 0}
           </div>
           <ol class="steps">
             <li><h4>แยก "ค่าคงที่" กับ "ตัวแปร"</h4>
-              <p>ค่าคงที่: ตำแหน่ง, <span class="math">p_i</span>, <span class="math">s_j</span>, <span class="math">D</span> และระยะทาง <span class="math">d_ij = √((x_fi − x_sj)² + (y_fi − y_sj)²)</span> คำนวณเป็นตัวเลขได้ก่อนเลย</p>
-              <div class="eq"><span class="r">ตัวแปร: &nbsp;x_ij ≥ 0 = จำนวน snack ที่ส่งจากโรงงาน i ไปร้าน j ต่อวัน</span></div></li>
+              <p>ค่าคงที่: ตำแหน่ง, <span class="math">p<sub>i</sub></span>, <span class="math">s<sub>j</sub></span>, <span class="math">D</span> และระยะทาง <span class="math">d<sub>ij</sub> = √((x<sub>fi</sub> − x<sub>sj</sub>)² + (y<sub>fi</sub> − y<sub>sj</sub>)²)</span> คำนวณเป็นตัวเลขได้ก่อนเลย</p>
+              <div class="eq"><span class="r">ตัวแปร: &nbsp;x<sub>ij</sub> ≥ 0 = จำนวน snack ที่ส่งจากโรงงาน i ไปร้าน j ต่อวัน</span></div></li>
             <li><h4>ข้อจำกัดระยะทาง</h4>
-              <p>ส่งได้เฉพาะคู่ที่ <span class="math">d_ij ≤ D</span> (เส้นประในรูป = คู่ที่ส่งได้):</p>
-              <div class="eq"><span class="r">x_ij = 0 &nbsp;สำหรับทุกคู่ที่ d_ij &gt; D</span></div>
-              <p class="why">หรือจะไม่สร้างตัวแปรของคู่นั้นเลยก็ได้ — ไม่ต้องใช้ if/else ใน LP เพราะ d_ij รู้ค่าล่วงหน้า</p></li>
+              <p>ส่งได้เฉพาะคู่ที่ <span class="math">d<sub>ij</sub> ≤ D</span> (เส้นประในรูป = คู่ที่ส่งได้):</p>
+              <div class="eq"><span class="r">x<sub>ij</sub> = 0 &nbsp;สำหรับทุกคู่ที่ d<sub>ij</sub> &gt; D</span></div>
+              <p class="why">หรือจะไม่สร้างตัวแปรของคู่นั้นเลยก็ได้ — ไม่ต้องใช้ if/else ใน LP เพราะ d<sub>ij</sub> รู้ค่าล่วงหน้า</p></li>
             <li><h4>ข้อจำกัดกำลังผลิตของโรงงาน</h4>
-              <div class="eq"><span class="r">Σ<sub>j</sub> x_ij ≤ p_i &emsp;∀ i = 1…N</span></div></li>
+              <div class="eq"><span class="r">Σ<sub>j</sub> x<sub>ij</sub> ≤ p<sub>i</sub> &emsp;∀ i = 1…N</span></div></li>
             <li><h4>ตัวแปรช่วย: dissatisfaction ของแต่ละร้าน</h4>
-              <p>ของที่ร้าน j ได้รับ = <span class="math">Σ<sub>i</sub> x_ij</span> ไม่ควรเกิน <span class="math">s_j</span> (ไม่งั้นความไม่พอใจติดลบ ไปหักกลบร้านอื่น)</p>
-              <div class="eq"><span class="r">u_j = (s_j − Σ<sub>i</sub> x_ij) / s_j &emsp;⇔&emsp; s_j u_j + Σ<sub>i</sub> x_ij = s_j, &emsp;u_j ≥ 0</span></div>
-              <p class="why"><span class="math">s_j</span> เป็นค่าคงที่ → หารด้วย s_j ยัง linear · และ <span class="math">u_j ≥ 0</span> บังคับ <span class="math">Σx_ij ≤ s_j</span> ให้อัตโนมัติ</p></li>
+              <p>ของที่ร้าน j ได้รับ = <span class="math">Σ<sub>i</sub> x<sub>ij</sub></span> ไม่ควรเกิน <span class="math">s<sub>j</sub></span> (ไม่งั้นความไม่พอใจติดลบ ไปหักกลบร้านอื่น)</p>
+              <div class="eq"><span class="r">u<sub>j</sub> = (s<sub>j</sub> − Σ<sub>i</sub> x<sub>ij</sub>) / s<sub>j</sub> &emsp;⇔&emsp; s<sub>j</sub> u<sub>j</sub> + Σ<sub>i</sub> x<sub>ij</sub> = s<sub>j</sub>, &emsp;u<sub>j</sub> ≥ 0</span></div>
+              <p class="why"><span class="math">s<sub>j</sub></span> เป็นค่าคงที่ → หารด้วย s<sub>j</sub> ยัง linear · และ <span class="math">u<sub>j</sub> ≥ 0</span> บังคับ <span class="math">Σx<sub>ij</sub> ≤ s<sub>j</sub></span> ให้อัตโนมัติ</p></li>
             <li><h4>8.1 · Objective: เฉลี่ยน้อยที่สุด</h4>
-              <div class="eq"><span class="r">min &nbsp;(1/M) Σ<sub>j</sub> u_j</span></div>
-              <p>ดูรูป: LP ชอบส่งให้ร้าน <b>เล็ก</b> ก่อน (ส่ง 1 ชิ้นลด u_j ได้ 1/s_j ซึ่งมากถ้า s_j เล็ก) → ร้านใหญ่โดนทิ้ง ความไม่พอใจสูงมาก</p></li>
+              <div class="eq"><span class="r">min &nbsp;(1/M) Σ<sub>j</sub> u<sub>j</sub></span></div>
+              <p>ดูรูป: LP ชอบส่งให้ร้าน <b>เล็ก</b> ก่อน (ส่ง 1 ชิ้นลด u<sub>j</sub> ได้ 1/s<sub>j</sub> ซึ่งมากถ้า s<sub>j</sub> เล็ก) → ร้านใหญ่โดนทิ้ง ความไม่พอใจสูงมาก</p></li>
             <li><h4>8.1 · Standard form</h4>
               <div class="eq">
-                <span class="r">min (1/M) Σ<sub>j</sub> u_j</span>
-                <span class="r">s.t. Σ<sub>j</sub> x_ij + t_i = p_i &emsp;∀ i <span class="c">(t_i = slack)</span></span>
-                <span class="r">&emsp;&emsp;Σ<sub>i</sub> x_ij + s_j u_j = s_j &emsp;∀ j</span>
-                <span class="r">&emsp;&emsp;x_ij = 0 &emsp;∀ (i, j) ที่ d_ij &gt; D</span>
-                <span class="r">&emsp;&emsp;x_ij, u_j, t_i ≥ 0</span>
+                <span class="r">min (1/M) Σ<sub>j</sub> u<sub>j</sub></span>
+                <span class="r">s.t. Σ<sub>j</sub> x<sub>ij</sub> + t<sub>i</sub> = p<sub>i</sub> &emsp;∀ i <span class="c">(t<sub>i</sub> = slack)</span></span>
+                <span class="r">&emsp;&emsp;Σ<sub>i</sub> x<sub>ij</sub> + s<sub>j</sub> u<sub>j</sub> = s<sub>j</sub> &emsp;∀ j</span>
+                <span class="r">&emsp;&emsp;x<sub>ij</sub> = 0 &emsp;∀ (i, j) ที่ d<sub>ij</sub> &gt; D</span>
+                <span class="r">&emsp;&emsp;x<sub>ij</sub>, u<sub>j</sub>, t<sub>i</sub> ≥ 0</span>
               </div></li>
             <li><h4>8.2 · min ของ max → เทคนิค "ตัวแปรเพดาน"</h4>
-              <p><span class="math">max(u₁,…,u_M)</span> ไม่ linear โดยตรง → ตั้งตัวแปร <span class="math">z</span> ที่ต้อง <b>สูงกว่าหรือเท่ากับทุก u_j</b> แล้ว min <span class="math">z</span></p>
-              <div class="eq"><span class="r">min z &nbsp;s.t.&nbsp; z ≥ u_j &nbsp;∀ j &nbsp;(+ ข้อจำกัดเดิมทั้งหมด)</span></div>
-              <p>Hint ของโจทย์: ร้านที่ไม่พอใจที่สุดคือร้านที่ <span class="math">u_j = z</span> พอดี (ข้อจำกัด z ≥ u_j ตึง) · min z จะกดเพดานลงจนชนร้านที่แย่ที่สุด</p>
+              <p><span class="math">max(u₁,…,u<sub>M</sub>)</span> ไม่ linear โดยตรง → ตั้งตัวแปร <span class="math">z</span> ที่ต้อง <b>สูงกว่าหรือเท่ากับทุก u<sub>j</sub></b> แล้ว min <span class="math">z</span></p>
+              <div class="eq"><span class="r">min z &nbsp;s.t.&nbsp; z ≥ u<sub>j</sub> &nbsp;∀ j &nbsp;(+ ข้อจำกัดเดิมทั้งหมด)</span></div>
+              <p>Hint ของโจทย์: ร้านที่ไม่พอใจที่สุดคือร้านที่ <span class="math">u<sub>j</sub> = z</span> พอดี (ข้อจำกัด z ≥ u<sub>j</sub> ตึง) · min z จะกดเพดานลงจนชนร้านที่แย่ที่สุด</p>
               <p>ดูรูป: ทุกร้านถูกเกลี่ยให้ไม่พอใจเท่า ๆ กัน</p></li>
             <li><h4>8.2 · Standard form</h4>
               <div class="eq">
                 <span class="r">min z</span>
-                <span class="r">s.t. z − u_j − v_j = 0 &emsp;∀ j <span class="c">(v_j = surplus)</span></span>
-                <span class="r">&emsp;&emsp;Σ<sub>j</sub> x_ij + t_i = p_i &emsp;∀ i</span>
-                <span class="r">&emsp;&emsp;Σ<sub>i</sub> x_ij + s_j u_j = s_j &emsp;∀ j</span>
-                <span class="r">&emsp;&emsp;x_ij = 0 &emsp;∀ (i, j) ที่ d_ij &gt; D</span>
-                <span class="r">&emsp;&emsp;x_ij, u_j, t_i, v_j, z ≥ 0</span>
+                <span class="r">s.t. z − u<sub>j</sub> − v<sub>j</sub> = 0 &emsp;∀ j <span class="c">(v<sub>j</sub> = surplus)</span></span>
+                <span class="r">&emsp;&emsp;Σ<sub>j</sub> x<sub>ij</sub> + t<sub>i</sub> = p<sub>i</sub> &emsp;∀ i</span>
+                <span class="r">&emsp;&emsp;Σ<sub>i</sub> x<sub>ij</sub> + s<sub>j</sub> u<sub>j</sub> = s<sub>j</sub> &emsp;∀ j</span>
+                <span class="r">&emsp;&emsp;x<sub>ij</sub> = 0 &emsp;∀ (i, j) ที่ d<sub>ij</sub> &gt; D</span>
+                <span class="r">&emsp;&emsp;x<sub>ij</sub>, u<sub>j</sub>, t<sub>i</sub>, v<sub>j</sub>, z ≥ 0</span>
               </div></li>
             <li><h4>8.3 · เทียบค่า optimal</h4>
-              <p>สำหรับทุกแผนการส่ง <span class="math">x</span>: ค่ามากสุด ≥ ค่าเฉลี่ยเสมอ <span class="math">max<sub>j</sub> u_j(x) ≥ (1/M)Σ u_j(x)</span></p>
-              <div class="eq"><span class="r">OPT<sub>8.2</sub> = min<sub>x</sub> max<sub>j</sub> u_j(x) &nbsp;≥&nbsp; min<sub>x</sub> (1/M)Σ<sub>j</sub> u_j(x) = OPT<sub>8.1</sub></span></div>
+              <p>สำหรับทุกแผนการส่ง <span class="math">x</span>: ค่ามากสุด ≥ ค่าเฉลี่ยเสมอ <span class="math">max<sub>j</sub> u<sub>j</sub>(x) ≥ (1/M)Σ u<sub>j</sub>(x)</span></p>
+              <div class="eq"><span class="r">OPT<sub>8.2</sub> = min<sub>x</sub> max<sub>j</sub> u<sub>j</sub>(x) &nbsp;≥&nbsp; min<sub>x</sub> (1/M)Σ<sub>j</sub> u<sub>j</sub>(x) = OPT<sub>8.1</sub></span></div>
               <p>และทั้งคู่ <span class="math">&gt; 0</span> เพราะ <span class="math">Σp &lt; Σs</span> ต้องมีอย่างน้อยหนึ่งร้านที่ได้ไม่ครบ · เท่ากันได้เมื่อแผนที่ดีที่สุดของ 8.1 เกลี่ยทุกร้านให้เท่ากันพอดี</p>
               <div class="ans" style="margin:6px 0"><b>8.3</b> OPT(8.2) ≥ OPT(8.1) &gt; 0 เพราะ max ≥ average ทุกแผน — ในรูปตัวอย่าง 0.25 ≥ 0.167</div></li>
           </ol>
@@ -1392,7 +1392,7 @@ FIGS.q8 = (k, st) => {
     P.text(12.3, 7.9, `max u = ${fmt(sol.max, 3)}`, {anchor: 'end', cls: 'tick', color: mode === 'max' ? '--y' : '--muted'});
   }
   P.text(12.3, .2, `Σp = 150 < Σs = 200`, {anchor: 'end', cls: 'tick'});
-  const caps = ['■ = โรงงาน, ○ = ร้าน (ตัวเลขสมมติ)', 'วงประ = รัศมี D รอบโรงงาน · เส้นประ = คู่ที่ส่งได้', 'โรงงานส่งรวมได้ไม่เกิน p_i', 'u_j = ส่วนที่ขาด / ที่ขอ', '8.1: ร้านใหญ่ (S4) ถูกทิ้ง u สูง เพราะส่งให้ร้านเล็กคุ้มกว่า', '8.1 standard form', '8.2: เกลี่ยให้ทุกร้านไม่พอใจเท่ากัน', '8.2 standard form', 'max u ของ 8.2 ≥ average u ของ 8.1'];
+  const caps = ['■ = โรงงาน, ○ = ร้าน (ตัวเลขสมมติ)', 'วงประ = รัศมี D รอบโรงงาน · เส้นประ = คู่ที่ส่งได้', 'โรงงานส่งรวมได้ไม่เกิน p<sub>i</sub>', 'u<sub>j</sub> = ส่วนที่ขาด / ที่ขอ', '8.1: ร้านใหญ่ (S4) ถูกทิ้ง u สูง เพราะส่งให้ร้านเล็กคุ้มกว่า', '8.1 standard form', '8.2: เกลี่ยให้ทุกร้านไม่พอใจเท่ากัน', '8.2 standard form', 'max u ของ 8.2 ≥ average u ของ 8.1'];
   return {svg: P.svg(), cap: caps[k]};
 };
 
